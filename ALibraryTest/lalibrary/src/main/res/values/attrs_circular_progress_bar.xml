@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="CircularProgressBar">
+        <attr name="lineWidth" format="float"/>
+        <attr name="lineColor" format="integer"/>
+    </declare-styleable>
+</resources>

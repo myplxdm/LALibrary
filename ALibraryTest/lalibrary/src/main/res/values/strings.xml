@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">LALibrary</string>
+    <string name="app_name">LiuLibrary</string>
+    <string name="err_get_photo_path">获取文件路径失败</string>
+    <string name="err_photo_upload">文件上传失败</string>
 </resources>

@@ -1,0 +1,9 @@
+<resources>
+    <declare-styleable name="CircularButton">
+        <attr name="cbBgColor" format="color"/>
+        <attr name="cbCornerRadius" format="integer"/>
+        <attr name="cbText" format="string"/>
+        <attr name="cbTextColor" format="color"/>
+        <attr name="cbTextSize" format="dimension"/>
+    </declare-styleable>
+</resources>

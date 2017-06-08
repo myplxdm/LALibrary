@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LTitleView">
+        <attr name="bgColor" format="color"/>
+        <!-- title -->
+        <attr name="titleTextColor" format="color"/>
+        <attr name="titleTextSize" format="dimension"/>
+        <!-- space -->
+        <attr name="leftViewSpace" format="dimension"/>
+        <attr name="rightViewSpace" format="dimension"/>
+        <!-- cust layout -->
+        <attr name="leftCustLayout" format="reference"/>
+        <attr name="middleCustLayout" format="reference"/>
+        <attr name="rightCustLayout" format="reference"/>
+    </declare-styleable>
+</resources>
