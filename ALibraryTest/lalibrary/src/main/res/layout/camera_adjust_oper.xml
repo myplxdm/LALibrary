@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="400px">
+
+    <LinearLayout
+        android:id="@+id/ll_fill"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <ImageView
+            android:id="@+id/iv_fill"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/camera_fill"
+            android:layout_width="73px"
+            android:layout_height="73px"/>
+
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:id="@+id/tv_fill"
+            android:layout_gravity="center_horizontal"
+            android:textSize="40px"
+            android:textColor="#000"
+            android:text="填充"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_filter"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <ImageView
+            android:id="@+id/iv_filter"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/camera_filter"
+            android:layout_width="73px"
+            android:layout_height="73px"/>
+
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:textSize="40px"
+            android:textColor="#000"
+            android:text="滤镜"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_bg_color"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <ImageView
+            android:id="@+id/iv_bg_color"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/camera_bg_black"
+            android:layout_width="72px"
+            android:layout_height="72px"/>
+
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:textSize="40px"
+            android:textColor="#000"
+            android:text="背景颜色"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_rot_photo"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/camera_rotate"
+            android:layout_width="66px"
+            android:layout_height="75px"/>
+
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:textSize="40px"
+            android:textColor="#000"
+            android:text="旋转图片"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="400px"
+              android:orientation="vertical">
+
+    <include layout="@layout/camera_seek" android:id="@+id/camera_seek" android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_filter_nav"
+        android:layout_width="match_parent"
+        android:layout_height="165px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="滤镜"
+            android:textColor="#000"
+            android:textSize="58px"/>
+
+        <Button
+            android:background="@null"
+            android:id="@+id/btn_ok"
+            android:text="确定"
+            android:textColor="#000"
+            android:textSize="58px"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_filter_oper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_exposure"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <View
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <ImageView
+                android:layout_width="82px"
+                android:layout_height="53px"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/camera_exposure"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="曝光度"
+                android:textColor="#000"
+                android:textSize="40px"/>
+
+            <View
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_contrast"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <View
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <ImageView
+                android:layout_width="82px"
+                android:layout_height="53px"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/camera_contrast"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="对比度"
+                android:textColor="#000"
+                android:textSize="40px"/>
+
+            <View
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sharpen"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <View
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <ImageView
+                android:layout_width="82px"
+                android:layout_height="53px"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/camera_shapen"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="锐化"
+                android:textColor="#000"
+                android:textSize="40px"/>
+
+            <View
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_saturation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <View
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <ImageView
+                android:layout_width="82px"
+                android:layout_height="53px"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/camera_corp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="饱和度"
+                android:textColor="#000"
+                android:textSize="40px"/>
+
+            <View
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

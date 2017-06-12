@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center_vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:drawablePadding="20px"
+        android:drawableTop="@mipmap/camera_font_color"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="102px"
+        android:layout_width="wrap_content"
+        android:text="颜色"
+        android:textColor="#000"
+        android:textSize="42px"/>
+
+    <View
+        android:background="@drawable/white_circular"
+        android:id="@+id/v_white_color"
+        android:layout_height="110px"
+        android:layout_marginLeft="90px"
+        android:layout_width="110px"/>
+
+    <View
+        android:background="@drawable/black_circular"
+        android:id="@+id/v_black_color"
+        android:layout_height="110px"
+        android:layout_marginLeft="64px"
+        android:layout_width="110px"/>
+
+    <View
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"/>
+
+    <TextView
+        android:drawablePadding="20px"
+        android:drawableTop="@mipmap/camera_alpha"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="102px"
+        android:layout_width="wrap_content"
+        android:text="透明度"
+        android:textColor="#000"
+        android:textSize="42px"/>
+
+    <ImageView
+        android:background="@mipmap/camera_dec"
+        android:id="@+id/iv_dec_alpha"
+        android:layout_height="110px"
+        android:layout_marginLeft="90px"
+        android:layout_width="110px"/>
+
+    <ImageView
+        android:background="@mipmap/camera_inc"
+        android:id="@+id/iv_inc_alpha"
+        android:layout_height="110px"
+        android:layout_marginLeft="54px"
+        android:layout_marginRight="110px"
+        android:layout_width="110px"/>
+
+</LinearLayout>

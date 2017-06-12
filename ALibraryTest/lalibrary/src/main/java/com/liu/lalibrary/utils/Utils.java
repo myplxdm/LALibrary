@@ -209,4 +209,13 @@ public class Utils
         return "";
     }
 
+    public static String getPath(String fn)
+    {
+        if (!TextUtils.isEmpty(fn))
+        {
+            int i = fn.lastIndexOf("/");
+            return fn.substring(0, i);
+        }
+        return "";
+    }
 }
