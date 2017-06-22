@@ -1,0 +1,50 @@
+/*
+**	@Description:	mobile css
+**	@Author:		cb340081631
+**	@Update:		2013-11-12
+*/
+
+/*
+	gy:		#708ba1		#556B85
+	rd:		#F26175		#E14A59
+	og:		#FF8359		#EF6343
+	ye:		#F8CD36		#E7B729
+	bl:		#5CA7DF		#468BCB
+	gn:		#4CD9AA		#3AC48E
+	vt:		#9E7AC2		#815DAA
+*/
+
+
+/* --------------------
+		reset
+-------------------- */
+
+a,abbr,address,article,aside,audio,b,blockquote,body,caption,cite,code,dd,del,dfn,dialog,div,dl,dt,em,fieldset,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,hr,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,p,pre,q,samp,section,small,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,time,tr,ul,var,video {margin:0;padding:0;border:0;font-size:100%;font-weight:normal;font-style:normal;outline:none;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block;}
+a,s {color:#333;text-decoration:none;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+a:hover {opacity:1}
+img{border:0;-ms-interpolation-mode:bicubic;vertical-align:middle;font-size:0}
+ul,ol {list-style:none;}
+table {border-collapse:collapse;border-spacing:0;}
+th,td,caption {vertical-align:top;text-align:left;}
+@media ="all" { ::-webkit-scrollbar{width:1px;height:1px} }
+body,html { width: 100%; overflow: hidden; background: #fff; font-size: 12px; /* [disabled]word-break:break-all; */ -webkit-text-size-adjust: none; -ms-text-size-adjust: 100%; -webkit-touch-callout: none; -webkit-user-select: none; -moz-user-select: moz-none; user-select: none; }
+
+.clearfix { display:block; zoom:1;}
+.clearfix:after { clear:both; display:block; height:0; content:"."; visibility:hidden;}
+.hidden { display:none;}
+.tl { text-align:left;}
+.tr { text-align:right;}
+.tc { text-align:center;}
+.fl{ float:left;}
+.fr{ float:right;}
+.sep { margin:0 10px; color:#ddd;}
+.indent { padding:10px;}
+
+
+/*** feedback ***/
+.ui-fb { padding:0 20px;}
+.ui-fb .bd { position:relative; margin-bottom:10px; padding:130px 20px 20px; background:#fff;font-family:\5FAE\8F6F\96C5\9ED1;}
+.ui-fb .fb-wifi:before { position:absolute; top:25px; left:50%; margin-left:-45px; display:block; width:90px; height:90px; content:''; background:url(../images/icon_wifi.png) no-repeat 0 0; background-size:90px 90px;}
+.ui-fb .bd .tit { margin-bottom:10px;   font-size:18px; text-align:center; line-height:30px;}
+.ui-fb .bd .con { margin-bottom:10px; color:#999; font-size:14px; line-height:20px; text-align:center; }
