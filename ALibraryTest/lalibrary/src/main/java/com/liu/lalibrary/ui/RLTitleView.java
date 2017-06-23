@@ -194,39 +194,40 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     {
         RelativeLayout rl = (RelativeLayout)View.inflate(context, R.layout.layout_titleview_imgbtn, null);
         final ImageView iv = (ImageView) rl.findViewById(R.id.iv_btn);
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                try
-                {
-                    final Bitmap bitmap = Glide.with(context)
-                            .asBitmap()
-                            .load(url)
-                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                            .get();
-
-                    tv_title_center.post(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            iv.getLayoutParams().width = bitmap.getWidth();
-                            iv.getLayoutParams().height = bitmap.getHeight();
-                            AutoUtils.auto(iv);
-                            iv.setImageBitmap(bitmap);
-                        }
-                    });
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                } catch (ExecutionException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        Glide.with(context).load(btImgUrl).into(iv);
+//        new Thread(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                try
+//                {
+//                    final Bitmap bitmap = Glide.with(context)
+//                            .asBitmap()
+//                            .load(url)
+//                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+//                            .get();
+//
+//                    tv_title_center.post(new Runnable()
+//                    {
+//                        @Override
+//                        public void run()
+//                        {
+//                            iv.getLayoutParams().width = bitmap.getWidth();
+//                            iv.getLayoutParams().height = bitmap.getHeight();
+//                            AutoUtils.auto(iv);
+//                            iv.setImageBitmap(bitmap);
+//                        }
+//                    });
+//                } catch (InterruptedException e)
+//                {
+//                    e.printStackTrace();
+//                } catch (ExecutionException e)
+//                {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
         ll_right.addView(rl, lp);
