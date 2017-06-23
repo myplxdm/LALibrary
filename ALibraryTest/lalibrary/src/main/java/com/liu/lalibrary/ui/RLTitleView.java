@@ -16,11 +16,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.liu.lalibrary.R;
 import com.liu.lalibrary.utils.DensityUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
 import com.zhy.autolayout.utils.AutoUtils;
+
+import java.util.concurrent.ExecutionException;
 
 public class RLTitleView extends AutoRelativeLayout implements OnClickListener
 {
@@ -191,17 +194,32 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     {
         RelativeLayout rl = (RelativeLayout)View.inflate(context, R.layout.layout_titleview_imgbtn, null);
         final ImageView iv = (ImageView) rl.findViewById(R.id.iv_btn);
-        SimpleTarget target = new SimpleTarget<Bitmap>()
+//        SimpleTarget target = new SimpleTarget<Bitmap>()
+//        {
+//            @Override
+//            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
+//            {
+//                iv.getLayoutParams().width = resource.getWidth();
+//                iv.getLayoutParams().height = resource.getHeight();
+//                AutoUtils.auto(iv);
+//            }
+//        };
+        try
         {
-            @Override
-            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
-            {
-                iv.getLayoutParams().width = resource.getWidth();
-                iv.getLayoutParams().height = resource.getHeight();
-                AutoUtils.auto(iv);
-            }
-        };
-        Glide.with(getContext()).load(btImgUrl).into(target);
+            Bitmap bitmap = Glide.with(context)
+                    .asBitmap()
+                    .load(url)
+                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .get();
+            iv.getLayoutParams().width = bitmap.getWidth();
+            iv.getLayoutParams().height = bitmap.getHeight();
+            AutoUtils.auto(iv);
+            iv.setImageBitmap(bitmap);
+        } catch (InterruptedException e)
+        {
+        } catch (ExecutionException e)
+        {
+        }
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
         ll_right.addView(rl, lp);
