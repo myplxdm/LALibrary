@@ -204,10 +204,10 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
             @Override
             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
             {
+                iv.setImageBitmap(resource);
                 iv.getLayoutParams().width = resource.getWidth();
                 iv.getLayoutParams().height = resource.getHeight();
                 AutoUtils.auto(iv);
-                LogUtils.LOGD(RLTitleView.class, "---------------------------------------------------");
             }
         };
         Glide.with(context.getApplicationContext()).asBitmap().load(btImgUrl).into(target);
