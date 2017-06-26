@@ -24,6 +24,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.liu.lalibrary.R;
+import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.utils.DensityUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -206,6 +207,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
                 iv.getLayoutParams().width = resource.getWidth();
                 iv.getLayoutParams().height = resource.getHeight();
                 AutoUtils.auto(iv);
+                LogUtils.LOGD(RLTitleView.class, "---------------------------------------------------");
             }
         };
         Glide.with(context.getApplicationContext()).asBitmap().load(btImgUrl).into(target);
