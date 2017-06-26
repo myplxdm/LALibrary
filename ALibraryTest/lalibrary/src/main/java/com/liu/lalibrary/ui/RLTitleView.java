@@ -210,7 +210,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
                 AutoUtils.auto(iv);
             }
         };
-        Glide.with(context.getApplicationContext()).asBitmap().load(btImgUrl).into(target);
+        Glide.with(context).asBitmap().load(btImgUrl).into(target);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
         ll_right.addView(rl, lp);
