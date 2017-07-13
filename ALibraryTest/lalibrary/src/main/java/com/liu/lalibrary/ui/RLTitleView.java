@@ -144,6 +144,12 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         }
     }
 
+    public void setTitle(String title)
+    {
+        tv_title_left.setText(title);
+        tv_title_center.setText(title);
+    }
+
     public void setTitleSizeAndColor(int textSize, int textColor)
     {
         tv_title_left.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
