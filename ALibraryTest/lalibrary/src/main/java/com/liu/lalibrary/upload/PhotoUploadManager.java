@@ -63,16 +63,6 @@ public class PhotoUploadManager implements UploadFileManager.UploadProgressEvent
         msg_proc = new MessageProc(act_own, listener);
     }
 
-    public void attchListener()
-    {
-        UploadFileManager.getInst().addEventListener(this);
-    }
-
-    public void cancelListener()
-    {
-        UploadFileManager.getInst().removeEventListener(this);
-    }
-
     public void chooseAlbum(final AbsActivity act)
     {
         if (Build.VERSION.SDK_INT >= 23)
@@ -91,8 +81,20 @@ public class PhotoUploadManager implements UploadFileManager.UploadProgressEvent
         }
     }
 
-    public void takePic(AbsActivity act)
+    public void takePic(final AbsActivity act)
     {
+        if (Build.VERSION.SDK_INT >= 23)
+        {
+            act.checkPermissions(new PermissionsUtil.PermissionCallback()
+            {
+                @Override
+                public void onPermission(boolean b)
+                {
+                    ImageTools.takePicture(act, savePath);
+                }
+            }, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            return;
+        }
         ImageTools.takePicture(act, savePath);
     }
 
@@ -108,7 +110,7 @@ public class PhotoUploadManager implements UploadFileManager.UploadProgressEvent
                 entity.addPart("upfile", new FileBody(new File(file)));
             }
         };
-        UploadFileManager.getInst().add(ui);
+        UploadFileManager.getInst().add(ui, this);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -228,11 +230,6 @@ public class PhotoUploadManager implements UploadFileManager.UploadProgressEvent
         msg.what = UP_STATE_ALL_COMP;
         msg.obj = ui;
         msg_proc.sendMessage(msg);
-    }
-
-    @Override
-    public void onUploadAllComplet()
-    {
     }
 
     @Override
