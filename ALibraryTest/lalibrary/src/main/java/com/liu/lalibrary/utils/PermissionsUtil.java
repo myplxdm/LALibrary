@@ -99,11 +99,11 @@ public class PermissionsUtil
             if (!verifyPermissions(paramArrayOfInt))
             {
                 showMissingPermissionDialog();
+            }else if (curPermissionCB != null)
+            {
+                curPermissionCB.onPermission(true);
+                curPermissionCB = null;
             }
-        }else if (curPermissionCB != null)
-        {
-            curPermissionCB.onPermission(true);
-            curPermissionCB = null;
         }
     }
 
