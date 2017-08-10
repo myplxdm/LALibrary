@@ -73,24 +73,23 @@ public class Utils
         return s;
     }
 
-    public static String getVersion(Context c)
+    public static String safeStr(String str)
     {
-        try
-        {
-            PackageManager manager = c.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(c.getPackageName(), 0);
-            return info.versionName;
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return "";
+        if (TextUtils.isEmpty(str)) return "";
+        return str;
     }
 
     public static void systemCall(Activity act, String phone)
     {
         Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel://" + phone));
         act.startActivity(i);
+    }
+
+    public static String idCardReplaceWithStar(String idCard)
+    {
+        if (TextUtils.isEmpty(idCard)) return "";
+        return idCard.replaceAll("(?<=\\d{4})\\d(?=\\d{4})","*");
+
     }
 
     public static void deleteFile(File file, boolean onlyFile)
