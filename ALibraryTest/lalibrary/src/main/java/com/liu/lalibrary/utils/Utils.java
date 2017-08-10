@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.CookieManager;
@@ -135,6 +136,7 @@ public class Utils
             }
             CookieSyncManager.createInstance(c);
             CookieManager cookieManager = CookieManager.getInstance();
+            //cookieManager.removeAllCookies(null);
             cookieManager.removeAllCookie();
             CookieSyncManager.getInstance().sync();
         } catch (Exception e)
@@ -204,6 +206,16 @@ public class Utils
         if (!TextUtils.isEmpty(fn))
         {
             int i = fn.lastIndexOf(".");
+            return fn.substring(i + 1);
+        }
+        return "";
+    }
+
+    public static String getFileName(String fn)
+    {
+        if (!TextUtils.isEmpty(fn))
+        {
+            int i = fn.lastIndexOf(File.separator);
             return fn.substring(i + 1);
         }
         return "";

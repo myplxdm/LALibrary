@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.liu.lalibrary.ui.view.BaseView;
 import com.liu.lalibrary.ui.view.IView;
+import com.liu.lalibrary.utils.PermissionsUtil;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 import java.io.Serializable;
@@ -44,6 +45,7 @@ public abstract class AbsActivity extends AutoLayoutActivity
     protected boolean mToBack = false;
     protected boolean mMaskBack = false;
     protected long preBackTime;
+    protected PermissionsUtil permissionsUtil;
     //
     //sub view
     protected ArrayList<IView> subViews = new ArrayList<>();
@@ -199,24 +201,6 @@ public abstract class AbsActivity extends AutoLayoutActivity
         }, time);
     }
 
-    //如果需要请求权限返回 true
-    public boolean checkPermissions(String[] pers, int reqCode)
-    {
-        ArrayList<String> reqPers = new ArrayList<>();
-        for (String p : pers)
-        {
-            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED)
-            {
-                reqPers.add(p);
-            }
-        }
-        if (reqPers.size() > 0)
-        {
-            ActivityCompat.requestPermissions(this, reqPers.toArray(new String[]{}), reqCode);
-            return true;
-        }
-        return false;
-    }
 
     public int generateViewId()
     {
@@ -237,23 +221,6 @@ public abstract class AbsActivity extends AutoLayoutActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        ArrayList<Boolean> list = new ArrayList<>();
-        for (int res : grantResults)
-        {
-            list.add(res == PackageManager.PERMISSION_GRANTED);
-        }
-        Boolean [] gr = list.toArray(new Boolean[]{});
-        for (IView bv : subViews)
-        {
-            bv.onRequestPermissionsResult(requestCode, permissions, gr);
-        }
-        onRequestPermissionsResult(requestCode, permissions, gr);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
@@ -263,7 +230,27 @@ public abstract class AbsActivity extends AutoLayoutActivity
         }
     }
 
-    protected void onRequestPermissionsResult(int requestCode, String[] permissions, Boolean[] grantResults){}
+    /*************** Permissions *****************/
+
+    public synchronized void checkPermissions(PermissionsUtil.PermissionCallback cb, String... permissions)
+    {
+        if (permissionsUtil == null)
+        {
+            permissionsUtil = new PermissionsUtil(this);
+        }
+        permissionsUtil.checkPermissions(cb, permissions);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionsUtil != null)
+        {
+            permissionsUtil.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     /*************** abstract *****************/
     protected abstract int getRootViewId();
     protected abstract void onInitView();

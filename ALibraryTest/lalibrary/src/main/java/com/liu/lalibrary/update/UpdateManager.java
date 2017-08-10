@@ -12,6 +12,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 
+import com.liu.lalibrary.utils.AppUtils;
+import com.liu.lalibrary.utils.Utils;
+import com.liu.lalibrary.utils.imagecache.CommonUtil;
+import com.liu.lalibrary.utils.imagecache.FileHelper;
+
 import java.io.File;
 
 public class UpdateManager
@@ -89,16 +94,17 @@ public class UpdateManager
 	
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-	public UpdateManager(Context c, String url, String path, String filename)
+	public UpdateManager(Context c, String url)
 	{
 		mContext = c;
+		String appName = AppUtils.getAppName(c);
+		String path = CommonUtil.getRootFilePath() + appName + File.separator;
+		String filename = Utils.getFileName(url);
+		FileHelper.createDirectory(path);
 		//
-		DownloadManager manger = (DownloadManager) c
-				.getSystemService(Context.DOWNLOAD_SERVICE);
-		Request down = new Request(
-				Uri.parse(url));
-		down.setAllowedNetworkTypes(Request.NETWORK_MOBILE
-				| Request.NETWORK_WIFI);
+		DownloadManager manger = (DownloadManager) c.getSystemService(Context.DOWNLOAD_SERVICE);
+		Request down = new Request(Uri.parse(url));
+		down.setAllowedNetworkTypes(Request.NETWORK_MOBILE | Request.NETWORK_WIFI);
 		if (VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 		{
 			down.setShowRunningNotification(true);
