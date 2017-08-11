@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 
 /**
  * 跟App相关的辅助类
@@ -62,4 +63,8 @@ public class AppUtils
 		return null;
 	}
 
+	public static int getOSVersion()
+	{
+		return Build.VERSION.SDK_INT;
+	}
 }
