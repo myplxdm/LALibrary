@@ -56,6 +56,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     private ImageView       iv_return;
     private ImageView       ib_left_btn;
     private LinearLayout    ll_right;
+    private View            vBottomLine;
     //
     private Context context;
     private OnTitleViewBtnClickListener listener;
@@ -80,6 +81,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         iv_return = (ImageView) findViewById(R.id.iv_return);
         ib_left_btn = (ImageView) findViewById(R.id.iv_left_btn);
         ll_right = (LinearLayout) findViewById(R.id.ll_right);
+        vBottomLine = (View) findViewById(R.id.vBottomLine);
         //
         iv_return.setOnClickListener(this);
         tv_title_left.setOnClickListener(this);
@@ -298,6 +300,11 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         ll_right.removeAllViews();
     }
 
+    public void setShowBottomLine(boolean bShow)
+    {
+        vBottomLine.setVisibility(bShow ? View.VISIBLE : View.GONE);
+    }
+
     @Override
     public void onClick(View v)
     {
@@ -312,4 +319,5 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
             }
         }
     }
+
 }
