@@ -36,6 +36,11 @@ public class FontUtil
         }
     }
 
+    public static void setTextViewFont(TextView tv)
+    {
+        tv.setTypeface(stTf);
+    }
+
     public static void setButtonAndTextViewFont(ViewGroup vg, boolean bSubView)
     {
         if (stTf == null)return;
