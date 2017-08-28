@@ -72,6 +72,7 @@ public class NetConnManager extends BroadcastReceiver
             } catch (Exception e)
             {
             }
+            connManager = null;
             isReg = false;
         }
     }

@@ -117,6 +117,10 @@ public abstract class AbsActivity extends AutoLayoutActivity
     protected void onDestroy()
     {
         super.onDestroy();
+        if (cur_act == this)
+        {
+            cur_act = null;
+        }
         activeVPState(IView.VIEW_EVENT_DESTRORY);
         subViews.clear();
         delActivity(this);
