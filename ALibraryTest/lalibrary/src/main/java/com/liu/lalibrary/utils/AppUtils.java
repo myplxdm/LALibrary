@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
+import com.liu.lalibrary.utils.imagecache.CommonUtil;
+
 /**
  * 跟App相关的辅助类
  * 
@@ -14,7 +16,6 @@ import android.os.Build;
  */
 public class AppUtils
 {
-
 	private AppUtils()
 	{
 		/* cannot be instantiated */

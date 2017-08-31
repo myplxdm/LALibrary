@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.liu.lalibrary.plugins.IPlugin;
 import com.liu.lalibrary.ui.view.BaseView;
 import com.liu.lalibrary.ui.view.IView;
 import com.liu.lalibrary.utils.PermissionsUtil;
@@ -46,9 +47,10 @@ public abstract class AbsActivity extends AutoLayoutActivity
     protected boolean mMaskBack = false;
     protected long preBackTime;
     protected PermissionsUtil permissionsUtil;
-    //
     //sub view
     protected ArrayList<IView> subViews = new ArrayList<>();
+    //plugins
+    protected ArrayList<IPlugin> plugins = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,6 +69,10 @@ public abstract class AbsActivity extends AutoLayoutActivity
     protected void addSubView(BaseView bv)
     {
         subViews.add(bv);
+    }
+    protected void addPlugin(IPlugin plg)
+    {
+        plugins.add(plg);
     }
 
     @Override
@@ -92,10 +98,17 @@ public abstract class AbsActivity extends AutoLayoutActivity
     }
 
     @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        activeVPState(IView.VIEW_EVENT_RESTART);
+    }
+
+    @Override
     protected void onResume()
     {
         super.onResume();
-        activeVPState(IView.VIEW_EVENT_ENTER);
+        activeVPState(IView.VIEW_EVENT_RESUME);
         cur_act = this;
     }
 
@@ -148,11 +161,29 @@ public abstract class AbsActivity extends AutoLayoutActivity
                 {
                     bv.onStart();
                 }
+                for (IPlugin plg : plugins)
+                {
+                    plg.onStart();
+                }
                 break;
-            case IView.VIEW_EVENT_ENTER:
+            case IView.VIEW_EVENT_RESUME:
                 for (IView bv : subViews)
                 {
-                    bv.onEnter();
+                    bv.onResume();
+                }
+                for (IPlugin plg : plugins)
+                {
+                    plg.onResume();
+                }
+                break;
+            case IView.VIEW_EVENT_RESTART:
+                for (IView bv : subViews)
+                {
+                    bv.onRestart();
+                }
+                for (IPlugin plg : plugins)
+                {
+                    plg.onRestart();
                 }
                 break;
             case IView.VIEW_EVENT_PAUSE:
@@ -160,17 +191,29 @@ public abstract class AbsActivity extends AutoLayoutActivity
                 {
                     bv.onPause();
                 }
+                for (IPlugin plg : plugins)
+                {
+                    plg.onPause();
+                }
                 break;
             case IView.VIEW_EVENT_STOP:
                 for (IView bv : subViews)
                 {
                     bv.onStop();
                 }
+                for (IPlugin plg : plugins)
+                {
+                    plg.onStop();
+                }
                 break;
             case IView.VIEW_EVENT_DESTRORY:
                 for (IView bv : subViews)
                 {
                     bv.onDestroy();
+                }
+                for (IPlugin plg : plugins)
+                {
+                    plg.onDestroy();
                 }
                 break;
         }
@@ -231,6 +274,10 @@ public abstract class AbsActivity extends AutoLayoutActivity
         for (IView bv : subViews)
         {
             bv.onActivityResult(requestCode, resultCode, data);
+        }
+        for (IPlugin plg : plugins)
+        {
+            plg.onActivityResult(requestCode, resultCode, data);
         }
     }
 

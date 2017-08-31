@@ -44,7 +44,11 @@ public abstract class BaseView implements IView
     {
     }
 
-    public void onEnter()
+    public void onRestart()
+    {
+    }
+
+    public void onResume()
     {
     }
 
