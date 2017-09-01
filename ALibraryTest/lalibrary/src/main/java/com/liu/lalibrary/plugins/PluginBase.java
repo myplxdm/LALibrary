@@ -4,12 +4,24 @@ import android.content.Intent;
 
 import com.liu.lalibrary.AbsActivity;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by liu on 2017/8/31.
  */
 
 public abstract class PluginBase implements IPlugin
 {
+    protected WeakReference<AbsActivity> wrActivity;
+
+    public PluginBase(AbsActivity activity)
+    {
+        if (activity != null)
+        {
+            wrActivity = new WeakReference<AbsActivity>(activity);
+        }
+    }
+
     @Override
     public void onStart()
     {

@@ -12,8 +12,7 @@ public interface IPlugin
 {
     public String getName();
     public String getDescribe();
-    public boolean exec(AbsActivity activity, IPluginEvent event);
-    public boolean close(AbsActivity activity, IPluginEvent event);
+    public boolean exec(String cmd, IPluginEvent event);
     public void onStart();
     public void onRestart();
     public void onResume();
