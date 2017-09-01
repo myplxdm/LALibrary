@@ -22,6 +22,15 @@ public abstract class PluginBase implements IPlugin
         }
     }
 
+    protected AbsActivity getActivity()
+    {
+        if (wrActivity != null)
+        {
+            return wrActivity.get();
+        }
+        return null;
+    }
+
     @Override
     public void onStart()
     {
