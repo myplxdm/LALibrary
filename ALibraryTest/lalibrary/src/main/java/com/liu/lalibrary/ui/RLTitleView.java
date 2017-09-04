@@ -286,6 +286,16 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         }
     }
 
+    public void mdImgBtnIco(int index, int imgResId)
+    {
+        if (index < ll_right.getChildCount())
+        {
+            ImageView iv = (ImageView) ll_right.getChildAt(index);
+            iv.setImageResource(imgResId);
+        }
+    }
+
+
     public void mdTextBtnTitle(int index, String text)
     {
         if (index < ll_right.getChildCount())
