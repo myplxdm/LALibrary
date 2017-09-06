@@ -281,8 +281,15 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     {
         if (index < ll_right.getChildCount())
         {
-            ImageView iv = (ImageView) ll_right.getChildAt(index);
-            Glide.with(getContext()).load(Uri.decode(imgUrl)).into(iv);
+            View v = ll_right.getChildAt(index);
+            if (v instanceof RelativeLayout)
+            {
+                ImageView iv = (ImageView) v.findViewById(R.id.iv_btn);
+                if (iv != null)
+                {
+                    Glide.with(getContext()).load(Uri.decode(imgUrl)).into(iv);
+                }
+            }
         }
     }
 
@@ -290,8 +297,15 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     {
         if (index < ll_right.getChildCount())
         {
-            ImageView iv = (ImageView) ll_right.getChildAt(index);
-            iv.setImageResource(imgResId);
+            View v = ll_right.getChildAt(index);
+            if (v instanceof RelativeLayout)
+            {
+                ImageView iv = (ImageView) v.findViewById(R.id.iv_btn);
+                if (iv != null)
+                {
+                    iv.setImageResource(imgResId);
+                }
+            }
         }
     }
 
