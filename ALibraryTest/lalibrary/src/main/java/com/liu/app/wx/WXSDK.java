@@ -93,34 +93,6 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
         this.listener = listener;
     }
 
-    private WxAppInfo getWxInfoByType(String type)
-    {
-        if (wxApi != null)
-        {
-            WxAppInfo info = mapAppInfo.get(type);
-            if (info == null)
-            {
-                for (Map.Entry<String, WxAppInfo> e : mapAppInfo.entrySet())
-                {
-                    info = e.getValue();
-                    break;
-                }
-            }
-            return info;
-        }
-        return null;
-    }
-
-    private boolean checkApiInst()
-    {
-        if (wxApi == null)
-        {
-            LogUtils.LOGE(WXSDK.class, "wxApi is null");
-            return false;
-        }
-        return true;
-    }
-
     public boolean switchType(String type)
     {
         if (checkApiInst())
@@ -185,6 +157,39 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
         req.scene = bTimeline ? SendMessageToWX.Req.WXSceneTimeline
                 : SendMessageToWX.Req.WXSceneSession;
         return wxApi.sendReq(req);
+    }
+
+    public boolean isInstall()
+    {
+        return wxApi != null ? wxApi.isWXAppInstalled() : false;
+    }
+    /***************  private fun ***************/
+    private WxAppInfo getWxInfoByType(String type)
+    {
+        if (wxApi != null)
+        {
+            WxAppInfo info = mapAppInfo.get(type);
+            if (info == null)
+            {
+                for (Map.Entry<String, WxAppInfo> e : mapAppInfo.entrySet())
+                {
+                    info = e.getValue();
+                    break;
+                }
+            }
+            return info;
+        }
+        return null;
+    }
+
+    private boolean checkApiInst()
+    {
+        if (wxApi == null)
+        {
+            LogUtils.LOGE(WXSDK.class, "wxApi is null");
+            return false;
+        }
+        return true;
     }
 
     private String buildTransaction(final String type)

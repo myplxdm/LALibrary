@@ -2,12 +2,9 @@ package com.liu.lalibrary;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,11 +67,13 @@ public abstract class AbsActivity extends AutoLayoutActivity
     {
         subViews.add(bv);
     }
-    protected void addPlugin(IPlugin plg)
+
+    public void addPlugin(IPlugin plg)
     {
         plugins.add(plg);
     }
-    protected IPlugin getPluginByName(String name)
+
+    public IPlugin getPluginByName(String name)
     {
         for (IPlugin plg : plugins)
         {
@@ -243,7 +242,7 @@ public abstract class AbsActivity extends AutoLayoutActivity
     public void hideInputMethod(View view)
     {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view,InputMethodManager.SHOW_FORCED);
+        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
@@ -262,18 +261,21 @@ public abstract class AbsActivity extends AutoLayoutActivity
 
     public int generateViewId()
     {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
+        {
             for (; ; )
             {
                 final int result = sNextGeneratedId.get();
                 // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
                 int newValue = result + 1;
                 if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
-                if (sNextGeneratedId.compareAndSet(result, newValue)) {
+                if (sNextGeneratedId.compareAndSet(result, newValue))
+                {
                     return result;
                 }
             }
-        } else {
+        } else
+        {
             return View.generateViewId();
         }
     }
@@ -315,8 +317,11 @@ public abstract class AbsActivity extends AutoLayoutActivity
 
     /*************** abstract *****************/
     protected abstract int getRootViewId();
+
     protected abstract void onInitView();
+
     protected abstract void onInitData();
+
     /*************  static fun  ****************/
     public static void addActivity(AbsActivity act)
     {
