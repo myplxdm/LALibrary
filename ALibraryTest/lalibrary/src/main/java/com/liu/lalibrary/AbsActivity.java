@@ -74,6 +74,17 @@ public abstract class AbsActivity extends AutoLayoutActivity
     {
         plugins.add(plg);
     }
+    protected IPlugin getPluginByName(String name)
+    {
+        for (IPlugin plg : plugins)
+        {
+            if (plg.getName().equals(name))
+            {
+                return plg;
+            }
+        }
+        return null;
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
