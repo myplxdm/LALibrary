@@ -36,6 +36,8 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     public static final String WX_APPID_TYPE_LOGIN = "login";
     public static final String WX_APPID_TYPE_PAY = "pay";
     public static final String WX_APPID_TYPE_OTHER = "other";
+    public static final int WX_SHARE_TYPE_FIREND = 0x1;
+    public static final int WX_SHARE_TYPE_TIMELINE = 0x10;
     //
     public static final String WX_FIELD_OPENID = "openid";
     public static final String WX_FIELD_UNIONID = "unionid";
@@ -146,16 +148,23 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
         return false;
     }
 
-    public void showShareMenu(AbsActivity activity, final String url, final String title, final String desc, final String imgUrl)
+    public void showShareMenu(AbsActivity activity, final String url, final String title, final String desc, final String imgUrl,
+                              int shareType)
     {
-        new BottomSheet.Builder(activity).sheet(R.menu.menu_wx_share).listener(new DialogInterface.OnClickListener()
+        if (shareType == (WX_SHARE_TYPE_FIREND | WX_SHARE_TYPE_TIMELINE))
         {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
+            new BottomSheet.Builder(activity).title("分享").sheet(R.menu.menu_wx_share).listener(new DialogInterface.OnClickListener()
             {
-                sendUrl(title, desc, imgUrl, url, which == 1);
-            }
-        }).build().show();
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    sendUrl(title, desc, imgUrl, url, which == 1);
+                }
+            }).build().show();
+        }else
+        {
+            sendUrl(title, desc, imgUrl, url, (shareType & WX_SHARE_TYPE_TIMELINE) == WX_SHARE_TYPE_TIMELINE);
+        }
     }
 
     public boolean sendUrl(String title, String content, String iconUrl,
