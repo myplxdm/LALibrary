@@ -303,21 +303,24 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     public void onResp(BaseResp baseResp)
     {
         if (listener == null) return;
-
-        if (baseResp.getType() == ConstantsAPI.COMMAND_SENDAUTH)
+        switch (baseResp.getType())
         {
-            SendAuth.Resp re = ((SendAuth.Resp) baseResp);
-            if (re.errCode == 0)
-            {
-                getAccessToken(re.code);
-            }else if (re.errCode == -4)
-            {
-                listener.onWxUserRejectAuth();
-            }else if (re.errCode == -2)
-            {
-                listener.onWxOnUserCancelAuth();
-            }
-            return;
+            case ConstantsAPI.COMMAND_SENDAUTH:
+                SendAuth.Resp re = ((SendAuth.Resp) baseResp);
+                if (re.errCode == 0)
+                {
+                    getAccessToken(re.code);
+                }else if (re.errCode == -4)
+                {
+                    listener.onWxUserRejectAuth();
+                }else if (re.errCode == -2)
+                {
+                    listener.onWxOnUserCancelAuth();
+                }
+                break;
+            case ConstantsAPI.COMMAND_PAY_BY_WX:
+                listener.onWxPayResult(baseResp.errCode, baseResp.errStr);
+                break;
         }
         listener.onResp(baseResp);
     }
