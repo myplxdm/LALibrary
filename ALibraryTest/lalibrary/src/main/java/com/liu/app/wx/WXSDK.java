@@ -1,10 +1,14 @@
 package com.liu.app.wx;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.cocosw.bottomsheet.BottomSheet;
+import com.liu.lalibrary.AbsActivity;
+import com.liu.lalibrary.R;
 import com.liu.lalibrary.loader.LoaderBase;
 import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.utils.HttpUtils;
@@ -140,6 +144,18 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
             return wxApi.sendReq(request);
         }
         return false;
+    }
+
+    public void showShareMenu(AbsActivity activity, final String url, final String title, final String desc, final String imgUrl)
+    {
+        new BottomSheet.Builder(activity).sheet(R.menu.menu_wx_share).listener(new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                sendUrl(title, desc, imgUrl, url, which == 1);
+            }
+        }).build().show();
     }
 
     public boolean sendUrl(String title, String content, String iconUrl,

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/wxFriend"
+        android:icon="@mipmap/ico_wx"
+        android:title="发送给朋友" />
+    <item
+        android:id="@+id/wxTimeline"
+        android:icon="@mipmap/ico_timeline"
+        android:title="分享朋友圈" />
+
+</menu>
