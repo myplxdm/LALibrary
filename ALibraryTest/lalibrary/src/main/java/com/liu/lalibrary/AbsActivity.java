@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class AbsActivity extends AutoLayoutActivity
 {
     public static final String PARAM_OBJ = "obj";
+    public static final int REQ_CODE_EXIT_TO = 0xff1010;//回退时带的数据
 
     public interface ActivityListener
     {
@@ -37,7 +38,9 @@ public abstract class AbsActivity extends AutoLayoutActivity
     //
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
     private static ArrayList<AbsActivity> actList = new ArrayList<AbsActivity>();
-    public static AbsActivity cur_act;
+    public static AbsActivity curActivity;
+    public static AbsActivity exitToActivity;
+    public static Intent exitToData;
     public static ActivityListener listener;
     //
     protected boolean mToBack = false;
@@ -59,7 +62,7 @@ public abstract class AbsActivity extends AutoLayoutActivity
         onInitView();
         activeVPState(IView.VIEW_EVENT_INIT_VIEW);
 
-        onInitData();
+        onInitData(getIntent());
         activeVPState(IView.VIEW_EVENT_INIT_DATA);
     }
 
@@ -118,8 +121,14 @@ public abstract class AbsActivity extends AutoLayoutActivity
     protected void onResume()
     {
         super.onResume();
+        if (exitToActivity != null && exitToActivity == this && exitToData != null)
+        {
+            onActivityResult(REQ_CODE_EXIT_TO, RESULT_OK, exitToData);
+            exitToActivity = null;
+            exitToData = null;
+        }
         activeVPState(IView.VIEW_EVENT_RESUME);
-        cur_act = this;
+        curActivity = this;
     }
 
     @Override
@@ -140,9 +149,9 @@ public abstract class AbsActivity extends AutoLayoutActivity
     protected void onDestroy()
     {
         super.onDestroy();
-        if (cur_act == this)
+        if (curActivity == this)
         {
-            cur_act = null;
+            curActivity = null;
         }
         activeVPState(IView.VIEW_EVENT_DESTRORY);
         subViews.clear();
@@ -320,7 +329,7 @@ public abstract class AbsActivity extends AutoLayoutActivity
 
     protected abstract void onInitView();
 
-    protected abstract void onInitData();
+    protected abstract void onInitData(Intent data);
 
     /*************  static fun  ****************/
     public static void addActivity(AbsActivity act)
@@ -358,9 +367,11 @@ public abstract class AbsActivity extends AutoLayoutActivity
     }
 
     //从当前界面返回到第几个界面 a -> b -> c ,num = 1 , back to b
-    public static void backToNum(int num)
+    public static void exitToNum(int num, Intent data)
     {
         if (num < 0) return;
+        exitToActivity = actList.get(num);
+        exitToData = data;
         for (int i = actList.size() - 1; i > num; i--)
         {
             actList.get(i).finish();
