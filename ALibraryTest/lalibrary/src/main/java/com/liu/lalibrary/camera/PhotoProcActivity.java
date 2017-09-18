@@ -86,10 +86,8 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
     }
 
     @Override
-    protected void onInitData()
+    protected void onInitData(Intent data)
     {
-
-
     }
 
     public static void show(String imgFilePath, float ration, int reqCode, AbsActivity activity)

@@ -50,7 +50,7 @@ public class PhotoViewActivity extends AbsActivity implements OnPhotoTapListener
     }
 
     @Override
-    protected void onInitData()
+    protected void onInitData(Intent data)
     {
         String[] imgAry = null;
         String host = null;
