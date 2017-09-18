@@ -91,7 +91,6 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     public void handle(Intent i, IWXAPIEventHandler handler)
     {
         wxApi.handleIntent(i, handler);
-        wxApi.handleIntent(i, handler);
     }
 
     public void setListener(WXSDXListener listener)
