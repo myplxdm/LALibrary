@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -93,10 +94,16 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     public void setLeftBtn(String leftBtnImgUrl, int btImgW, int btImgH,
                            final String title, final String url, final boolean bReload, final boolean bTrans, final int btnType)
     {
-        if (leftBtnImgUrl != null)
+        if (!TextUtils.isEmpty(leftBtnImgUrl))
         {
             ib_left_btn.setVisibility(View.VISIBLE);
-            Glide.with(getContext()).load(Uri.decode(leftBtnImgUrl)).into(ib_left_btn);
+            if (leftBtnImgUrl.startsWith("http"))
+            {
+                Glide.with(getContext()).load(Uri.decode(leftBtnImgUrl)).into(ib_left_btn);
+            }else
+            {
+                ib_left_btn.setImageResource(Integer.parseInt(leftBtnImgUrl));
+            }
         }else
         {
             ib_left_btn.setVisibility(View.GONE);

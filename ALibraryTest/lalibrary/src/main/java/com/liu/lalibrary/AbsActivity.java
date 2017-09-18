@@ -360,7 +360,8 @@ public abstract class AbsActivity extends AutoLayoutActivity
     //从当前界面返回到第几个界面 a -> b -> c ,num = 1 , back to b
     public static void backToNum(int num)
     {
-        for (int i = actList.size() - 1; i >= actList.size() - num; i--)
+        if (num < 0) return;
+        for (int i = actList.size() - 1; i > num; i--)
         {
             actList.get(i).finish();
         }

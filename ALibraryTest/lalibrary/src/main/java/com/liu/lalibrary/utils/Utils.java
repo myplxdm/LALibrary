@@ -85,6 +85,15 @@ public class Utils
         act.startActivity(i);
     }
 
+    public static void sendSms(Activity act, String tel, String body)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.putExtra("address", tel);
+        intent.putExtra("sms_body", body);
+        intent.setType("vnd.android-dir[表情]s-sms");
+        act.startActivity(intent);
+    }
+
     public static String idCardReplaceWithStar(String idCard)
     {
         if (TextUtils.isEmpty(idCard)) return "";
