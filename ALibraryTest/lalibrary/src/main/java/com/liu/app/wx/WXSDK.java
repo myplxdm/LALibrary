@@ -153,14 +153,14 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     {
         if (shareType == (WX_SHARE_TYPE_FIREND | WX_SHARE_TYPE_TIMELINE))
         {
-            new BottomSheet.Builder(activity).title("分享").sheet(R.menu.menu_wx_share).listener(new DialogInterface.OnClickListener()
+            new BottomSheet.Builder(activity, R.style.BottomSheetStyleDialog).title("分享").sheet(R.menu.menu_wx_share).listener(new DialogInterface.OnClickListener()
             {
                 @Override
                 public void onClick(DialogInterface dialog, int which)
                 {
                     sendUrl(title, desc, imgUrl, url, which == 1);
                 }
-            }).build().show();
+            }).grid().build().show();
         }else
         {
             sendUrl(title, desc, imgUrl, url, (shareType & WX_SHARE_TYPE_TIMELINE) == WX_SHARE_TYPE_TIMELINE);
