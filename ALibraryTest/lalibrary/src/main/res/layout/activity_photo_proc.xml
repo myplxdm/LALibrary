@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:background="#000"/>
 
-        <org.liu.library.ui.touchview.TouchPlate
+        <com.liu.lalibrary.ui.touchview.TouchPlate
             android:id="@+id/tp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
