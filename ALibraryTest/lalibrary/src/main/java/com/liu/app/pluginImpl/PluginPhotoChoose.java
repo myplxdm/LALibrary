@@ -28,7 +28,6 @@ public class PluginPhotoChoose extends PluginBase
     public static final String NAME = "photo_choose";
     private final String TAKE_PHOTO_NAME = "photo.jpg";
     private AlertView photoAlertView;
-    private WeakReference<AbsActivity> wrActivity;
     private IPluginEvent event;
 
     public PluginPhotoChoose(AbsActivity activity)
@@ -86,10 +85,10 @@ public class PluginPhotoChoose extends PluginBase
                         {
                             if (position == 0)
                             {
-                                ImageTools.takePicture(wrActivity.get(), DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME));
+                                ImageTools.takePicture(getActivity(), DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME));
                             } else if (position == 1)
                             {
-                                ImageTools.chooseAlbum(wrActivity.get());
+                                ImageTools.chooseAlbum(getActivity());
                             }
                         }
                     });
@@ -133,7 +132,6 @@ public class PluginPhotoChoose extends PluginBase
     {
         super.onDestroy();
         event = null;
-        wrActivity = null;
         photoAlertView = null;
     }
 }

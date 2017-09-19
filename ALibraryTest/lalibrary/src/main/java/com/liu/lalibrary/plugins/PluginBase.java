@@ -64,7 +64,7 @@ public abstract class PluginBase implements IPlugin
     @Override
     public void onDestroy()
     {
-
+        wrActivity = null;
     }
 
     @Override
