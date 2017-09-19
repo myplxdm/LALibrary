@@ -27,6 +27,7 @@ import com.liu.lalibrary.ui.touchview.TouchTextView;
 import com.liu.lalibrary.utils.Utils;
 import com.liu.lalibrary.utils.imagecache.ImageTools;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -221,7 +222,7 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
         ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), saveFileName, true);
 
         Intent rs = new Intent();
-        rs.putExtra(RESULT_FILE_NAME, saveFileName);
+        rs.putExtra(RESULT_FILE_NAME, Utils.getPath(filePath) + File.separator + saveFileName);
         setResult(RESULT_OK, rs);
         finish();
     }

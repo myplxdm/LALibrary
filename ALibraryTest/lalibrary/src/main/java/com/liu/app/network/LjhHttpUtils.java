@@ -151,7 +151,7 @@ public class LjhHttpUtils
             @Override
             public void onFailure(Call call, IOException e)
             {
-                listener.onHttpReqResult(HU_STATE_ERR, NERR_NETWORK);
+                listener.onHttpReqResult(HU_STATE_ERR, e.getMessage());
                 LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
             }
 
