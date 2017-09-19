@@ -25,6 +25,7 @@ public class NetConnManager extends BroadcastReceiver
     private ArrayList<WeakReference<INetworkLisener>> wrListeners;
     private boolean isConnect = false;
     private boolean isReg = false;
+    private boolean isInit = false;
     private ConnectivityManager connManager;
     private ExecutorService executorService;
 
@@ -49,16 +50,21 @@ public class NetConnManager extends BroadcastReceiver
         return SingletonHolder.INSTANCE;
     }
 
+    public synchronized void init(Context c)
+    {
+        if (isInit)return;
+        connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        checkConn();
+        isInit = true;
+    }
+
     public synchronized void reg(Context c)
     {
+        init(c);
         if (!isReg)
         {
             IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
             c.registerReceiver(this, filter);
-
-            connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
-            checkConn();
-            isReg = true;
         }
     }
 

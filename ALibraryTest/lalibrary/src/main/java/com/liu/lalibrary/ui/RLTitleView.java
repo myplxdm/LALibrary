@@ -109,9 +109,10 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
             ib_left_btn.setVisibility(View.GONE);
         }
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)ib_left_btn.getLayoutParams();
-        lp.width = DensityUtils.dp2px(context, btImgW);
-        lp.height = DensityUtils.dp2px(context, btImgH);
+        lp.width = btImgW;
+        lp.height = btImgH;
         ib_left_btn.setLayoutParams(lp);
+        AutoUtils.auto(ib_left_btn);
         ib_left_btn.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -190,14 +191,18 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         });
     }
 
-    public void addImgButton(int resId, final String title, final String url, final boolean bReload, final boolean bTrans, final int btnType)
+    public void addImgButton(int resId,
+                             int width, int height,
+                             final String title, final String url,
+                             final boolean bReload, final boolean bTrans,
+                             final int btnType)
     {
         RelativeLayout rl = (RelativeLayout)View.inflate(context, R.layout.layout_titleview_imgbtn, null);
         final ImageView iv = (ImageView) rl.findViewById(R.id.iv_btn);
         iv.setBackgroundResource(resId);
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        //lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
+        LayoutParams lp = new LayoutParams(width, height);
         ll_right.addView(rl, lp);
+        AutoUtils.auto(rl);
         rl.setOnClickListener(new OnClickListener()
         {
             @Override
