@@ -30,7 +30,7 @@ import okhttp3.Response;
 
 public class LjhHttpUtils
 {
-    private final int TIME_OUT = 6;//sec
+    private final int TIME_OUT = 10;//sec
     private final String NERR_NETWORK = "网络错误";
     private final String NERR_NO_NETWORK = "当前无网络";
     //
