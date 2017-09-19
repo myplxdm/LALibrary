@@ -46,8 +46,6 @@ public class TextOperView extends BaseView implements ViewPager.OnPageChangeList
     private TextView tv_line_ver;
     //
     private TouchPlate touchPlate;
-    //
-    private Context context;
 
     public TextOperView(AbsActivity activity, ViewGroup vg, int rid)
     {
@@ -86,21 +84,22 @@ public class TextOperView extends BaseView implements ViewPager.OnPageChangeList
 
     private void createFontList()
     {
-        View v = View.inflate(context, R.layout.camera_text_vp_font_list, null);
+        AbsActivity activity = getActivity();
+        View v = View.inflate(activity, R.layout.camera_text_vp_font_list, null);
         pageViews[0] = v;
         LinearLayout ll = (LinearLayout)v.findViewById(R.id.ll_font_list);
         //FontLoader.getInst().addFontFromAsset(getContext(),"fonts/ccfst.ttf");
-        FontLoader.getInst().addFontFromAsset(context, "fonts/fz.ttf");
-        FontLoader.getInst().addFontFromAsset(context,"fonts/fzyx.ttf");
-        FontLoader.getInst().addFontFromAsset(context,"fonts/ht.ttf");
-        FontLoader.getInst().addFontFromAsset(context,"fonts/jhc.ttf");
+        FontLoader.getInst().addFontFromAsset(activity, "fonts/fz.ttf");
+        FontLoader.getInst().addFontFromAsset(activity,"fonts/fzyx.ttf");
+        FontLoader.getInst().addFontFromAsset(activity,"fonts/ht.ttf");
+        FontLoader.getInst().addFontFromAsset(activity,"fonts/jhc.ttf");
         //FontLoader.getInst().addFontFromAsset(getContext(),"fonts/jqs.ttf");
         int fc = FontLoader.getInst().getFontCount();
         TextView tv;
         LinearLayout.LayoutParams lp;
         for (int i = 0;i < fc;i++)
         {
-            tv = new TextView(context);
+            tv = new TextView(activity);
             tv.setBackgroundResource(R.drawable.font_bg);
             tv.setText("茶");
             tv.setTypeface(FontLoader.getInst().getFont(i));
@@ -118,7 +117,8 @@ public class TextOperView extends BaseView implements ViewPager.OnPageChangeList
 
     private void createFontColor()
     {
-        View v = View.inflate(context, R.layout.camera_text_vp_font_color, null);
+        AbsActivity activity = getActivity();
+        View v = View.inflate(activity, R.layout.camera_text_vp_font_color, null);
         pageViews[1] = v;
 
         v_white_color = (View) v.findViewById(R.id.v_white_color);
@@ -136,7 +136,8 @@ public class TextOperView extends BaseView implements ViewPager.OnPageChangeList
 
     private void createLines()
     {
-        View v = View.inflate(context, R.layout.camera_text_vp_lines, null);
+        AbsActivity activity = getActivity();
+        View v = View.inflate(activity, R.layout.camera_text_vp_lines, null);
         pageViews[2] = v;
 
         tv_line_hor = (TextView) v.findViewById(R.id.tv_line_hor);
