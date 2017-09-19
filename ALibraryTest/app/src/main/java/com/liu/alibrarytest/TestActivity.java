@@ -1,5 +1,6 @@
 package com.liu.alibrarytest;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class TestActivity extends AbsActivity implements NetConnManager.INetwork
     }
 
     @Override
-    protected void onInitData()
+    protected void onInitData(Intent data)
     {
         NetConnManager.inst().addListener(this);
     }

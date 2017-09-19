@@ -42,6 +42,7 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
 {
     private static final String PHOTO_PATH = "photo_path";
     private static final String CANVA_RATION = "canva_ration";
+    public static final String RESULT_FILE_NAME = "rfn";
     //title
     private Button                      btn_close;
     //content
@@ -195,11 +196,13 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
                 Bitmap bmp = fl_bg_canva.exportImage();
                 touchPlate.drawInBmp(bmp, new Rect(fl_bg_canva.getLeft(), fl_bg_canva.getTop(), fl_bg_canva.getRight(), fl_bg_canva.getBottom()));
 
-                ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), "tmp." + Utils.getExtName(filePath), true);
-                setResult(RESULT_OK);
+                String saveFileName = "tmp." + Utils.getExtName(filePath);
+                ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), saveFileName, true);
+
+                Intent rs = new Intent();
+                rs.putExtra(RESULT_FILE_NAME, saveFileName);
+                setResult(RESULT_OK, rs);
                 finish();
-                //Utils.saveImageToGallery(this,bmp);
-                //Toast.makeText(this, "已经导出到相册", Toast.LENGTH_SHORT).show();
                 return;
             }
             cur_page++;
