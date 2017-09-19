@@ -45,6 +45,7 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
     public static final String RESULT_FILE_NAME = "rfn";
     //title
     private Button                      btn_close;
+    private TextView                    tvFinish;
     //content
     private CameraContentFrameLayout    ccfl;
     private BgCanvaLayout fl_bg_canva;
@@ -114,6 +115,8 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
         //nav
         btn_close = (Button) findViewById(R.id.btn_close);
         btn_close.setOnClickListener(this);
+        tvFinish = (TextView) findViewById(R.id.tvFinish);
+        tvFinish.setOnClickListener(this);
         //content
         ViewGroup vg = getRootViewGroup();
         for (int i = 0;i < vg.getChildCount();i++)
@@ -170,7 +173,10 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
     public void onClick(View v)
     {
         int i = v.getId();
-        if (i == R.id.btn_close)
+        if (i == R.id.tvFinish)
+        {
+            exportImage();
+        }else if (i == R.id.btn_close)
         {
             finish();
 
@@ -193,16 +199,7 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
         {
             if (cur_page == 1)
             {
-                Bitmap bmp = fl_bg_canva.exportImage();
-                touchPlate.drawInBmp(bmp, new Rect(fl_bg_canva.getLeft(), fl_bg_canva.getTop(), fl_bg_canva.getRight(), fl_bg_canva.getBottom()));
-
-                String saveFileName = "tmp." + Utils.getExtName(filePath);
-                ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), saveFileName, true);
-
-                Intent rs = new Intent();
-                rs.putExtra(RESULT_FILE_NAME, saveFileName);
-                setResult(RESULT_OK, rs);
-                finish();
+                exportImage();
                 return;
             }
             cur_page++;
@@ -213,6 +210,20 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
             ccfl.incViewIndex();
 
         }
+    }
+
+    private void exportImage()
+    {
+        Bitmap bmp = fl_bg_canva.exportImage();
+        touchPlate.drawInBmp(bmp, new Rect(fl_bg_canva.getLeft(), fl_bg_canva.getTop(), fl_bg_canva.getRight(), fl_bg_canva.getBottom()));
+
+        String saveFileName = "tmp." + Utils.getExtName(filePath);
+        ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), saveFileName, true);
+
+        Intent rs = new Intent();
+        rs.putExtra(RESULT_FILE_NAME, saveFileName);
+        setResult(RESULT_OK, rs);
+        finish();
     }
 
     /*************  AdjustOperListener  *******************/

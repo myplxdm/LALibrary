@@ -23,6 +23,17 @@
             android:textColor="#000"
             android:textSize="53px"/>
 
+        <TextView
+            android:id="@+id/tvFinish"
+            android:layout_marginRight="30px"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#000"
+            android:textSize="53px"
+            android:text="确定"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
