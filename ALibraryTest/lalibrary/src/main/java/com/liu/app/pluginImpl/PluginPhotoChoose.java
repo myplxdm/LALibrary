@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.liu.app.DirManager;
@@ -14,10 +15,6 @@ import com.liu.lalibrary.plugins.PluginBase;
 import com.liu.lalibrary.utils.AppUtils;
 import com.liu.lalibrary.utils.PermissionsUtil;
 import com.liu.lalibrary.utils.imagecache.ImageTools;
-
-import org.json.JSONObject;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Created by liu on 2017/9/1.
