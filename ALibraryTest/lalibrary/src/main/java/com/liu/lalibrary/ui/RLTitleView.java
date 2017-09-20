@@ -99,6 +99,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
             ib_left_btn.setVisibility(View.GONE);
         }else
         {
+            ib_left_btn.setVisibility(View.VISIBLE);
             SimpleTarget target = new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
