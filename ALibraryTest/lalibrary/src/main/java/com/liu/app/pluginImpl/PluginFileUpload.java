@@ -33,7 +33,6 @@ public class PluginFileUpload extends PluginBase
     public static final String P_IS_CORP = "corp";
     public static final String P_WIDTH = "width";
     public static final String P_HEIGHT = "height";
-    private final int REQ_PHOTO_CORP = 0xff101010;
     //
     private String upUrl;
     private float corpRation;
@@ -79,7 +78,7 @@ public class PluginFileUpload extends PluginBase
                 {
                     if (corpRation > 0)
                     {
-                        PhotoProcActivity.show(path, corpRation, REQ_PHOTO_CORP, getActivity());
+                        PhotoProcActivity.show(path, corpRation, ImageTools.REQ_OPEN_CORP, getActivity());
                         return;
                     }
                     uploadFile(path);
@@ -120,9 +119,9 @@ public class PluginFileUpload extends PluginBase
                             if (!TextUtils.isEmpty(result))
                             {
                                 event.pluginResult(true, result, null);
-                                //web.loadUrl(String.format("javascript:photoup_after('%s')",result));
                                 return;
                             }
+                            event.pluginResult(false, result, null);
                             Toast.makeText(getActivity(), "上传失败", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -152,7 +151,7 @@ public class PluginFileUpload extends PluginBase
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_PHOTO_CORP && data != null)
+        if (requestCode == ImageTools.REQ_OPEN_CORP && data != null)
         {
             uploadFile(data.getStringExtra(PhotoProcActivity.RESULT_FILE_NAME));
         }
