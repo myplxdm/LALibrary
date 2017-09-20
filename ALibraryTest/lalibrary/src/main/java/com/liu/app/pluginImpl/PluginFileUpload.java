@@ -63,6 +63,7 @@ public class PluginFileUpload extends PluginBase
         upUrl = params.getString(P_URL);
         width = params.getIntValue(P_WIDTH);
         height = params.getIntValue(P_HEIGHT);
+        this.event = event;
         if (params.getBoolean(P_IS_CORP))
         {
             corpRation = params.getFloat(P_RATION);
