@@ -1,7 +1,8 @@
 package com.liu.lalibrary.plugins;
 
 import android.content.Intent;
-import org.json.JSONObject;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * Created by liu on 2017/8/31.
