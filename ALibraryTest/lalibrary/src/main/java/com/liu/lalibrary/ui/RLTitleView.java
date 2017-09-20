@@ -91,6 +91,39 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         AutoUtils.auto(this);
     }
 
+    public void setLeftBtn(String leftBtnImgUrl, final String title, final String url,
+                           final boolean bReload, final boolean bTrans, final int btnType)
+    {
+        if (TextUtils.isEmpty(leftBtnImgUrl))
+        {
+            ib_left_btn.setVisibility(View.GONE);
+        }else
+        {
+            SimpleTarget target = new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
+                {
+                    ib_left_btn.setImageBitmap(resource);
+                    ib_left_btn.getLayoutParams().width = resource.getWidth();
+                    ib_left_btn.getLayoutParams().height = resource.getHeight();
+                    AutoUtils.auto(ib_left_btn);
+                }
+            };
+            Glide.with(context).asBitmap().load(leftBtnImgUrl).into(target);
+            ib_left_btn.setOnClickListener(new OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (listener != null)
+                    {
+                        listener.onTitleViewBtnClick(ib_left_btn, title, url, bReload, bTrans, btnType);
+                    }
+                }
+            });
+        }
+    }
+
     public void setLeftBtn(String leftBtnImgUrl, int btImgW, int btImgH,
                            final String title, final String url, final boolean bReload, final boolean bTrans, final int btnType)
     {
@@ -104,26 +137,26 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
             {
                 ib_left_btn.setImageResource(Integer.parseInt(leftBtnImgUrl));
             }
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)ib_left_btn.getLayoutParams();
+            lp.width = btImgW;
+            lp.height = btImgH;
+            ib_left_btn.setLayoutParams(lp);
+            AutoUtils.auto(ib_left_btn);
+            ib_left_btn.setOnClickListener(new OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (listener != null)
+                    {
+                        listener.onTitleViewBtnClick(ib_left_btn, title, url, bReload, bTrans, btnType);
+                    }
+                }
+            });
         }else
         {
             ib_left_btn.setVisibility(View.GONE);
         }
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)ib_left_btn.getLayoutParams();
-        lp.width = btImgW;
-        lp.height = btImgH;
-        ib_left_btn.setLayoutParams(lp);
-        AutoUtils.auto(ib_left_btn);
-        ib_left_btn.setOnClickListener(new OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (listener != null)
-                {
-                    listener.onTitleViewBtnClick(ib_left_btn, title, url, bReload, bTrans, btnType);
-                }
-            }
-        });
     }
 
     public void set(int retImgResId, String title, int titleAlignment, long bgc)
