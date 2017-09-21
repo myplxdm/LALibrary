@@ -33,12 +33,16 @@ public class PluginFileUpload extends PluginBase
     public static final String P_IS_CORP = "corp";
     public static final String P_WIDTH = "width";
     public static final String P_HEIGHT = "height";
+    public static final String P_UP_KEYS = "upkeys";
+    public static final String P_UP_VALUES = "upvalues";
     //
     private String upUrl;
     private float corpRation;
     private int width;
     private int height;
     private IPluginEvent event;
+    private String upKeys;
+    private String upValues;
 
     public PluginFileUpload(AbsActivity activity)
     {
@@ -64,9 +68,14 @@ public class PluginFileUpload extends PluginBase
         width = params.getIntValue(P_WIDTH);
         height = params.getIntValue(P_HEIGHT);
         this.event = event;
-        if (params.getBoolean(P_IS_CORP))
+        if (params.containsKey(P_IS_CORP) && params.getBoolean(P_IS_CORP))
         {
             corpRation = params.getFloat(P_RATION);
+        }
+        if (params.containsKey(P_UP_KEYS) && params.containsKey(P_UP_VALUES))
+        {
+            upKeys = params.getString(P_UP_KEYS);
+            upValues = params.getString(P_UP_VALUES);
         }
         IPlugin pc = getActivity().getPluginByName(PluginPhotoChoose.NAME);
         if (pc == null)return false;
@@ -104,7 +113,18 @@ public class PluginFileUpload extends PluginBase
                                                              "tmp." + Utils.getExtName(path), true);
         HashMap<String,File> files = new HashMap<>();
         files.put("upfile",new File(fileName));
-        LjhHttpUtils.inst().uploadFile(upUrl, null, files, new LjhHttpUtils.IHttpRespListener()
+        HashMap<String,String> params = null;
+        if (upKeys != null && upValues != null)
+        {
+            params = new HashMap<>();
+            String[] ks = upKeys.split(",");
+            String[] vs = upValues.split(",");
+            for (int i = 0;i < ks.length;i++)
+            {
+                params.put(ks[i],vs[i]);
+            }
+        }
+        LjhHttpUtils.inst().uploadFile(upUrl, params, files, new LjhHttpUtils.IHttpRespListener()
         {
             @Override
             public void onHttpReqResult(int state, final String result)

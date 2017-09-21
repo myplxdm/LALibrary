@@ -45,12 +45,20 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     public static final String WX_FIELD_HEADIMGURL = "headimgurl";
     public static final String WX_FIELD_ERRCODE = "errcode";
     public static final String WX_FIELD_ERRMSG = "errmsg";
+    //
+    public static final int TYPE_LOGIN_RESULT = 1;
+    public static final int TYPE_USER_REJECT_AUTH = 2;
+    public static final int TYPE_USER_CANCEL_AUTH = 3;
+    public static final int TYPE_PAY_RESULT = 4;
+    //
+    public static final String WX_RESULT_IS_SUCCESS = "isSuccess";
 
     //
     private static class SingletonHolder
     {
         private static final WXSDK INSTANCE = new WXSDK();
     }
+
     public static final WXSDK inst()
     {
         return SingletonHolder.INSTANCE;
@@ -59,21 +67,17 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     //
     public interface WXSDXListener
     {
-        public void onResp(BaseResp baseResp);
-        //login
-        public void onWXLoginResult(boolean isSuccess, JSONObject result);
-        public void onWxUserRejectAuth();
-        public void onWxOnUserCancelAuth();
-        //pay
-        public void onWxPayResult(int errCode, String err);
+        public void onWXResp(BaseResp baseResp);
+
+        public void onWXResult(int type, JSONObject result);
     }
 
-    private WXSDXListener				listener;
-    private IWXAPI                      wxApi;
-    private HashMap<String, WxAppInfo>  mapAppInfo = new HashMap<>();
-    private String                      curType;
-    private WxAppInfo                   curWxInfo;
-    private Context                     context;
+    private WXSDXListener listener;
+    private IWXAPI wxApi;
+    private HashMap<String, WxAppInfo> mapAppInfo = new HashMap<>();
+    private String curType;
+    private WxAppInfo curWxInfo;
+    private Context context;
 
     public synchronized void addAppInfo(String type, String appId, String secret)
     {
@@ -107,7 +111,7 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
                 WxAppInfo info = getWxInfoByType(type);
                 if (info == null)
                 {
-                    LogUtils.LOGE(WXSDK.class, String.format("can't find %s type appid",type));
+                    LogUtils.LOGE(WXSDK.class, String.format("can't find %s type appid", type));
                     return false;
                 }
                 curWxInfo = info;
@@ -137,11 +141,11 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
             PayReq request = new PayReq();
             request.appId = getWxInfoByType(WX_APPID_TYPE_PAY).appId;
             request.partnerId = partenerId;
-            request.prepayId= prepayId;
+            request.prepayId = prepayId;
             request.packageValue = packageName;
-            request.nonceStr= nonceStr;
-            request.timeStamp= timeStamp;
-            request.sign= sign;
+            request.nonceStr = nonceStr;
+            request.timeStamp = timeStamp;
+            request.sign = sign;
             return wxApi.sendReq(request);
         }
         return false;
@@ -160,7 +164,7 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
                     sendUrl(title, desc, imgUrl, url, which == 1);
                 }
             }).grid().build().show();
-        }else
+        } else
         {
             sendUrl(title, desc, imgUrl, url, (shareType & WX_SHARE_TYPE_TIMELINE) == WX_SHARE_TYPE_TIMELINE);
         }
@@ -187,6 +191,7 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     {
         return wxApi != null ? wxApi.isWXAppInstalled() : false;
     }
+
     /***************  private fun ***************/
     private WxAppInfo getWxInfoByType(String type)
     {
@@ -225,8 +230,9 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     private void getAccessTokenWithRefreshToken(String token)
     {
         String url = String.format("https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s",
-                                   curWxInfo.appId,token);
-        HttpUtils.doGetAsyn(url, new HttpUtils.CallBack() {
+                                   curWxInfo.appId, token);
+        HttpUtils.doGetAsyn(url, new HttpUtils.CallBack()
+        {
             @Override
             public void onRequestComplete(String result)
             {
@@ -236,9 +242,9 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
                     if (obj.containsKey(WX_FIELD_ERRCODE))
                     {
                         loginWx();
-                    }else
+                    } else
                     {
-                        getUserInfo(obj.getString("openid"),obj.getString("access_token"),obj.getString("refresh_token"));
+                        getUserInfo(obj.getString("openid"), obj.getString("access_token"), obj.getString("refresh_token"));
                     }
                 }
             }
@@ -247,23 +253,27 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
 
     private void getUserInfo(String openId, String token, final String refreshToken)
     {
-        String url = String.format("https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s",token,openId);
-        HttpUtils.doGetAsyn(url, new HttpUtils.CallBack() {
+        String url = String.format("https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s", token, openId);
+        HttpUtils.doGetAsyn(url, new HttpUtils.CallBack()
+        {
             @Override
             public void onRequestComplete(String result)
             {
                 if (result != null)
                 {
-                    JSONObject obj = JSON.parseObject(result);
-                    if (obj.containsKey("errcode"))
+                    JSONObject json = JSON.parseObject(result);
+                    if (json.containsKey("errcode"))
                     {
                         getAccessTokenWithRefreshToken(refreshToken);
                         return;
                     }
-                    listener.onWXLoginResult(true, obj);
-                }else
+                    json.put(WX_RESULT_IS_SUCCESS, true);
+                    listener.onWXResult(TYPE_LOGIN_RESULT, json);
+                } else
                 {
-                    listener.onWXLoginResult(false, null);
+                    JSONObject json = new JSONObject();
+                    json.put(WX_RESULT_IS_SUCCESS, false);
+                    listener.onWXResult(TYPE_LOGIN_RESULT, json);
                 }
             }
         });
@@ -272,20 +282,27 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     private void getAccessToken(String code)
     {
         String url = String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
-                                   curWxInfo.appId,curWxInfo.secret,code);
-        HttpUtils.doGetAsyn(url, new HttpUtils.CallBack() {
+                                   curWxInfo.appId, curWxInfo.secret, code);
+        HttpUtils.doGetAsyn(url, new HttpUtils.CallBack()
+        {
             @Override
             public void onRequestComplete(String result)
             {
                 if (result != null)
                 {
-                    JSONObject obj = JSON.parseObject(result);
-                    if (obj.containsKey("errcode"))
+                    JSONObject json = JSON.parseObject(result);
+                    if (json.containsKey("errcode"))
                     {
-                        listener.onWXLoginResult(false, obj);
+                        json.put(WX_RESULT_IS_SUCCESS, true);
+                        listener.onWXResult(TYPE_LOGIN_RESULT, json);
                         return;
                     }
-                    getUserInfo(obj.getString("openid"),obj.getString("access_token"),obj.getString("refresh_token"));
+                    getUserInfo(json.getString("openid"), json.getString("access_token"), json.getString("refresh_token"));
+                } else
+                {
+                    JSONObject json = new JSONObject();
+                    json.put(WX_RESULT_IS_SUCCESS, false);
+                    listener.onWXResult(TYPE_LOGIN_RESULT, json);
                 }
             }
         });
@@ -309,20 +326,24 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
                 if (re.errCode == 0)
                 {
                     getAccessToken(re.code);
-                }else if (re.errCode == -4)
+                } else if (re.errCode == -4)
                 {
-                    listener.onWxUserRejectAuth();
-                }else if (re.errCode == -2)
+                    listener.onWXResult(TYPE_USER_REJECT_AUTH, null);
+                } else if (re.errCode == -2)
                 {
-                    listener.onWxOnUserCancelAuth();
+                    listener.onWXResult(TYPE_USER_CANCEL_AUTH, null);
                 }
                 break;
             case ConstantsAPI.COMMAND_PAY_BY_WX:
-                listener.onWxPayResult(baseResp.errCode, baseResp.errStr);
+                JSONObject json = new JSONObject();
+                json.put(WX_FIELD_ERRCODE, baseResp.errCode);
+                json.put(WX_FIELD_ERRMSG, baseResp.errStr);
+                listener.onWXResult(TYPE_PAY_RESULT, json);
                 break;
         }
-        listener.onResp(baseResp);
+        listener.onWXResp(baseResp);
     }
+
     /***************  IWXAPIEventHandler end ***************/
 
     private class WxAppInfo
