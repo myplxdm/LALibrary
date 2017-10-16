@@ -66,7 +66,7 @@ public class FilterOperView extends BaseView implements View.OnClickListener, Se
 
     private void initFilterProgress(AbsActivity activity, ViewGroup vg, int rid)
     {
-        seek_view = new SeekView(activity, vg, rid);
+        seek_view = new SeekView(activity, vg, R.id.camera_seek);
         seek_view.setOnSeekListener(this);
     }
 

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.liu.lalibrary.utils.ViewIdUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -83,7 +85,7 @@ public class TouchPlate extends FrameLayout implements TouchTextView.TouchTextVi
             {
                 ((TouchTextView)child).setDoubleTapListener(this);
             }
-            child.setId(View.NO_ID);
+            child.setId(ViewIdUtils.generateViewId());
             ((TouchView) child).setEditable(true);
             if (getChildCount() > 0)
             {
@@ -141,7 +143,7 @@ public class TouchPlate extends FrameLayout implements TouchTextView.TouchTextVi
                 _downY = ev.getY();
                 _isSwitch = true;
                 ArrayList<Object> list = getPointInRect(ev.getX(), ev.getY());
-                if (list != null && list.size() == 2)
+                if (list != null && list.size() >= 2)
                 {
                     TouchView tv = (TouchView) list.get(0);
                     if (getChildAt(getChildCount() - 1) != tv)

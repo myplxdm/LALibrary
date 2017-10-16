@@ -49,7 +49,7 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
     private TextView                    tvFinish;
     //content
     private CameraContentFrameLayout    ccfl;
-    private BgCanvaLayout fl_bg_canva;
+    private BgCanvaLayout               fl_bg_canva;
     private TouchPlate                  touchPlate;
     //setp
     private RelativeLayout              rl_step;
