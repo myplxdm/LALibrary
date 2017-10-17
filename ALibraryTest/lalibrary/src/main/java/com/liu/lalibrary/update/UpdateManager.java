@@ -27,7 +27,6 @@ public class UpdateManager
 //	private String			filename;
 
 	private long			mDownloadID;
-	private String			mSaveFileName;
 	private Context			mContext;
 	// private ServiceConnection serviceConnection = new ServiceConnection()
 	// {
@@ -75,8 +74,16 @@ public class UpdateManager
 //                break;   
             case DownloadManager.STATUS_SUCCESSFUL:   
             	Intent intent = new Intent(Intent.ACTION_VIEW);
-            	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-            	File f = new File(mSaveFileName);
+            	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				String name;
+				if (AppUtils.getOSVersion() >= 24)
+				{
+					name = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+				}else
+				{
+					name = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
+				}
+            	File f = new File(name);
             	if (f.exists())
 				{
             		intent.setDataAndType(
@@ -115,8 +122,8 @@ public class UpdateManager
 		down.setVisibleInDownloadsUi(true);
 		down.setTitle(filename);
 		down.setDestinationInExternalPublicDir(path, filename);
-		mSaveFileName = path + filename;
-		File f = new File(mSaveFileName);
+		String sPath = path + filename;
+		File f = new File(sPath);
 		if (f.exists())
 		{
 			f.delete();
