@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.media.Image;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -80,7 +81,7 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
         initView();
         //
         filePath = getIntent().getStringExtra(PHOTO_PATH);
-        Bitmap bmp = BitmapFactory.decodeFile(filePath);
+        Bitmap bmp = ImageTools.decodeFile(new File(filePath), 1000, 1000); //BitmapFactory.decodeFile(filePath);
         bmpCache.put(0, bmp);
 
         fl_bg_canva.setImage(bmp);
