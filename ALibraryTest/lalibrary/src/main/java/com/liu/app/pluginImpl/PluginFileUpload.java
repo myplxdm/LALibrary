@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.liu.app.network.LjhHttpUtils;
 import com.liu.lalibrary.AbsActivity;
@@ -30,9 +31,8 @@ public class PluginFileUpload extends PluginBase
     public static final String NAME = "fileUpload";
     public static final String P_URL = "url";
     public static final String P_RATION = "ration";
-    public static final String P_IS_CORP = "corp";
-    public static final String P_WIDTH = "width";
-    public static final String P_HEIGHT = "height";
+    public static final String P_OUT_WIDTH = "owidth";
+    public static final String P_OUT_HEIGHT = "oheight";
     public static final String P_UP_KEYS = "upkeys";
     public static final String P_UP_VALUES = "upvalues";
     //
@@ -65,10 +65,10 @@ public class PluginFileUpload extends PluginBase
     public boolean exec(String cmd, JSONObject params, IPluginEvent event)
     {
         upUrl = params.getString(P_URL);
-        width = params.getIntValue(P_WIDTH);
-        height = params.getIntValue(P_HEIGHT);
+        width = params.getIntValue(P_OUT_WIDTH);
+        height = params.getIntValue(P_OUT_HEIGHT);
         this.event = event;
-        if (params.containsKey(P_IS_CORP) && params.getBoolean(P_IS_CORP))
+        if (params.containsKey(P_RATION))
         {
             corpRation = params.getFloat(P_RATION);
         }
@@ -88,7 +88,7 @@ public class PluginFileUpload extends PluginBase
                 {
                     if (corpRation > 0)
                     {
-                        PhotoProcActivity.show(path, corpRation, ImageTools.REQ_OPEN_CORP, getActivity());
+                        PhotoProcActivity.show(path, corpRation, width, height, ImageTools.REQ_OPEN_CORP, getActivity());
                         return;
                     }
                     uploadFile(path);
@@ -104,15 +104,28 @@ public class PluginFileUpload extends PluginBase
         return true;
     }
 
+    public static JSONObject packetParam(String url, float ration, int outWidth, int outHeight,
+                                         String httpKeys, String httpValues)
+    {
+        JSONObject json = new JSONObject();
+        json.put(P_URL, url);
+        json.put(P_RATION, ration);
+        json.put(P_OUT_WIDTH, outWidth);
+        json.put(P_OUT_HEIGHT, outHeight);
+        if (!TextUtils.isEmpty(httpKeys)) json.put(P_UP_KEYS, httpKeys);
+        if (!TextUtils.isEmpty(httpValues)) json.put(P_UP_VALUES, httpValues);
+        return json;
+    }
+
     private void uploadFile(String path)
     {
-        Bitmap bmp = ImageTools.getPhotoFromSDCard(path, width, height);
+        //Bitmap bmp = ImageTools.getPhotoFromSDCard(path, width, height);
         final ProgressDialog dlg = ProgressDialog.show(getActivity(), null, "正在上传文件...");
-        final String fileName = ImageTools.savePhotoToSDCard(bmp,
-                                                             CommonUtil.getRootFilePath() + AppUtils.getAppName(getActivity()),
-                                                             "tmp." + Utils.getExtName(path), true);
+        //final String fileName = ImageTools.savePhotoToSDCard(bmp,
+//                                                             CommonUtil.getRootFilePath() + AppUtils.getAppName(getActivity()),
+//                                                             "tmp." + Utils.getExtName(path), true);
         HashMap<String,File> files = new HashMap<>();
-        files.put("upfile",new File(fileName));
+        files.put("upfile",new File(path));
         HashMap<String,String> params = null;
         if (upKeys != null && upValues != null)
         {

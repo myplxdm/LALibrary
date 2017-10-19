@@ -43,6 +43,8 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
                                                               TouchPlate.TouchPlateListener
 {
     private static final String PHOTO_PATH = "photo_path";
+    private static final String MAX_WIDHT = "mw";
+    private static final String MAX_HEIGHT = "mh";
     private static final String CANVA_RATION = "canva_ration";
     public static final String RESULT_FILE_NAME = "rfn";
     //title
@@ -80,8 +82,15 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
     {
         initView();
         //
-        filePath = getIntent().getStringExtra(PHOTO_PATH);
-        Bitmap bmp = ImageTools.decodeFile(new File(filePath), 1000, 1000); //BitmapFactory.decodeFile(filePath);
+
+    }
+
+    @Override
+    protected void onInitData(Intent data)
+    {
+        filePath = data.getStringExtra(PHOTO_PATH);
+
+        Bitmap bmp = ImageTools.decodeFile(new File(filePath), data.getIntExtra(MAX_WIDHT, 1000), data.getIntExtra(MAX_HEIGHT, 1000)); //BitmapFactory.decodeFile(filePath);
         bmpCache.put(0, bmp);
 
         fl_bg_canva.setImage(bmp);
@@ -89,16 +98,13 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
         filterOperView.setImage(bmp);
     }
 
-    @Override
-    protected void onInitData(Intent data)
-    {
-    }
-
-    public static void show(String imgFilePath, float ration, int reqCode, AbsActivity activity)
+    public static void show(String imgFilePath, float ration, int maxWidth, int maxHeight, int reqCode, AbsActivity activity)
     {
         Intent i = new Intent(activity, PhotoProcActivity.class);
         i.putExtra(PHOTO_PATH, imgFilePath);
         i.putExtra(CANVA_RATION, ration);
+        i.putExtra(MAX_WIDHT, maxWidth);
+        i.putExtra(MAX_HEIGHT, maxHeight);
         activity.startActivityForResult(i, reqCode);
     }
 
