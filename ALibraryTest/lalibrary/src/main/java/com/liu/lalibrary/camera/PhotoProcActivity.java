@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.R;
@@ -223,15 +224,22 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
     private void exportImage()
     {
         Bitmap bmp = fl_bg_canva.exportImage();
-        touchPlate.drawInBmp(bmp, new Rect(fl_bg_canva.getLeft(), fl_bg_canva.getTop(), fl_bg_canva.getRight(), fl_bg_canva.getBottom()));
+        if (bmp != null)
+        {
+            touchPlate.drawInBmp(bmp, new Rect(fl_bg_canva.getLeft(), fl_bg_canva.getTop(), fl_bg_canva.getRight(), fl_bg_canva.getBottom()));
 
-        String saveFileName = "tmp." + Utils.getExtName(filePath);
-        ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), saveFileName, true);
+            String saveFileName = "tmp." + Utils.getExtName(filePath);
+            ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), saveFileName, true);
+            bmp.recycle();
 
-        Intent rs = new Intent();
-        rs.putExtra(RESULT_FILE_NAME, Utils.getPath(filePath) + File.separator + saveFileName);
-        setResult(RESULT_OK, rs);
-        finish();
+            Intent rs = new Intent();
+            rs.putExtra(RESULT_FILE_NAME, Utils.getPath(filePath) + File.separator + saveFileName);
+            setResult(RESULT_OK, rs);
+            finish();
+        }else
+        {
+            Toast.makeText(this, "导出文件不成功，请重试", Toast.LENGTH_LONG).show();
+        }
     }
 
     /*************  AdjustOperListener  *******************/
