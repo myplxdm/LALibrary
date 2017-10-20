@@ -507,8 +507,8 @@ public final class ImageTools
         {
             try
             {
-                fileOutputStream.close();
-            } catch (IOException e)
+                if (fileOutputStream != null) fileOutputStream.close();
+            } catch (Exception e)
             {
                 e.printStackTrace();
             }
