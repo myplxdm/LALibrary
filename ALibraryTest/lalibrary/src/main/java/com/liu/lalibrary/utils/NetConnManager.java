@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
  * Created by liu on 2017/8/27.
  */
 
-public class NetConnManager extends BroadcastReceiver
+public class NetConnManager extends BroadcastReceiver implements INetworkCheck
 {
     public interface INetworkLisener
     {

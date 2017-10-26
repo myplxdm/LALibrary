@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.liu.app.network.model.NetReqCmd;
 import com.liu.lalibrary.log.LogUtils;
+import com.liu.lalibrary.utils.INetworkCheck;
 import com.liu.lalibrary.utils.NetConnManager;
 import com.liu.lalibrary.utils.Utils;
 
@@ -33,10 +34,12 @@ public class LjhHttpUtils
     private final int TIME_OUT = 10;//sec
     private final String NERR_NETWORK = "网络错误";
     private final String NERR_NO_NETWORK = "当前无网络";
+    private final String NERR_NO_NO_200 = "请求出错";
     //
     public static final int HU_STATE_OK = 0x0;
     public static final int HU_STATE_NO_NET = 0x10;//无网络
     public static final int HU_STATE_ERR = 0x11;
+    public static final int HU_STATE_ERR_NO_200 = 0x12;//返回非200状态码
 
     private static class SingletonHolder
     {
@@ -51,6 +54,7 @@ public class LjhHttpUtils
     }
 
     private OkHttpClient client;
+    private INetworkCheck networkCheck;
 
     private LjhHttpUtils()
     {
@@ -65,10 +69,14 @@ public class LjhHttpUtils
     {
         return SingletonHolder.INSTANCE;
     }
+    public void setNetworkCheck(INetworkCheck check)
+    {
+        this.networkCheck = check;
+    }
 
     private boolean checkNetwork(IHttpRespListener listener)
     {
-        if (!NetConnManager.inst().isConnect())
+        if (networkCheck != null && !NetConnManager.inst().isConnect())
         {
             listener.onHttpReqResult(HU_STATE_NO_NET, NERR_NO_NETWORK);
             return false;
@@ -92,6 +100,11 @@ public class LjhHttpUtils
             @Override
             public void onResponse(Call call, Response response) throws IOException
             {
+                if (response.code() != 200)
+                {
+                    listener.onHttpReqResult(HU_STATE_ERR_NO_200, String.format("%s(%d)",NERR_NO_NO_200,response.code()));
+                    return;
+                }
                 listener.onHttpReqResult(HU_STATE_OK, response.body().string());
             }
         });
@@ -164,7 +177,7 @@ public class LjhHttpUtils
         return call;
     }
 
-    public Call downFile(final String url, final String saveDir, final IHttpRespListener listener)
+    public Call downFile(final String url, final String saveName, final IHttpRespListener listener)
     {
         if (!checkNetwork(listener))return null;
         Request request = new Request.Builder().url(url).build();
@@ -189,7 +202,7 @@ public class LjhHttpUtils
                 {
                     is = response.body().byteStream();
                     long total = response.body().contentLength();
-                    File file = new File(saveDir, Utils.getFileName(url));
+                    File file = new File(saveName);
                     fos = new FileOutputStream(file);
                     long sum = 0;
                     while ((len = is.read(buf)) != -1)
@@ -202,7 +215,7 @@ public class LjhHttpUtils
                     listener.onHttpReqResult(HU_STATE_OK, file.getAbsolutePath());
                 } catch (Exception e)
                 {
-                    listener.onHttpReqResult(HU_STATE_ERR, NERR_NETWORK);
+                    listener.onHttpReqResult(HU_STATE_ERR, e.getMessage());
                     LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
                 } finally
                 {
