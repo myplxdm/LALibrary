@@ -254,17 +254,25 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     {
         RelativeLayout rl = (RelativeLayout)View.inflate(context, R.layout.layout_titleview_imgbtn, null);
         final ImageView iv = (ImageView) rl.findViewById(R.id.iv_btn);
-        SimpleTarget target = new SimpleTarget<Bitmap>() {
+        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
             {
-                iv.setImageBitmap(resource);
-                iv.getLayoutParams().width = resource.getWidth();
-                iv.getLayoutParams().height = resource.getHeight();
-                AutoUtils.auto(iv);
+                try
+                {
+                    iv.setImageBitmap(resource);
+                    iv.getLayoutParams().width = resource.getWidth();
+                    iv.getLayoutParams().height = resource.getHeight();
+                    AutoUtils.auto(iv);
+                    iv.setTag(null);
+                }catch (Exception e)
+                {
+
+                }
             }
         };
         Glide.with(context).asBitmap().load(btImgUrl).into(target);
+        iv.setTag(target);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
         ll_right.addView(rl, lp);
