@@ -22,6 +22,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.liu.lalibrary.R;
@@ -254,25 +255,34 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     {
         RelativeLayout rl = (RelativeLayout)View.inflate(context, R.layout.layout_titleview_imgbtn, null);
         final ImageView iv = (ImageView) rl.findViewById(R.id.iv_btn);
-        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+        Glide.with(context).load(btImgUrl).into(iv).getSize(new SizeReadyCallback() {
             @Override
-            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
+            public void onSizeReady(int i, int i1)
             {
-                try
-                {
-                    iv.setImageBitmap(resource);
-                    iv.getLayoutParams().width = resource.getWidth();
-                    iv.getLayoutParams().height = resource.getHeight();
-                    AutoUtils.auto(iv);
-                    iv.setTag(null);
-                }catch (Exception e)
-                {
-
-                }
+                iv.getLayoutParams().width = i;
+                iv.getLayoutParams().height = i1;
+                AutoUtils.auto(iv);
             }
-        };
-        Glide.with(context).asBitmap().load(btImgUrl).into(target);
-        iv.setTag(target);
+        });
+//        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+//            @Override
+//            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
+//            {
+//                try
+//                {
+//                    iv.setImageBitmap(resource);
+//                    iv.getLayoutParams().width = resource.getWidth();
+//                    iv.getLayoutParams().height = resource.getHeight();
+//                    AutoUtils.auto(iv);
+//                    iv.setTag(null);
+//                }catch (Exception e)
+//                {
+//
+//                }
+//            }
+//        };
+//        Glide.with(context).asBitmap().load(btImgUrl).into(target);
+//        iv.setTag(target);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
         ll_right.addView(rl, lp);
