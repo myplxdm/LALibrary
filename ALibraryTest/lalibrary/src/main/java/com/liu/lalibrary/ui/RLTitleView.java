@@ -301,15 +301,12 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
 
     public void addTextButton(String btText, long btTextColor, int textSize, final String title, final String url, final boolean bReload, final boolean bTrans, final int btnType)
     {
-        //RelativeLayout rl = (RelativeLayout)View.inflate(context, R.layout.layout_titleview_textbtn, null);
         View v = LayoutInflater.from(context).inflate(R.layout.layout_titleview_textbtn, ll_right, false);
         final TextView tv = (TextView) v.findViewById(R.id.tv_btn);
         tv.setText(btText);
         tv.setTextColor((int) btTextColor);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * 3);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         AutoUtils.auto(v);
-        //LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        //lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
         ll_right.addView(v);
         v.setOnClickListener(new OnClickListener()
         {
