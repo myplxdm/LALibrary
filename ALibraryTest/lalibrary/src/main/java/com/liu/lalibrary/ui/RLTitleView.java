@@ -92,6 +92,15 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         AutoUtils.auto(this);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+    {
+        super.onLayout(changed, left, top, right, bottom);
+        float i = ll_right.getX();
+        float w = ll_right.getWidth();
+        LogUtils.LOGD(RLTitleView.class, "x = " + i + "  w = " + w);
+    }
+
     public void setLeftBtn(String leftBtnImgUrl, final String title, final String url,
                            final boolean bReload, final boolean bTrans, final int btnType)
     {
@@ -255,34 +264,24 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     {
         RelativeLayout rl = (RelativeLayout)View.inflate(context, R.layout.layout_titleview_imgbtn, null);
         final ImageView iv = (ImageView) rl.findViewById(R.id.iv_btn);
-        Glide.with(context).load(btImgUrl).into(iv).getSize(new SizeReadyCallback() {
+        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
             @Override
-            public void onSizeReady(int i, int i1)
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
             {
-                iv.getLayoutParams().width = i;
-                iv.getLayoutParams().height = i1;
-                AutoUtils.auto(iv);
+                try
+                {
+                    iv.setImageBitmap(resource);
+                    iv.getLayoutParams().width = resource.getWidth();
+                    iv.getLayoutParams().height = resource.getHeight();
+                    AutoUtils.auto(iv);
+                    iv.setTag(null);
+                }catch (Exception e)
+                {
+                }
             }
-        });
-//        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
-//            @Override
-//            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
-//            {
-//                try
-//                {
-//                    iv.setImageBitmap(resource);
-//                    iv.getLayoutParams().width = resource.getWidth();
-//                    iv.getLayoutParams().height = resource.getHeight();
-//                    AutoUtils.auto(iv);
-//                    iv.setTag(null);
-//                }catch (Exception e)
-//                {
-//
-//                }
-//            }
-//        };
-//        Glide.with(context).asBitmap().load(btImgUrl).into(target);
-//        iv.setTag(target);
+        };
+        Glide.with(context).asBitmap().load(btImgUrl).into(target);
+        iv.setTag(target);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
         ll_right.addView(rl, lp);
