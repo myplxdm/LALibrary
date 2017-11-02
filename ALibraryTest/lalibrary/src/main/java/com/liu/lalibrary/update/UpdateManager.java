@@ -68,8 +68,7 @@ public class UpdateManager
 //                Log.v("down", "STATUS_PAUSED");  
 //            case DownloadManager.STATUS_PENDING:   
 //                Log.v("down", "STATUS_PENDING");  
-//            case DownloadManager.STATUS_RUNNING:   
-//                //濮濓絽婀稉瀣祰閿涘奔绗夐崑姘崲娴ｆ洑绨ㄩ幆锟�
+//            case DownloadManager.STATUS_RUNNING:
 //                Log.v("down", "STATUS_RUNNING");  
 //                break;   
             case DownloadManager.STATUS_SUCCESSFUL:   
@@ -90,10 +89,12 @@ public class UpdateManager
     						Uri.fromFile(f),
     						"application/vnd.android.package-archive");
     				mContext.startActivity(intent);
-				}				
+				}
+				mContext.unregisterReceiver(downReceiver);
                 break;   
             case DownloadManager.STATUS_FAILED:   
-                manger.remove(mDownloadID);   
+                manger.remove(mDownloadID);
+				mContext.unregisterReceiver(downReceiver);
                 break;   
             }   
         }  
