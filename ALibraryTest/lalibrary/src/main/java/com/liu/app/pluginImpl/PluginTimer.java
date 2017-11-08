@@ -65,6 +65,12 @@ public class PluginTimer extends PluginBase
         return false;
     }
 
+    @Override
+    public void stopPlugin()
+    {
+        cancelTime();
+    }
+
     private void cancelTime()
     {
         event.pluginResult(true, RES_TIMING_CANCEL, null);
