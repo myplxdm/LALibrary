@@ -18,6 +18,7 @@ import java.util.TimerTask;
 
 public class PluginTimer extends PluginBase
 {
+    public static final String NAME = "timer";
     public static String CMD_START = "start";
     public static String PAM_COUNT = "count";//int
     //
@@ -42,13 +43,13 @@ public class PluginTimer extends PluginBase
     @Override
     public String getName()
     {
-        return null;
+        return NAME;
     }
 
     @Override
     public String getDescribe()
     {
-        return null;
+        return NAME;
     }
 
     @Override
