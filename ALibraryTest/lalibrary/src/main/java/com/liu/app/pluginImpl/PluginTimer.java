@@ -73,7 +73,7 @@ public class PluginTimer extends PluginBase
 
     private void cancelTime()
     {
-        event.pluginResult(true, RES_TIMING_CANCEL, null);
+        if (event != null) event.pluginResult(true, RES_TIMING_CANCEL, null);
         isStartTimer = false;
         if (timer != null)
         {
