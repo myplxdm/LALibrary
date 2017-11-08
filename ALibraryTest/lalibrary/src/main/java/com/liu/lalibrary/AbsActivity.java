@@ -155,7 +155,7 @@ public abstract class AbsActivity extends AutoLayoutActivity
         }
         activeVPState(IView.VIEW_EVENT_DESTRORY);
         subViews.clear();
-        for (int i = plugins.size() - 1;i > -1;i++)
+        for (int i = plugins.size() - 1;i > -1;i--)
         {
             plugins.get(i).stopPlugin();
         }
