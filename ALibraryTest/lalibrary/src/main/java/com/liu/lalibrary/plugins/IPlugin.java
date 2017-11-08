@@ -13,6 +13,7 @@ public interface IPlugin
     public String getName();
     public String getDescribe();
     public boolean exec(String cmd, JSONObject params, IPluginEvent event);
+    public void stopPlugin();
     public void onStart();
     public void onRestart();
     public void onResume();

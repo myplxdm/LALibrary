@@ -32,6 +32,11 @@ public abstract class PluginBase implements IPlugin
     }
 
     @Override
+    public void stopPlugin()
+    {
+    }
+
+    @Override
     public void onStart()
     {
 
