@@ -30,6 +30,8 @@ import com.liu.lalibrary.R;
 import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.utils.DensityUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
+import com.zhy.autolayout.attr.Attrs;
+import com.zhy.autolayout.attr.AutoAttr;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.concurrent.ExecutionException;
@@ -187,9 +189,10 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
             ViewSize vs = DensityUtils.getResImageSize(getResources(), retImgResId);
             iv_return.setVisibility(View.VISIBLE);
             iv_return.setBackgroundResource(retImgResId);
-            iv_return.getLayoutParams().width = vs.width;
-            iv_return.getLayoutParams().height = vs.height;
-            AutoUtils.auto(iv_return);
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(AutoUtils.getPercentWidthSize(vs.width),
+                    AutoUtils.getPercentHeightSize(vs.height));
+            iv_return.setLayoutParams(lp);
         } else
         {
             iv_return.setVisibility(View.GONE);
