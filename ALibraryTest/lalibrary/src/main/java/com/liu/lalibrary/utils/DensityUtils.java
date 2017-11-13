@@ -1,7 +1,12 @@
 package com.liu.lalibrary.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
+import android.util.Size;
 import android.util.TypedValue;
+
+import com.liu.lalibrary.ui.ViewSize;
 
 /**
  * 常用单位转换的辅助类
@@ -11,6 +16,7 @@ import android.util.TypedValue;
  */
 public class DensityUtils
 {
+
 	private DensityUtils()
 	{
 		/* cannot be instantiated */
@@ -21,7 +27,7 @@ public class DensityUtils
 	 * dp转px
 	 * 
 	 * @param context
-	 * @param val
+	 * @param dpVal
 	 * @return
 	 */
 	public static int dp2px(Context context, float dpVal)
@@ -34,7 +40,7 @@ public class DensityUtils
 	 * sp转px
 	 * 
 	 * @param context
-	 * @param val
+	 * @param spVal
 	 * @return
 	 */
 	public static int sp2px(Context context, float spVal)
@@ -59,7 +65,7 @@ public class DensityUtils
 	/**
 	 * px转sp
 	 * 
-	 * @param fontScale
+	 * @param
 	 * @param pxVal
 	 * @return
 	 */
@@ -68,4 +74,11 @@ public class DensityUtils
 		return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
 	}
 
+	public static ViewSize getResImageSize(Resources res, int resId)
+	{
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(res, resId, options);
+		return new ViewSize(options.outWidth, options.outHeight);
+	}
 }

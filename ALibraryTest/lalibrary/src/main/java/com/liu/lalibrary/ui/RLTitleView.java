@@ -184,8 +184,12 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
     {
         if (retImgResId > 0)
         {
+            ViewSize vs = DensityUtils.getResImageSize(getResources(), retImgResId);
             iv_return.setVisibility(View.VISIBLE);
             iv_return.setBackgroundResource(retImgResId);
+            iv_return.getLayoutParams().width = vs.width;
+            iv_return.getLayoutParams().height = vs.height;
+            AutoUtils.auto(iv_return);
         } else
         {
             iv_return.setVisibility(View.GONE);
