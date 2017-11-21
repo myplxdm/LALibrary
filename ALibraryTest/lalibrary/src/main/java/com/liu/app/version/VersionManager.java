@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.liu.app.network.LjhHttpUtils;
+import com.liu.app.network.NetResult;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.update.UpdateManager;
@@ -35,8 +36,12 @@ public class VersionManager
                 {
                     try
                     {
-                        VersionInfo vi = JSON.parseObject(result, VersionInfo.class);
-                        listener.onRecvVersion(vi);
+                        NetResult nr = JSON.parseObject(result, NetResult.class);
+                        if (nr.state == 0)
+                        {
+                            VersionInfo vi = JSON.parseObject(nr.obj, VersionInfo.class);
+                            listener.onRecvVersion(vi);
+                        }
                     }catch (Exception e)
                     {
                         LogUtils.LOGE(VersionManager.class, e.getMessage());
