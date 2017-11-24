@@ -210,10 +210,10 @@ public class FlowLayout extends ViewGroup {
                 int measuredWidth = view.getMeasuredWidth();
                 int measuredHeight = view.getMeasuredHeight();
                 // 重新测量
-                view.measure(MeasureSpec.makeMeasureSpec(measuredWidth + avg, MeasureSpec.EXACTLY),
-                        MeasureSpec.makeMeasureSpec(measuredHeight, MeasureSpec.EXACTLY));
+                //view.measure(MeasureSpec.makeMeasureSpec(measuredWidth + avg, MeasureSpec.EXACTLY),
+                //        MeasureSpec.makeMeasureSpec(measuredHeight, MeasureSpec.EXACTLY));
                 // 重新获取宽度值
-                measuredWidth = view.getMeasuredWidth();
+                //measuredWidth = view.getMeasuredWidth();
 
 
                 int top = t;
