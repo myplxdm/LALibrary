@@ -132,7 +132,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
                     AutoUtils.auto(ib_left_btn);
                 }
             };
-            Glide.with(context).asBitmap().load(leftBtnImgUrl).into(target);
+            Glide.with(context.getApplicationContext()).asBitmap().load(leftBtnImgUrl).into(target);
             ib_left_btn.setOnClickListener(new OnClickListener()
             {
                 @Override
@@ -155,7 +155,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
             ib_left_btn.setVisibility(View.VISIBLE);
             if (leftBtnImgUrl.startsWith("http"))
             {
-                Glide.with(getContext()).load(Uri.decode(leftBtnImgUrl)).into(ib_left_btn);
+                Glide.with(context.getApplicationContext()).load(Uri.decode(leftBtnImgUrl)).into(ib_left_btn);
             } else
             {
                 ib_left_btn.setImageResource(Integer.parseInt(leftBtnImgUrl));
@@ -309,7 +309,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
                 }
             }
         };
-        Glide.with(context).asBitmap().load(btImgUrl).into(target);
+        Glide.with(context.getApplicationContext()).asBitmap().load(btImgUrl).into(target);
         iv.setTag(target);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
@@ -376,7 +376,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
                 ImageView iv = (ImageView) v.findViewById(R.id.iv_btn);
                 if (iv != null)
                 {
-                    Glide.with(getContext()).load(Uri.decode(imgUrl)).into(iv);
+                    Glide.with(context.getApplicationContext()).load(Uri.decode(imgUrl)).into(iv);
                 }
             }
         }
