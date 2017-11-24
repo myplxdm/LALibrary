@@ -69,6 +69,7 @@ public class PluginTimer extends PluginBase
     public void stopPlugin()
     {
         cancelTime();
+        event = null;
     }
 
     private void cancelTime()

@@ -45,6 +45,13 @@ public class PluginPhotoChoose extends PluginBase
     }
 
     @Override
+    public void stopPlugin()
+    {
+        super.stopPlugin();
+        event = null;
+    }
+
+    @Override
     public boolean exec(String cmd, JSONObject params, IPluginEvent event)
     {
         this.event = event;
