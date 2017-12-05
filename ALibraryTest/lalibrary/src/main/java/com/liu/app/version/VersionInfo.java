@@ -9,4 +9,5 @@ public class VersionInfo
     public String url;
     public String ver;
     public String remark;
+    public boolean enforce;
 }

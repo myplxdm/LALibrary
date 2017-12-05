@@ -6,8 +6,7 @@
         <attr name="titleTextColor" format="color"/>
         <attr name="titleTextSize" format="dimension"/>
         <!-- space -->
-        <attr name="leftViewSpace" format="dimension"/>
-        <attr name="rightViewSpace" format="dimension"/>
+        <attr name="viewSpace" format="dimension"/>
         <!-- cust layout -->
         <attr name="leftCustLayout" format="reference"/>
         <attr name="middleCustLayout" format="reference"/>

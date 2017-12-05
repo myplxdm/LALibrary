@@ -204,11 +204,6 @@ public class Utils
         return org & (~value);
     }
 
-    public static String nonNull(String value)
-    {
-        return value == null ? "" : value;
-    }
-
     public static String getExtName(String fn)
     {
         if (!TextUtils.isEmpty(fn))
@@ -237,5 +232,16 @@ public class Utils
             return fn.substring(0, i);
         }
         return "";
+    }
+
+    public static int strToInt(String str)
+    {
+        if (TextUtils.isEmpty(str))return 0;
+        int count = 0;
+        for (int i = 0;i < str.length();i++)
+        {
+            count += str.charAt(i);
+        }
+        return count;
     }
 }

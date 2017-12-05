@@ -3,9 +3,14 @@ package com.liu.lalibrary.ui.webview;
 import java.io.File;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
@@ -140,6 +145,20 @@ public class WebViewEx extends WebView
 
 	class WebViewClientEx extends WebViewClient
 	{
+		@SuppressLint("NewApi")
+		@Override
+		public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error)
+		{
+			super.onReceivedError(view, request, error);
+			lastUrl = request.getUrl().toString();
+			loadUrl(ERR_URL);
+			err = true;
+			if (webEvent != null)
+			{
+				webEvent.onReceivedError(view, error.getErrorCode(), error.getDescription().toString(), lastUrl);
+			}
+		}
+
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl)
 		{
@@ -163,6 +182,18 @@ public class WebViewEx extends WebView
 			{
 				webEvent.onPageFinished(view, url);
 			}
+		}
+
+		@SuppressLint("NewApi")
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request)
+		{
+			if (webEvent == null || webEvent.shouldOverrideUrlLoading(view, request.getUrl().toString()))
+			{
+				view.loadUrl(request.getUrl().toString());
+			}
+			err = false;
+			return true;
 		}
 
 		@Override

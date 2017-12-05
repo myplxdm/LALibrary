@@ -103,6 +103,14 @@ public abstract class AbsActivity extends AutoLayoutActivity
         return super.onKeyDown(keyCode, event);
     }
 
+    //isMaskBack 是否屏蔽返回键
+    //isToBack 按返回键让app转入后台
+    public void setBackFun(boolean isMaskBack, boolean isToBackgroud)
+    {
+        mMaskBack = isMaskBack;
+        mToBack = isToBackgroud;
+    }
+
     @Override
     protected void onStart()
     {

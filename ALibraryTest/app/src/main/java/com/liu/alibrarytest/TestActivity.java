@@ -50,6 +50,7 @@ public class TestActivity extends AbsActivity
     protected void onInitData(Intent data)
     {
         addPlugin(new PluginContacts(this));
+        MainActivity.inst = this;
     }
 
     @Override
