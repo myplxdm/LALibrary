@@ -29,18 +29,12 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     public static final int TVL_MIDDLE = 1;
     public static final int TVL_RIGHT = 2;
 
-    public interface TitleViewListener
-    {
-        public void onViewClick(int tvl, int index, View view);
-    }
-
     private final int COLOR_BG = 0xffffff;
     private final int COLOR_TITLE_TEXT = 0xff000000;
     private final int SIZE_TITLE_TEXt = 58;
     private final int SPACE_ = 10;
     //
-    private int titleTextColor;
-    private int titleTextSize;
+    private boolean middelClickSetup;
     private int space;
     //
     private LinearLayout llSet[] = new LinearLayout[3];
@@ -67,8 +61,6 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
             int bgColor = attr.getColor(R.styleable.LTitleView_bgColor, COLOR_BG);
             setBackgroundColor(bgColor);
             //
-            titleTextColor = attr.getColor(R.styleable.LTitleView_titleTextColor, COLOR_TITLE_TEXT);
-            titleTextSize = attr.getColor(R.styleable.LTitleView_titleTextSize, SIZE_TITLE_TEXt);
             space = attr.getDimensionPixelSize(R.styleable.LTitleView_viewSpace, SPACE_);
             //
             attr.recycle();
@@ -142,61 +134,65 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
         return tv;
     }
 
+    private void clickProc(View view, final int index, final int tvl)
+    {
+        if (tvl == TVL_MIDDLE)
+        {
+            if (!middelClickSetup)
+            {
+                middelClickSetup = true;
+                llSet[tvl].setOnClickListener(new OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        listener.onViewClick(tvl, 0, v);
+                    }
+                });
+            }
+            return;
+        }
+        view.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onViewClick(tvl, index, v);
+            }
+        });
+    }
+
     @Override
-    public void addView(final int tvl, int resId, boolean needClick)
+    public void addView(int tvl, int resId, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
-        final int index = ll.getChildCount();
+        int index = ll.getChildCount();
         View view = addImageViewTo(resId, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
-        if (needClick)
-        {
-            view.setOnClickListener(new OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    listener.onViewClick(tvl, index, v);
-                }
-            });
-        }
+        if (needClick) clickProc(view, index, tvl);
     }
 
     @Override
-    public void addView(final int tvl, String imageUrl, boolean needClick)
+    public void addView(int tvl, String imageUrl, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
-        final int index = ll.getChildCount();
+        int index = ll.getChildCount();
         View view = addImageViewTo(imageUrl, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
-        if (needClick)
-        {
-            view.setOnClickListener(new OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    listener.onViewClick(tvl, index, v);
-                }
-            });
-        }
+        if (needClick) clickProc(view, index, tvl);
     }
 
     @Override
-    public void addView(final int tvl, String text, int textSize, int textColor, boolean needClick)
+    public void addView(int tvl, String text, int textSize, int textColor, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
-        final int index = ll.getChildCount();
+        int index = ll.getChildCount();
         View view = addTextViewTo(text, textSize, textColor, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
-        if (needClick)
-        {
-            view.setOnClickListener(new OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    listener.onViewClick(tvl, index, v);
-                }
-            });
-        }
+        if (needClick) clickProc(view, index, tvl);
+    }
+
+    @Override
+    public void setTitleViewListener(TitleViewListener listener)
+    {
+        this.listener = listener;
     }
 
 }

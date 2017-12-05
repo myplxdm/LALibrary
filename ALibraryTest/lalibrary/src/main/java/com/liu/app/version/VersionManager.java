@@ -48,15 +48,15 @@ public class VersionManager
                                 final AbsActivity activity = listener.onConfirmUpdate(vi);
                                 if (activity != null)
                                 {
+                                    if (TextUtils.isEmpty(vi.remark))
+                                    {
+                                        vi.remark = "该版本太低，需强制升级到最新版本";
+                                    }
                                     activity.runOnUiThread(new Runnable()
                                     {
                                         @Override
                                         public void run()
                                         {
-                                            if (TextUtils.isEmpty(vi.remark))
-                                            {
-                                                vi.remark = "该版本太低，需强制升级到最新版本";
-                                            }
                                             confirmUpdate(activity, vi.url, vi.remark, vi.enforce);
                                         }
                                     });
@@ -104,7 +104,8 @@ public class VersionManager
                 update(activity, url);
             }
         });
-        if (!enforce) dlg.setNegativeButton("取消", null).show();
-        else dlg.show();
+        if (enforce) dlg.setCancelable(false);
+        else dlg.setNegativeButton("取消", null);
+        dlg.show();
     }
 }
