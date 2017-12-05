@@ -23,6 +23,8 @@ public class VersionManager
     public interface OnVersionListener
     {
         public void onRecvVersion(VersionInfo ver);
+        //如果remark不为空，或需要强制升级就会回调这个方法，如果返回activity就由该类处理，返回null由应用自行处理
+        public AbsActivity onConfirmUpdate(VersionInfo ver);
     }
 
     public void req(String url, final OnVersionListener listener)
@@ -39,8 +41,27 @@ public class VersionManager
                         NetResult nr = JSON.parseObject(result, NetResult.class);
                         if (nr.state == 0)
                         {
-                            VersionInfo vi = JSON.parseObject(nr.obj, VersionInfo.class);
+                            final VersionInfo vi = JSON.parseObject(nr.obj, VersionInfo.class);
                             listener.onRecvVersion(vi);
+                            if (!TextUtils.isEmpty(vi.remark) || vi.enforce)
+                            {
+                                final AbsActivity activity = listener.onConfirmUpdate(vi);
+                                if (activity != null)
+                                {
+                                    activity.runOnUiThread(new Runnable()
+                                    {
+                                        @Override
+                                        public void run()
+                                        {
+                                            if (TextUtils.isEmpty(vi.remark))
+                                            {
+                                                vi.remark = "该版本太低，需强制升级到最新版本";
+                                            }
+                                            confirmUpdate(activity, vi.url, vi.remark, vi.enforce);
+                                        }
+                                    });
+                                }
+                            }
                         }
                     }catch (Exception e)
                     {
@@ -72,7 +93,7 @@ public class VersionManager
         }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
-    public void confirmUpdate(final AbsActivity activity, final String url, String remark)
+    public void confirmUpdate(final AbsActivity activity, final String url, String remark, boolean enforce)
     {
         AlertDialog.Builder dlg = new AlertDialog.Builder(activity);
         dlg.setTitle("新版本").setMessage(remark).setPositiveButton("升级", new DialogInterface.OnClickListener()
@@ -82,6 +103,8 @@ public class VersionManager
             {
                 update(activity, url);
             }
-        }).setNegativeButton("取消", null).show();
+        });
+        if (!enforce) dlg.setNegativeButton("取消", null).show();
+        else dlg.show();
     }
 }
