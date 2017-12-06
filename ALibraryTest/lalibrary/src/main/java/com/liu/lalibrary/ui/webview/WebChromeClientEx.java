@@ -23,7 +23,7 @@ public class WebChromeClientEx extends WebChromeClient
 //	public boolean onJsAlert(WebView view, String url, String message,
 //			final JsResult result)
 //	{
-//		AlertDialog.Builder dlg = new AlertDialog.Builder(mContext);
+//		AlertDialogEx.Builder dlg = new AlertDialogEx.Builder(mContext);
 //		dlg.setMessage(message);
 //		dlg.setTitle("Alert");
 //		// Don't let alerts break the back button
@@ -126,7 +126,7 @@ public class WebChromeClientEx extends WebChromeClient
 //	public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result)
 //	{
 //		final JsPromptResult res = result;
-//		AlertDialog.Builder dlg = new AlertDialog.Builder(mContext);
+//		AlertDialogEx.Builder dlg = new AlertDialogEx.Builder(mContext);
 //		dlg.setMessage(message);
 //		final EditText input = new EditText(mContext);
 //		if (defaultValue != null)

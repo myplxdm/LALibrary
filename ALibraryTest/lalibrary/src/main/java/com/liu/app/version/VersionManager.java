@@ -1,8 +1,8 @@
 package com.liu.app.version;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -11,6 +11,7 @@ import com.liu.app.network.LjhHttpUtils;
 import com.liu.app.network.NetResult;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.log.LogUtils;
+import com.liu.lalibrary.ui.AlertDialogHelper;
 import com.liu.lalibrary.update.UpdateManager;
 import com.liu.lalibrary.utils.PermissionsUtil;
 
@@ -20,6 +21,8 @@ import com.liu.lalibrary.utils.PermissionsUtil;
 
 public class VersionManager
 {
+    private boolean isClickUpdate;
+
     public interface OnVersionListener
     {
         public void onRecvVersion(VersionInfo ver);
@@ -93,7 +96,7 @@ public class VersionManager
         }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
-    public void confirmUpdate(final AbsActivity activity, final String url, String remark, boolean enforce)
+    public void confirmUpdate(final AbsActivity activity, final String url, String remark, final boolean enforce)
     {
         AlertDialog.Builder dlg = new AlertDialog.Builder(activity);
         dlg.setTitle("新版本").setMessage(remark).setPositiveButton("升级", new DialogInterface.OnClickListener()
@@ -101,10 +104,21 @@ public class VersionManager
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                update(activity, url);
+                if (!isClickUpdate)
+                {
+                    update(activity, url);
+                }
+                if (enforce)
+                {
+                    isClickUpdate = true;
+                    AlertDialogHelper.closeDlg(dialog, true);
+                }
             }
         });
-        if (enforce) dlg.setCancelable(false);
+        if (enforce)
+        {
+            dlg.setCancelable(false);
+        }
         else dlg.setNegativeButton("取消", null);
         dlg.show();
     }

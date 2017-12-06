@@ -11,7 +11,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.support.v4.content.FileProvider;
 
+import com.liu.lalibrary.BuildConfig;
 import com.liu.lalibrary.utils.AppUtils;
 import com.liu.lalibrary.utils.Utils;
 import com.liu.lalibrary.utils.imagecache.CommonUtil;
@@ -82,14 +84,17 @@ public class UpdateManager
 				{
 					name = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
 				}
-            	File f = new File(name);
-            	if (f.exists())
+				File f = new File(name);
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
 				{
-            		intent.setDataAndType(
-    						Uri.fromFile(f),
-    						"application/vnd.android.package-archive");
-    				mContext.startActivity(intent);
+					intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+					Uri contentUri = FileProvider.getUriForFile(mContext, "com.liu.lalibrary.fileProvider", f);
+					intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+				} else
+				{
+					intent.setDataAndType(Uri.fromFile(f), "application/vnd.android.package-archive");
 				}
+				mContext.startActivity(intent);
 				mContext.unregisterReceiver(downReceiver);
                 break;   
             case DownloadManager.STATUS_FAILED:   
@@ -106,7 +111,7 @@ public class UpdateManager
 	{
 		mContext = c;
 		String appName = AppUtils.getAppName(c);
-		String path = CommonUtil.getRootFilePath() + appName + File.separator;
+		String path = CommonUtil.getRootFilePath() + "com.liu.lalibrary" + File.separator;
 		String filename = Utils.getFileName(url);
 		FileHelper.createDirectory(path);
 		//
