@@ -89,7 +89,6 @@ public class VersionManager
             {
                 if (isOK)
                 {
-                    Toast.makeText(activity, "正在下载......", Toast.LENGTH_LONG).show();
                     new UpdateManager(activity, url);
                 }
             }

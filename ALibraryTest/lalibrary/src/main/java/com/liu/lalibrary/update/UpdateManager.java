@@ -15,6 +15,7 @@ import android.os.Build.VERSION;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.liu.lalibrary.BuildConfig;
 import com.liu.lalibrary.utils.AppUtils;
@@ -119,6 +120,7 @@ public class UpdateManager
 			installApk(mContext, mFilePath);
 			return;
 		}
+		Toast.makeText(c, "正在下载......", Toast.LENGTH_LONG).show();
 		//
 		DownloadManager manger = (DownloadManager) c.getSystemService(Context.DOWNLOAD_SERVICE);
 		Request down = new Request(Uri.parse(url));
