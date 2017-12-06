@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<PreferenceScreen>
     <paths>
-        <root-path path="" name="files_path" />
+        <external-path
+            name="myAppUpdateInstallApkFile"
+            path=""/>
     </paths>
-</resources>
+</PreferenceScreen>

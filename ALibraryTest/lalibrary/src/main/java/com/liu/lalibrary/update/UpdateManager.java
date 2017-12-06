@@ -7,11 +7,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 
 import com.liu.lalibrary.BuildConfig;
 import com.liu.lalibrary.utils.AppUtils;
@@ -30,6 +33,7 @@ public class UpdateManager
 
 	private long			mDownloadID;
 	private Context			mContext;
+	private File			mFilePath;
 	// private ServiceConnection serviceConnection = new ServiceConnection()
 	// {
 	// @Override
@@ -74,27 +78,7 @@ public class UpdateManager
 //                Log.v("down", "STATUS_RUNNING");  
 //                break;   
             case DownloadManager.STATUS_SUCCESSFUL:   
-            	Intent intent = new Intent(Intent.ACTION_VIEW);
-            	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				String name;
-				if (AppUtils.getOSVersion() >= 24)
-				{
-					name = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
-				}else
-				{
-					name = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
-				}
-				File f = new File(name);
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-				{
-					intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-					Uri contentUri = FileProvider.getUriForFile(mContext, "com.liu.lalibrary.fileProvider", f);
-					intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-				} else
-				{
-					intent.setDataAndType(Uri.fromFile(f), "application/vnd.android.package-archive");
-				}
-				mContext.startActivity(intent);
+				installApk(mContext, mFilePath);
 				mContext.unregisterReceiver(downReceiver);
                 break;   
             case DownloadManager.STATUS_FAILED:   
@@ -103,21 +87,43 @@ public class UpdateManager
                 break;   
             }   
         }  
-    }  
-	
+    }
+
+    public static void installApk(Context context, File file)
+	{
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+		{
+			intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+			intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+		} else
+		{
+			intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+		}
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(intent);
+	}
+
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	public UpdateManager(Context c, String url)
 	{
 		mContext = c;
-		String appName = AppUtils.getAppName(c);
-		String path = CommonUtil.getRootFilePath() + "com.liu.lalibrary" + File.separator;
+		String path = CommonUtil.getRootFilePath() + mContext.getPackageName() + File.separator;
 		String filename = Utils.getFileName(url);
 		FileHelper.createDirectory(path);
+		mFilePath = new File(path + filename);
+		if (mFilePath.exists())
+		{
+			installApk(mContext, mFilePath);
+			return;
+		}
 		//
 		DownloadManager manger = (DownloadManager) c.getSystemService(Context.DOWNLOAD_SERVICE);
 		Request down = new Request(Uri.parse(url));
 		down.setAllowedNetworkTypes(Request.NETWORK_MOBILE | Request.NETWORK_WIFI);
+		down.setMimeType("application/vnd.android.package-archive");
 		if (VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 		{
 			down.setShowRunningNotification(true);
@@ -127,13 +133,7 @@ public class UpdateManager
 		}
 		down.setVisibleInDownloadsUi(true);
 		down.setTitle(filename);
-		down.setDestinationInExternalPublicDir(path, filename);
-		String sPath = path + filename;
-		File f = new File(sPath);
-		if (f.exists())
-		{
-			f.delete();
-		}
+		down.setDestinationUri(Uri.fromFile(mFilePath));
 		mDownloadID = manger.enqueue(down);
 		mContext.registerReceiver(downReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 	}
