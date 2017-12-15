@@ -8,7 +8,12 @@ import android.content.Intent;
 
 public interface IWebPlugin
 {
-    public void init(IWebShell ws);
+    public static final int EVENT_INIT = 1;
+    public static final int EVENT_DEINIT = 2;
+    public static final int EVENT_RESULT_DATA = 3;
+
+    public void init(IWebShell ws, Intent data);
+    public String getName();
     public void deInit();
     public boolean exec(int funName, String json, String callback);//返回是否执行
     public boolean exec(String funName, String json, String callback);//返回是否执行

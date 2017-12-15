@@ -64,8 +64,9 @@ public class WebViewEx extends WebView
 		settings.setJavaScriptEnabled(true);
 		settings.setJavaScriptCanOpenWindowsAutomatically(true);
 		settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
-		// settings.setRenderPriority(RenderPriority.HIGH);
+		settings.setDomStorageEnabled(true);
 		settings.setBlockNetworkImage(true);
+		// settings.setRenderPriority(RenderPriority.HIGH);
 		// try
 		// {
 		// Method gingerbread_getMethod =

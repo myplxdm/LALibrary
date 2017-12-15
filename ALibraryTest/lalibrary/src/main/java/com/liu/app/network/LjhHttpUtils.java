@@ -2,11 +2,13 @@ package com.liu.app.network;
 
 import android.text.TextUtils;
 
+import com.liu.app.UMengHelper;
 import com.liu.app.network.model.NetReqCmd;
 import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.utils.INetworkCheck;
 import com.liu.lalibrary.utils.NetConnManager;
 import com.liu.lalibrary.utils.Utils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -84,6 +86,17 @@ public class LjhHttpUtils
         return true;
     }
 
+    private void onHttpReqResult(String url, IHttpRespListener listener, int state, String result)
+    {
+        try
+        {
+            listener.onHttpReqResult(state, result);
+        }catch (Exception e)
+        {
+            MobclickAgent.reportError(null, "url = " + url + ", exception = " + e.getMessage());
+        }
+    }
+
     public Call get(final String url, final IHttpRespListener listener)
     {
         if (!checkNetwork(listener))return null;
@@ -93,7 +106,7 @@ public class LjhHttpUtils
             @Override
             public void onFailure(Call call, IOException e)
             {
-                listener.onHttpReqResult(HU_STATE_ERR, NERR_NETWORK);
+                onHttpReqResult(url, listener, HU_STATE_ERR, NERR_NETWORK);
                 LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
             }
 
@@ -102,10 +115,10 @@ public class LjhHttpUtils
             {
                 if (response.code() != 200)
                 {
-                    listener.onHttpReqResult(HU_STATE_ERR_NO_200, String.format("%s(%d)",NERR_NO_NO_200,response.code()));
+                    onHttpReqResult(url, listener, HU_STATE_ERR_NO_200, String.format("%s(%d)",NERR_NO_NO_200,response.code()));
                     return;
                 }
-                listener.onHttpReqResult(HU_STATE_OK, response.body().string());
+                onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
             }
         });
         return call;
@@ -128,14 +141,14 @@ public class LjhHttpUtils
             @Override
             public void onFailure(Call call, IOException e)
             {
-                listener.onHttpReqResult(HU_STATE_ERR, NERR_NETWORK);
+                onHttpReqResult(url, listener, HU_STATE_ERR, NERR_NETWORK);
                 LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException
             {
-                listener.onHttpReqResult(HU_STATE_OK, response.body().string());
+                onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
             }
         });
         return call;
@@ -164,14 +177,14 @@ public class LjhHttpUtils
             @Override
             public void onFailure(Call call, IOException e)
             {
-                listener.onHttpReqResult(HU_STATE_ERR, e.getMessage());
+                onHttpReqResult(url, listener, HU_STATE_ERR, e.getMessage());
                 LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException
             {
-                listener.onHttpReqResult(HU_STATE_OK, response.body().string());
+                onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
             }
         });
         return call;
@@ -187,7 +200,7 @@ public class LjhHttpUtils
             @Override
             public void onFailure(Call call, IOException e)
             {
-                listener.onHttpReqResult(HU_STATE_ERR, NERR_NETWORK);
+                onHttpReqResult(url, listener, HU_STATE_ERR, NERR_NETWORK);
                 LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
             }
 
@@ -212,10 +225,10 @@ public class LjhHttpUtils
                         listener.onHttpReqProgress((sum * 1.0f / total * 100));
                     }
                     fos.flush();
-                    listener.onHttpReqResult(HU_STATE_OK, file.getAbsolutePath());
+                    onHttpReqResult(url, listener, HU_STATE_OK, file.getAbsolutePath());
                 } catch (Exception e)
                 {
-                    listener.onHttpReqResult(HU_STATE_ERR, e.getMessage());
+                    onHttpReqResult(url, listener, HU_STATE_ERR, e.getMessage());
                     LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
                 } finally
                 {

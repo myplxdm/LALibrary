@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -82,6 +83,7 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
             if (space < 0) lp.setMargins(space, 0, 0, 0);
             else lp.setMargins(0, 0, space, 0);
         }
+        AutoUtils.auto(iv);
         return iv;
     }
 
@@ -131,6 +133,7 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
             if (space < 0) lp.setMargins(space, 0, 0, 0);
             else lp.setMargins(0, 0, space, 0);
         }
+        AutoUtils.auto(tv);
         return tv;
     }
 
@@ -163,30 +166,89 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     }
 
     @Override
-    public void addView(int tvl, int resId, boolean needClick)
+    public View addView(int tvl, int resId, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
         View view = addImageViewTo(resId, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
+        return view;
     }
 
     @Override
-    public void addView(int tvl, String imageUrl, boolean needClick)
+    public View addView(int tvl, String imageUrl, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
         View view = addImageViewTo(imageUrl, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
+        return view;
     }
 
     @Override
-    public void addView(int tvl, String text, int textSize, int textColor, boolean needClick)
+    public View addView(int tvl, String text, int textSize, int textColor, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
         View view = addTextViewTo(text, textSize, textColor, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
+        return view;
+    }
+
+    @Override
+    public View mdImgView(int tvl, int index, int resId)
+    {
+        LinearLayout ll = llSet[tvl];
+        if (index >= ll.getChildCount())return null;
+        ImageView iv = (ImageView)ll.getChildAt(index);
+        iv.setImageResource(resId);
+        AutoUtils.auto(iv);
+        return iv;
+    }
+
+    @Override
+    public View mdImgView(int tvl, int index, String imageUrl)
+    {
+        LinearLayout ll = llSet[tvl];
+        if (index >= ll.getChildCount())return null;
+        final ImageView iv = (ImageView)ll.getChildAt(index);
+        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>()
+        {
+            @Override
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
+            {
+                try
+                {
+                    iv.setImageBitmap(resource);
+                    iv.getLayoutParams().width = resource.getWidth();
+                    iv.getLayoutParams().height = resource.getHeight();
+                    AutoUtils.auto(iv);
+                    iv.setTag(null);
+                } catch (Exception e)
+                {
+                }
+            }
+        };
+        Glide.with(getContext().getApplicationContext()).asBitmap().load(imageUrl).into(target);
+        iv.setTag(target);
+        return iv;
+    }
+
+    @Override
+    public View mdTxtView(int tvl, int index, String text)
+    {
+        LinearLayout ll = llSet[tvl];
+        if (index >= ll.getChildCount())return null;
+        TextView tv = (TextView)ll.getChildAt(index);
+        tv.setText(text);
+        return tv;
+    }
+
+    @Override
+    public void clearView(int tvl)
+    {
+        LinearLayout ll = llSet[tvl];
+        ll.removeAllViews();
     }
 
     @Override
