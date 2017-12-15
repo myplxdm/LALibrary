@@ -36,7 +36,7 @@ public class WebWindowPlugin extends BaseWebPlugin
             if (funName == WND_TO_URL)
             {
                 boolean isShowRB = JsonHelper.getBoolen(param, IWebShell.WC_RETURN_RES_ID, true);
-                shell.openWindow();
+                //shell.openWindow();
             }
 
             //final String title, final String url, final boolean reload, final boolean trans, final int titleAlign, final boolean isShowReturn

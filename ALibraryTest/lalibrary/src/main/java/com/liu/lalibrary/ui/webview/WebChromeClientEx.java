@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.KeyEvent;
+import android.webkit.GeolocationPermissions;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -121,8 +122,15 @@ public class WebChromeClientEx extends WebChromeClient
 			mWebView.getSettings().setBlockNetworkImage(false);
 		}
 	}
-	
-//	@Override
+
+	@Override
+	public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback)
+	{
+		callback.invoke(origin, true, false);
+		super.onGeolocationPermissionsShowPrompt(origin, callback);
+	}
+
+	//	@Override
 //	public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result)
 //	{
 //		final JsPromptResult res = result;

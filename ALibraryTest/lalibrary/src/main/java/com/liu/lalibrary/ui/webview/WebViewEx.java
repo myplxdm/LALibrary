@@ -86,7 +86,7 @@ public class WebViewEx extends WebView
 		// android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 		// settings.setAllowUniversalAccessFromFileURLs(true);
 		// settings.setDomStorageEnabled(true);
-		// settings.setGeolocationEnabled(true);
+		 settings.setGeolocationEnabled(true);
 		// settings.getUserAgentString();
 		client = new WebViewClientEx();
 		setWebViewClient(client);
