@@ -21,13 +21,20 @@ import com.liu.lalibrary.utils.PermissionsUtil;
 
 public class VersionManager
 {
+    public static final int VM_TYPE_NONE = 0;//自己不做处理
+    public static final int VM_TYPE_AUTO = 1;//默认处理
+    public static final int VM_TYPE_LOCK = 2;//锁定，这个用于pos这种情况，升级由第三方市场安装情况下
+
     private boolean isClickUpdate;
 
     public interface OnVersionListener
     {
         public void onRecvVersion(VersionInfo ver);
-        //如果remark不为空，或需要强制升级就会回调这个方法，如果返回activity就由该类处理，返回null由应用自行处理
-        public AbsActivity onConfirmUpdate(VersionInfo ver);
+
+        //
+        public int onGetUpdateType(VersionInfo ver);
+
+        public AbsActivity onVMGetActivity();
     }
 
     public void req(String url, final OnVersionListener listener)
@@ -48,25 +55,40 @@ public class VersionManager
                             listener.onRecvVersion(vi);
                             if (!TextUtils.isEmpty(vi.remark) || vi.enforce)
                             {
-                                final AbsActivity activity = listener.onConfirmUpdate(vi);
+                                final int type = listener.onGetUpdateType(vi);
+                                final AbsActivity activity = listener.onVMGetActivity();
+                                switch (type)
+                                {
+                                    case VM_TYPE_NONE:
+                                        break;
+                                    case VM_TYPE_AUTO:
+                                    case VM_TYPE_LOCK:
+                                        if (activity != null)
+                                        {
+                                            if (TextUtils.isEmpty(vi.remark))
+                                            {
+                                                vi.remark = "该版本太低，需强制升级到最新版本";
+                                            }
+                                            activity.runOnUiThread(new Runnable()
+                                            {
+                                                @Override
+                                                public void run()
+                                                {
+                                                    confirmUpdate(activity, vi.url, vi.remark, vi.enforce, type == VM_TYPE_LOCK);
+                                                }
+                                            });
+                                        }
+                                        break;
+                                }
+
+
                                 if (activity != null)
                                 {
-                                    if (TextUtils.isEmpty(vi.remark))
-                                    {
-                                        vi.remark = "该版本太低，需强制升级到最新版本";
-                                    }
-                                    activity.runOnUiThread(new Runnable()
-                                    {
-                                        @Override
-                                        public void run()
-                                        {
-                                            confirmUpdate(activity, vi.url, vi.remark, vi.enforce);
-                                        }
-                                    });
+
                                 }
                             }
                         }
-                    }catch (Exception e)
+                    } catch (Exception e)
                     {
                         LogUtils.LOGE(VersionManager.class, e.getMessage());
                     }
@@ -83,7 +105,8 @@ public class VersionManager
 
     public void update(final AbsActivity activity, final String url)
     {
-        activity.checkPermissions(new PermissionsUtil.PermissionCallback() {
+        activity.checkPermissions(new PermissionsUtil.PermissionCallback()
+        {
             @Override
             public void onPermission(boolean isOK)
             {
@@ -95,15 +118,15 @@ public class VersionManager
         }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
-    public void confirmUpdate(final AbsActivity activity, final String url, String remark, final boolean enforce)
+    public void confirmUpdate(final AbsActivity activity, final String url, String remark, final boolean enforce, final boolean lock)
     {
         AlertDialog.Builder dlg = new AlertDialog.Builder(activity);
-        dlg.setTitle("新版本").setMessage(remark).setPositiveButton("升级", new DialogInterface.OnClickListener()
+        dlg.setTitle("新版本").setMessage(remark).setPositiveButton(lock ? "请升级" : "升级", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                if (!isClickUpdate)
+                if (!lock && !isClickUpdate)
                 {
                     update(activity, url);
                 }
@@ -117,8 +140,7 @@ public class VersionManager
         if (enforce)
         {
             dlg.setCancelable(false);
-        }
-        else dlg.setNegativeButton("取消", null);
+        } else dlg.setNegativeButton("取消", null);
         dlg.show();
     }
 }
