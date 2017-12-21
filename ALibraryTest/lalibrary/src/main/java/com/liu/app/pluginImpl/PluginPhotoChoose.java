@@ -23,9 +23,14 @@ import com.liu.lalibrary.utils.imagecache.ImageTools;
 public class PluginPhotoChoose extends PluginBase
 {
     public static final String NAME = "photo_choose";
+    public static final String CHOOSE_TYPE = "ct";
+    public static final int PHOTO_CHOOSE_CT_ALBUM = 0;//相册
+    public static final int PHOTO_CHOOSE_CT_TAKEPIC = 1;//相机
+    public static final int PHOTO_CHOOSE_CT_BOTH = 2;//
     private final String TAKE_PHOTO_NAME = "photo.jpg";
     private AlertView photoAlertView;
     private IPluginEvent event;
+    private int chooseType = 2;//0 相册，1 相机 2 相册与相机
 
     public PluginPhotoChoose(AbsActivity activity)
     {
@@ -55,6 +60,10 @@ public class PluginPhotoChoose extends PluginBase
     public boolean exec(String cmd, JSONObject params, IPluginEvent event)
     {
         this.event = event;
+        if (params != null)
+        {
+            chooseType = params.getIntValue(CHOOSE_TYPE);
+        }
         if (AppUtils.getOSVersion() < 23)
         {
             photoPermiss.onPermission(true);
@@ -78,26 +87,35 @@ public class PluginPhotoChoose extends PluginBase
         {
             if (b)
             {
-                if (photoAlertView == null)
+                if (chooseType == 2)
                 {
-                    photoAlertView = new AlertView("上传图片", null, "取消", null,
-                                                   new String[]{"从相机打开", "从相册打开"}, wrActivity.get(),
-                                                   AlertView.Style.ActionSheet, new OnItemClickListener()
+                    if (photoAlertView == null)
                     {
-                        @Override
-                        public void onItemClick(Object o, int position)
+                        photoAlertView = new AlertView("上传图片", null, "取消", null,
+                                new String[]{"从相机打开", "从相册打开"}, wrActivity.get(),
+                                AlertView.Style.ActionSheet, new OnItemClickListener()
                         {
-                            if (position == 0)
+                            @Override
+                            public void onItemClick(Object o, int position)
                             {
-                                ImageTools.takePicture(getActivity(), DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME));
-                            } else if (position == 1)
-                            {
-                                ImageTools.chooseAlbum(getActivity());
+                                if (position == 0)
+                                {
+                                    ImageTools.takePicture(getActivity(), DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME));
+                                } else if (position == 1)
+                                {
+                                    ImageTools.chooseAlbum(getActivity());
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    photoAlertView.show();
+                }else if (chooseType == 0) //相册
+                {
+                    ImageTools.chooseAlbum(getActivity());
+                }else //相机
+                {
+                    ImageTools.takePicture(getActivity(), DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME));
                 }
-                photoAlertView.show();
             }
         }
     };
@@ -106,7 +124,7 @@ public class PluginPhotoChoose extends PluginBase
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && data != null)
+        if (resultCode == Activity.RESULT_OK)
         {
             if (requestCode == ImageTools.REQ_TAKE_PIC)
             {

@@ -112,7 +112,7 @@ public class PluginFileUpload extends PluginBase
     }
 
     public static JSONObject packetParam(String url, float ration, int outWidth, int outHeight,
-                                         String httpKeys, String httpValues)
+                                         String httpKeys, String httpValues, int chooseType)
     {
         JSONObject json = new JSONObject();
         json.put(P_URL, url);
@@ -121,7 +121,14 @@ public class PluginFileUpload extends PluginBase
         json.put(P_OUT_HEIGHT, outHeight);
         if (!TextUtils.isEmpty(httpKeys)) json.put(P_UP_KEYS, httpKeys);
         if (!TextUtils.isEmpty(httpValues)) json.put(P_UP_VALUES, httpValues);
+        json.put(PluginPhotoChoose.CHOOSE_TYPE, chooseType);
         return json;
+    }
+
+    public static JSONObject packetParam(String url, float ration, int outWidth, int outHeight,
+                                         String httpKeys, String httpValues)
+    {
+        return packetParam(url, ration, outWidth, outHeight, httpKeys, httpValues, PluginPhotoChoose.PHOTO_CHOOSE_CT_ALBUM);
     }
 
     private void uploadFile(String path)

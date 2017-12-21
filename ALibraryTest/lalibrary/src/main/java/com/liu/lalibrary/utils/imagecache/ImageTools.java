@@ -30,8 +30,11 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 
 import com.liu.lalibrary.log.LogUtils;
+import com.liu.lalibrary.utils.AppUtils;
+import com.liu.lalibrary.utils.Utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -618,7 +621,14 @@ public final class ImageTools
     public static void takePicture(Activity act, String path, int reqCode)
     {
         Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri imageUri = Uri.fromFile(new File(path));
+        Uri imageUri;
+        if (AppUtils.getOSVersion() >= 24)
+        {
+            imageUri = FileProvider.getUriForFile(act, act.getPackageName() + ".fileprovider", new File(path));
+        }else
+        {
+            imageUri = Uri.fromFile(new File(path));
+        }
         openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         act.startActivityForResult(openCameraIntent, reqCode);
     }
