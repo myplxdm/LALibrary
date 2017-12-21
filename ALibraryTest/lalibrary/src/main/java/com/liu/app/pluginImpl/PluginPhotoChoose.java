@@ -30,7 +30,7 @@ public class PluginPhotoChoose extends PluginBase
     private final String TAKE_PHOTO_NAME = "photo.jpg";
     private AlertView photoAlertView;
     private IPluginEvent event;
-    private int chooseType = 2;//0 相册，1 相机 2 相册与相机
+    private int chooseType = 0;//0 相册，1 相机 2 相册与相机
 
     public PluginPhotoChoose(AbsActivity activity)
     {
