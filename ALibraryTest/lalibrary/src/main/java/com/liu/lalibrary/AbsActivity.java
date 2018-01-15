@@ -111,6 +111,16 @@ public abstract class AbsActivity extends AutoLayoutActivity
         mToBack = isToBackgroud;
     }
 
+    public void maskBack(boolean isMask)
+    {
+        mMaskBack = isMask;
+    }
+
+    public void backToBackgroud(boolean isBack)
+    {
+        mToBack = isBack;
+    }
+
     @Override
     protected void onStart()
     {

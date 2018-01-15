@@ -32,6 +32,12 @@ public abstract class PluginBase implements IPlugin
     }
 
     @Override
+    public String getName()
+    {
+        return getClass().getSimpleName();
+    }
+
+    @Override
     public void stopPlugin()
     {
     }

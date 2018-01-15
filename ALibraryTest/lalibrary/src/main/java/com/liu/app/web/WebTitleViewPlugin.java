@@ -2,31 +2,29 @@ package com.liu.app.web;
 
 import android.content.ComponentName;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.liu.lalibrary.R;
 import com.liu.lalibrary.ui.titleview.ITitleView;
 import com.liu.lalibrary.ui.titleview.LTitleView;
 import com.liu.lalibrary.utils.JsonHelper;
-import com.liu.lalibrary.utils.Utils;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by liu on 2017/12/4.
  */
 
-public class WebTitleViewPlugin extends BaseWebPlugin implements ITitleView.TitleViewListener
+public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.TitleViewListener
 {
     public static final String NAME = "pluginTitleView";
 
     private final int BTN_TYPE_NORMAL = 0;
-    private final int BTN_TYPE_PK = 1;
+    private final int BTN_TYPE_PK = 1;//不使用
     private final int BTN_TYPE_JS = 2;
+    private final int BTN_TYPE_UI = 3;
+    private final int TITLE_MAX_LEN = 12;
 
     class BtnInfo
     {
@@ -34,6 +32,7 @@ public class WebTitleViewPlugin extends BaseWebPlugin implements ITitleView.Titl
         public String title;
         public boolean closeReload;
         public int btnType;
+        public Object data;//用于ui操作或其它功能
     }
 
     private final String P_URL = "url";
@@ -41,119 +40,124 @@ public class WebTitleViewPlugin extends BaseWebPlugin implements ITitleView.Titl
     private final String P_CLOSE_RELOAD = "closeReload";
     private final String P_BTN_TYPE = "btnType";
     private final String P_INDEX = "index";
+    private final String P_TITLE_LOCATION = "titleLoc";
     //--------------------------------------------
-    private final int TV_ADD_IMG_BTN = "addImgBtn".hashCode();
-    private final String P_IB_IMG_URL = "btImgUrl";
-    private final String P_IB_RES_ID = "btResId";
+    private final String TV_ADD_IMG_BTN = "addimgbtn";
+    private final String P_IB_IMG_URL = "imgurl";
+    private final String P_IB_RES_ID = "resid";
     //--------------------------------------------
-    private final int TV_ADD_TXT_BTN = "addTxtBtn".hashCode();
-    private final String P_TB_TEXT = "btText";
-    private final String P_TB_TEXT_COLOR = "btTextColor";
-    private final String P_TB_TEXT_SIZE = "textSize";
+    private final String TV_ADD_TXT_BTN = "addtxtbtn";
+    private final String P_TB_TEXT = "text";
+    private final String P_TB_TEXT_COLOR = "tcolor";
+    private final String P_TB_TEXT_SIZE = "tsize";
     //--------------------------------------------
-    private final int TV_MD_IMG_BTN_ICO = "mdImgBtnIco".hashCode();
-    private final int TV_MD_TXT_BTN_TITLE = "mdTxtBtnTitle".hashCode();
-    private final int TV_CLEAR_ALL_BTN = "clsAllBtn".hashCode();
-    private final int TV_LEFT_IMG_BTN = "addLeftImgBtn".hashCode();
+    private final String TV_MD_IMG_BTN_ICO = "mdimgbtnico";
+    private final String TV_MD_TXT_BTN_TITLE = "mdtxtbtntitle";
+    private final String TV_CLEAR_ALL_BTN = "clsallbtn";
+    private final String TV_LEFT_IMG_BTN = "addleftimgbtn";
+    //--------------------------------------------
+    public static final String TV_ADD_TAG = "addtag";
+    private final String P_TAP_DATA = "tapdata";
     //
-    private final int TV_SET_TITLE = "setTitle".hashCode();
-    private final int TV_ADD_TITLE = "addTitle".hashCode();
-    private final int TV_ADD_RETURN = "addReturn".hashCode();
-
+    private final String TV_SET_TITLE = "settitle";
+    private final String TV_SET_RETURN = "setreturn";
+    //
+    private int returnBtnIndex = -1;
+    private int titleLocation = LTitleView.TVL_MIDDLE;
+    private int titleIndex = -1;
 
     private HashMap<View, BtnInfo> mapBtnInfo = new HashMap<>();
 
     @Override
     public void init(IWebShell ws, Intent data)
     {
+        super.init(ws, data);
         ITitleView tv = ws.getTitleView();
         tv.setTitleViewListener(this);
         //
-        String title = data.getStringExtra(IWebShell.WC_TITLE);
-        int resId = data.getIntExtra(IWebShell.WC_RETURN_RES_ID, -1);
+        String title = data.getStringExtra(IWebShell.WS_TITLE);
+        int resId = data.getIntExtra(IWebShell.WS_RETURN_RES_ID, -1);
         if (resId != -1)
         {
-            exec(TV_ADD_RETURN, JsonHelper.convert(P_IB_RES_ID, resId).toJSONString(), null);
+            exec(TV_SET_RETURN, JsonHelper.convert(P_IB_RES_ID, resId), null);
         }
-        exec(TV_ADD_TITLE, JsonHelper.convert(P_TITLE, title).toJSONString(), null);
+        //
+        titleLocation = data.getIntExtra(IWebShell.WS_TITLE_LOCATION, LTitleView.TVL_MIDDLE);
+        exec(TV_SET_TITLE, JsonHelper.convert(P_TITLE, title, P_TITLE_LOCATION, titleLocation), null);
     }
 
     @Override
-    public String getName()
+    public boolean exec(String funName, JSONObject param, String callback)
     {
-        return NAME;
-    }
-
-    private boolean exec(int funName, JSONObject param, String callback)
-    {
+        View view;
         IWebShell shell = webShell.get();
         if (shell == null) return false;
         ITitleView tv = shell.getTitleView();
-        View view;
         boolean isProc = false;
-        if (funName == TV_ADD_IMG_BTN)
+        int index;
+        if (funName.equals(TV_ADD_IMG_BTN))
         {
-            view = tv.addView(LTitleView.TVL_RIGHT, param.getString(P_IB_IMG_URL), true);
-            genBtnInfo(param, view);
+            index = tv.addImageView(LTitleView.TVL_RIGHT, param.getString(P_IB_IMG_URL), true);
+            genBtnInfo(param, tv.getView(LTitleView.TVL_RIGHT, index));
             isProc = true;
-        } else if (funName == TV_ADD_TXT_BTN)
+        } else if (funName.equals(TV_ADD_TXT_BTN))
         {
-            view = tv.addView(LTitleView.TVL_RIGHT, param.getString(P_TB_TEXT),
+            index = tv.addTextView(LTitleView.TVL_RIGHT, param.getString(P_TB_TEXT),
                     param.getIntValue(P_TB_TEXT_SIZE), param.getIntValue(P_TB_TEXT_COLOR), true);
-            genBtnInfo(param, view);
+            genBtnInfo(param, tv.getView(LTitleView.TVL_RIGHT, index));
             isProc = true;
-        } else if (funName == TV_MD_IMG_BTN_ICO)
+        } else if (funName.equals(TV_MD_IMG_BTN_ICO))
         {
             tv.mdImgView(LTitleView.TVL_RIGHT, param.getIntValue(P_INDEX), param.getString(P_IB_IMG_URL));
             isProc = true;
-        } else if (funName == TV_MD_TXT_BTN_TITLE)
+        } else if (funName.equals(TV_MD_TXT_BTN_TITLE))
         {
             tv.mdTxtView(LTitleView.TVL_RIGHT, param.getIntValue(P_INDEX), param.getString(P_TB_TEXT));
             isProc = true;
-        } else if (funName == TV_CLEAR_ALL_BTN)
+        } else if (funName.equals(TV_CLEAR_ALL_BTN))
         {
             tv.clearView(LTitleView.TVL_RIGHT);
             isProc = true;
-        } else if (funName == TV_LEFT_IMG_BTN)
+        } else if (funName.equals(TV_LEFT_IMG_BTN))
         {
-            view = tv.addView(LTitleView.TVL_LEFT, param.getString(P_IB_IMG_URL), true);
-            genBtnInfo(param, view);
+            index = tv.addImageView(LTitleView.TVL_LEFT, param.getString(P_IB_IMG_URL), true);
+            genBtnInfo(param, tv.getView(LTitleView.TVL_LEFT, index));
             isProc = true;
-        } else if (funName == TV_ADD_TITLE)
+        } else if (funName.equals(TV_SET_TITLE))
         {
-            tv.addView(LTitleView.TVL_RIGHT, param.getString(P_TB_TEXT),
-                    param.getIntValue(P_TB_TEXT_SIZE), param.getIntValue(P_TB_TEXT_COLOR), true);
+            int tl = JsonHelper.getInt(param, P_TITLE_LOCATION, LTitleView.TVL_MIDDLE);
+            String txt = JsonHelper.getString(param, P_TB_TEXT, "");
+            int ts = JsonHelper.getInt(param, P_TB_TEXT_SIZE, tv.getContext().getResources().getDimensionPixelOffset(R.dimen.title_view_title_text_size));
+            int color = JsonHelper.getInt(param, P_TB_TEXT_COLOR, R.color.colorTitleViewTitle);
+            if (txt.length() > TITLE_MAX_LEN)
+            {
+                txt = txt.substring(0, TITLE_MAX_LEN) + "...";
+            }
+            if (titleIndex == -1)
+            {
+                titleIndex = tv.addTextView(tl, txt, ts, color, true);
+                titleLocation = tl;
+            }else
+            {
+                tv.mdTxtView(titleLocation, titleIndex, txt);
+            }
             isProc = true;
-        } else if (funName == TV_SET_TITLE)
+        } else if (funName.equals(TV_SET_RETURN))
         {
-            tv.mdTxtView(LTitleView.TVL_MIDDLE, 0, param.getString(P_TITLE));
+            returnBtnIndex = tv.addImageView(LTitleView.TVL_LEFT, param.getIntValue(P_IB_RES_ID), true);
             isProc = true;
-        } else if (funName == TV_ADD_RETURN)
+        } else if (funName.equals(TV_ADD_TAG))
         {
-            tv.addView(LTitleView.TVL_LEFT, param.getIntValue(P_IB_RES_ID), true);
+            index = tv.addImageView(LTitleView.TVL_MIDDLE, param.getString(P_IB_IMG_URL), true);
+            BtnInfo bi = new BtnInfo();
+            bi.btnType = BTN_TYPE_UI;
+            bi.data = funName;
+            mapBtnInfo.put(tv.getView(ITitleView.TVL_MIDDLE, index), bi);
+            shell.jsCall(funName, JsonHelper.getString(param, P_TAP_DATA, ""));
             isProc = true;
         }
-        if (isProc && !TextUtils.isEmpty(callback))
-        {
-            shell.execJScript("javascript:" + callback);
-        }
-        return isProc;
-    }
-
-    @Override
-    public boolean exec(int funName, String json, String callback)
-    {
-        try
-        {
-            return exec(funName, JSON.parseObject(json), callback);
-        }catch (Exception e){}
-        return false;
-    }
-
-    @Override
-    public boolean exec(String funName, String json, String callback)
-    {
-        return exec(funName.hashCode(), json, callback);
+        isProc = isProc || (execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC ? false : true);
+        return procCallback(isProc, param, callback, shell);
     }
 
     @Override
@@ -170,6 +174,7 @@ public class WebTitleViewPlugin extends BaseWebPlugin implements ITitleView.Titl
         bi.closeReload = JsonHelper.getBoolen(param, P_CLOSE_RELOAD, false);
         bi.openUrl = JsonHelper.getString(param, P_URL, "");
         bi.title = JsonHelper.getString(param, P_TITLE, "");
+        bi.data = param.getString("alias");
         mapBtnInfo.put(view, bi);
     }
 
@@ -179,18 +184,22 @@ public class WebTitleViewPlugin extends BaseWebPlugin implements ITitleView.Titl
     {
         IWebShell shell = webShell.get();
         if (shell == null) return;
-        BtnInfo bi;
         switch (tvl)
         {
             case LTitleView.TVL_LEFT:
-                bi = mapBtnInfo.get(view);
-                if (bi == null)//return button click
+                if (index == returnBtnIndex && tvl == LTitleView.TVL_LEFT)
                 {
-                    shell.getActvity().finish();
-                } else
+                    shell.getActivity().finish();
+                }else
                 {
-                    clickBtnInfo(shell, bi);
+                    clickBtnInfo(shell, mapBtnInfo.get(view));
                 }
+                break;
+            case LTitleView.TVL_MIDDLE:
+                clickBtnInfo(shell, mapBtnInfo.get(view));
+                break;
+            case LTitleView.TVL_RIGHT:
+                clickBtnInfo(shell, mapBtnInfo.get(view));
                 break;
         }
     }
@@ -200,16 +209,19 @@ public class WebTitleViewPlugin extends BaseWebPlugin implements ITitleView.Titl
         switch (bi.btnType)
         {
             case BTN_TYPE_NORMAL:
-
+                shell.openWindow(true, bi.openUrl, bi.title, LTitleView.TVL_MIDDLE, bi.closeReload, 0);
                 break;
             case BTN_TYPE_PK:
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 ComponentName com = new ComponentName(bi.title, bi.openUrl);
                 i.setComponent(com);
-                shell.getActvity().startActivityForResult(i, IWebShell.REQ_PK);
+                shell.getActivity().startActivityForResult(i, IWebShell.REQ_PK);
                 break;
             case BTN_TYPE_JS:
-                shell.execJScript(bi.openUrl);
+                shell.execJScript("javascript:" + "event_callback(#)".replaceAll("#", JsonHelper.convertToStr("method", (String) bi.data)));
+                break;
+            case BTN_TYPE_UI:
+                shell.pluginCallback((String) bi.data, null);
                 break;
         }
     }

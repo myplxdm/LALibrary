@@ -2,7 +2,7 @@
 <PreferenceScreen>
     <paths>
         <external-path
-            name="myAppUpdateInstallApkFile"
+            name="appExtPath"
             path=""/>
     </paths>
 </PreferenceScreen>

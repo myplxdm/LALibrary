@@ -16,7 +16,7 @@ public class UMengHelper
 {
     public static void init(final AbsActivity absActivity, final String appkey, final String channelId)
     {
-        if (AppUtils.getOSVersion() >= 23)
+        if (AppUtils.getOSVersion() >= 23 && absActivity != null)
         {
             absActivity.checkPermissions(new PermissionsUtil.PermissionCallback()
             {

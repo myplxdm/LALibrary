@@ -41,12 +41,6 @@ public class PluginTimer extends PluginBase
     }
 
     @Override
-    public String getName()
-    {
-        return NAME;
-    }
-
-    @Override
     public String getDescribe()
     {
         return NAME;

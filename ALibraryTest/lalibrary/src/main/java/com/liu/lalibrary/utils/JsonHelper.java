@@ -1,5 +1,6 @@
 package com.liu.lalibrary.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -31,5 +32,15 @@ public class JsonHelper
             jo.put((String) args[i], args[i + 1]);
         }
         return jo;
+    }
+
+    public static String convertToStr(Object... args)
+    {
+        JSONObject jo = new JSONObject();
+        for (int i = 0;i < args.length;i += 2)
+        {
+            jo.put((String) args[i], args[i + 1]);
+        }
+        return JSON.toJSONString(jo);
     }
 }

@@ -1,8 +1,10 @@
 package com.liu.lalibrary.ui.titleview;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,10 +29,6 @@ import com.zhy.autolayout.utils.AutoUtils;
 
 public class LTitleView extends AutoRelativeLayout implements ITitleView
 {
-    public static final int TVL_LEFT = 0;
-    public static final int TVL_MIDDLE = 1;
-    public static final int TVL_RIGHT = 2;
-
     private final int COLOR_BG = 0xffffff;
     private final int COLOR_TITLE_TEXT = 0xff000000;
     private final int SIZE_TITLE_TEXt = 58;
@@ -55,35 +54,47 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     public LTitleView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(context).inflate(R.layout.title_view, this, true);
+        llSet[0] = new LinearLayout(context);
+        llSet[0].setOrientation(LinearLayout.HORIZONTAL);
+        AutoRelativeLayout.LayoutParams lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.CENTER_VERTICAL);
+        addView(llSet[0], lp);
+        //
+        llSet[1] = new LinearLayout(context);
+        llSet[1].setOrientation(LinearLayout.HORIZONTAL);
+        lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+        addView(llSet[1], lp);
+        //
+        llSet[2] = new LinearLayout(context);
+        llSet[2].setOrientation(LinearLayout.HORIZONTAL);
+        lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.CENTER_VERTICAL);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        addView(llSet[2], lp);
+        //
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.LTitleView);
         if (attr != null)
         {
-            int bgColor = attr.getColor(R.styleable.LTitleView_bgColor, COLOR_BG);
-            setBackgroundColor(bgColor);
-            //
             space = attr.getDimensionPixelSize(R.styleable.LTitleView_viewSpace, SPACE_);
             //
             attr.recycle();
         }
-        llSet[0] = (LinearLayout) findViewById(R.id.llLeft);
-        llSet[1] = (LinearLayout) findViewById(R.id.llMiddle);
-        llSet[2] = (LinearLayout) findViewById(R.id.llRight);
     }
-
 
     private View addImageViewTo(int resId, LinearLayout ll, int space)
     {
-        Drawable d = getResources().getDrawable(resId);
+        Bitmap b = BitmapFactory.decodeResource(getResources(), resId);
         ImageView iv = new ImageView(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(d.getIntrinsicWidth(), d.getIntrinsicHeight());
-        ll.addView(iv, lp);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(b.getWidth(), b.getHeight());
+        iv.setLayoutParams(lp);
+        iv.setImageBitmap(b);
+        ll.addView(iv);
         if (space != 0)
         {
             if (space < 0) lp.setMargins(space, 0, 0, 0);
             else lp.setMargins(0, 0, space, 0);
         }
-        AutoUtils.auto(iv);
         return iv;
     }
 
@@ -139,22 +150,22 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
 
     private void clickProc(View view, final int index, final int tvl)
     {
-        if (tvl == TVL_MIDDLE)
-        {
-            if (!middelClickSetup)
-            {
-                middelClickSetup = true;
-                llSet[tvl].setOnClickListener(new OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        listener.onViewClick(tvl, 0, v);
-                    }
-                });
-            }
-            return;
-        }
+//        if (tvl == TVL_MIDDLE)
+//        {
+//            if (!middelClickSetup)
+//            {
+//                middelClickSetup = true;
+//                llSet[tvl].setOnClickListener(new OnClickListener()
+//                {
+//                    @Override
+//                    public void onClick(View v)
+//                    {
+//                        listener.onViewClick(tvl, 0, v);
+//                    }
+//                });
+//            }
+//            return;
+//        }
         view.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -166,41 +177,49 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     }
 
     @Override
-    public View addView(int tvl, int resId, boolean needClick)
+    public int addImageView(int tvl, int resId, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
         View view = addImageViewTo(resId, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
-        return view;
+        return index;
     }
 
     @Override
-    public View addView(int tvl, String imageUrl, boolean needClick)
+    public int addImageView(int tvl, String imageUrl, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
         View view = addImageViewTo(imageUrl, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
-        return view;
+        return index;
     }
 
     @Override
-    public View addView(int tvl, String text, int textSize, int textColor, boolean needClick)
+    public int addTextView(int tvl, String text, int textSize, int textColor, boolean needClick)
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
         View view = addTextViewTo(text, textSize, textColor, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
-        return view;
+        return index;
+    }
+
+    @Override
+    public View getView(int tvl, int index)
+    {
+        LinearLayout ll = llSet[tvl];
+        if (index >= ll.getChildCount()) return null;
+        return ll.getChildAt(index);
     }
 
     @Override
     public View mdImgView(int tvl, int index, int resId)
     {
         LinearLayout ll = llSet[tvl];
-        if (index >= ll.getChildCount())return null;
-        ImageView iv = (ImageView)ll.getChildAt(index);
+        if (index >= ll.getChildCount()) return null;
+        ImageView iv = (ImageView) ll.getChildAt(index);
         iv.setImageResource(resId);
         AutoUtils.auto(iv);
         return iv;
@@ -210,8 +229,8 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     public View mdImgView(int tvl, int index, String imageUrl)
     {
         LinearLayout ll = llSet[tvl];
-        if (index >= ll.getChildCount())return null;
-        final ImageView iv = (ImageView)ll.getChildAt(index);
+        if (index >= ll.getChildCount()) return null;
+        final ImageView iv = (ImageView) ll.getChildAt(index);
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>()
         {
             @Override
@@ -238,10 +257,18 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     public View mdTxtView(int tvl, int index, String text)
     {
         LinearLayout ll = llSet[tvl];
-        if (index >= ll.getChildCount())return null;
-        TextView tv = (TextView)ll.getChildAt(index);
+        if (index >= ll.getChildCount()) return null;
+        TextView tv = (TextView) ll.getChildAt(index);
         tv.setText(text);
         return tv;
+    }
+
+    @Override
+    public void showView(int tvl, int index, boolean isShow)
+    {
+        LinearLayout ll = llSet[tvl];
+        if (index >= ll.getChildCount()) return;
+        ll.getChildAt(index).setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -28,12 +28,6 @@ public class PluginContacts extends PluginBase
     }
 
     @Override
-    public String getName()
-    {
-        return NAME;
-    }
-
-    @Override
     public String getDescribe()
     {
         return NAME;

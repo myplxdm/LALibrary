@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.liu.app.pluginImpl.PluginContacts;
+import com.liu.app.web.WebShellActivity;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.plugins.IPluginEvent;
 
@@ -12,50 +13,29 @@ import com.liu.lalibrary.plugins.IPluginEvent;
  * Created by liu on 2017/11/24.
  */
 
-public class TestActivity extends AbsActivity
+public class TestActivity extends WebShellActivity
 {
     @Override
-    protected int getRootViewId()
+    public Class getWebActivityClass()
     {
-        return R.layout.activity_test;
+        return TestActivity.class;
     }
 
     @Override
-    protected void onInitView()
+    public void uiUpdate(int funName, Object param)
     {
-        findViewById(R.id.tvTest).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                getPluginByName(PluginContacts.NAME).exec(PluginContacts.CMD_OPEN_CONTACTS_VIEW, null, new IPluginEvent()
-                {
-                    @Override
-                    public void pluginResult(boolean isSuccess, String result, Object param)
-                    {
-                        Toast.makeText(TestActivity.this, result, Toast.LENGTH_LONG).show();
-                    }
 
-                    @Override
-                    public void pluginClose(boolean isSuccess, String result)
-                    {
-
-                    }
-                });
-            }
-        });
     }
 
     @Override
-    protected void onInitData(Intent data)
+    public void uiClick(int funName)
     {
-        addPlugin(new PluginContacts(this));
+
     }
 
     @Override
-    protected void onDestroy()
+    protected int getReturnBtnResId()
     {
-        super.onDestroy();
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
+        return R.mipmap.btn_return_w;
     }
 }
