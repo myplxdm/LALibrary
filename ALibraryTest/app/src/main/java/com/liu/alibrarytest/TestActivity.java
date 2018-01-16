@@ -22,13 +22,13 @@ public class TestActivity extends WebShellActivity
     }
 
     @Override
-    public void uiUpdate(int funName, Object param)
+    public void jsCall(String funName, Object param)
     {
 
     }
 
     @Override
-    public void uiClick(int funName)
+    public void pluginCallback(String funName, Object param)
     {
 
     }

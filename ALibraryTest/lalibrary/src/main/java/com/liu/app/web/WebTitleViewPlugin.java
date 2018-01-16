@@ -41,6 +41,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
     private final String P_BTN_TYPE = "btnType";
     private final String P_INDEX = "index";
     private final String P_TITLE_LOCATION = "titleLoc";
+    private final String P_ALIAS = "alias";
     //--------------------------------------------
     private final String TV_ADD_IMG_BTN = "addimgbtn";
     private final String P_IB_IMG_URL = "imgurl";
@@ -174,7 +175,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
         bi.closeReload = JsonHelper.getBoolen(param, P_CLOSE_RELOAD, false);
         bi.openUrl = JsonHelper.getString(param, P_URL, "");
         bi.title = JsonHelper.getString(param, P_TITLE, "");
-        bi.data = param.getString("alias");
+        bi.data = JsonHelper.getString(param, P_ALIAS, "");
         mapBtnInfo.put(view, bi);
     }
 
