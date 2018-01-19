@@ -273,6 +273,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         final ImageView iv = (ImageView) rl.findViewById(R.id.iv_btn);
         iv.setBackgroundResource(resId);
         LayoutParams lp = new LayoutParams(width, height);
+        lp.setMargins(0, 0, ll_right.getChildCount() > 0 ? DensityUtils.dp2px(context, VIEW_SPACE) : 0, 0);
         ll_right.addView(rl, lp);
         AutoUtils.auto(rl);
         rl.setOnClickListener(new OnClickListener()
@@ -312,7 +313,7 @@ public class RLTitleView extends AutoRelativeLayout implements OnClickListener
         Glide.with(context.getApplicationContext()).asBitmap().load(btImgUrl).into(target);
         iv.setTag(target);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, 0, DensityUtils.dp2px(context, VIEW_SPACE), 0);
+        lp.setMargins(0, 0, ll_right.getChildCount() > 0 ? DensityUtils.dp2px(context, VIEW_SPACE) : 0, 0);
         ll_right.addView(rl, lp);
         rl.setOnClickListener(new OnClickListener()
         {

@@ -157,7 +157,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
             shell.jsCall(funName, JsonHelper.getString(param, P_TAP_DATA, ""));
             isProc = true;
         }
-        isProc = isProc || (execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC ? false : true);
+        isProc = isProc || !(execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC);
         return procCallback(isProc, param, callback, shell);
     }
 
@@ -188,7 +188,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
         switch (tvl)
         {
             case LTitleView.TVL_LEFT:
-                if (index == returnBtnIndex && tvl == LTitleView.TVL_LEFT)
+                if (index == returnBtnIndex)
                 {
                     shell.getActivity().finish();
                 }else
