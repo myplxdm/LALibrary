@@ -22,7 +22,7 @@ import com.liu.lalibrary.utils.imagecache.ImageTools;
 
 public class PluginPhotoChoose extends PluginBase
 {
-    public static final String NAME = "photo_choose";
+    public static final String NAME = PluginPhotoChoose.class.getSimpleName();
     public static final String CHOOSE_TYPE = "ct";
     public static final int PHOTO_CHOOSE_CT_ALBUM = 0;//相册
     public static final int PHOTO_CHOOSE_CT_TAKEPIC = 1;//相机

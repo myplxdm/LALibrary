@@ -17,7 +17,7 @@ import com.liu.lalibrary.utils.PermissionsUtil;
 
 public class PluginContacts extends PluginBase
 {
-    public static final String NAME = "Contacts";
+    public static final String NAME = PluginContacts.class.getSimpleName();
     public static final String CMD_OPEN_CONTACTS_VIEW = "openContactsView";
     private final int REQ_CODE_CONTACTS = 0xff2;
     private IPluginEvent event;

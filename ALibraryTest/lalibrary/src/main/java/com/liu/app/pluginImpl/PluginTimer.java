@@ -18,7 +18,7 @@ import java.util.TimerTask;
 
 public class PluginTimer extends PluginBase
 {
-    public static final String NAME = "timer";
+    public static final String NAME = PluginTimer.class.getSimpleName();
     public static String CMD_START = "start";
     public static String PAM_COUNT = "count";//int
     //

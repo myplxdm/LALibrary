@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 public class PluginFileUpload extends PluginBase
 {
-    public static final String NAME = "fileUpload";
+    public static final String NAME = PluginFileUpload.class.getSimpleName();
     public static final String P_URL = "url";
     public static final String P_RATION = "ration";
     public static final String P_OUT_WIDTH = "owidth";
