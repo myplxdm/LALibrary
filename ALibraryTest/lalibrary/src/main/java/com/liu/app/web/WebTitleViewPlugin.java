@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.TitleViewListener
 {
-    public static final String NAME = "pluginTitleView";
+    public static final String NAME = WebTitleViewPlugin.class.getSimpleName();
 
     private final int BTN_TYPE_NORMAL = 0;
     private final int BTN_TYPE_PK = 1;//不使用

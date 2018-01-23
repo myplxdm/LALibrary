@@ -15,7 +15,7 @@ import com.liu.lalibrary.utils.Utils;
 
 public class WebSystemPlugin extends WebPluginBase
 {
-    public static final String NAME = "webSystemPlugin";
+    public static final String NAME = WebSystemPlugin.class.getSimpleName();
     //
     private final String SEND_SMS = "sendsms";
     private final String P_SS_TOS = "tos";

@@ -13,7 +13,7 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 
 public class WebWXPlugin extends WebPluginBase implements WXSDK.WXSDXListener
 {
-    public static final String NAME = "WXPlugin";
+    public static final String NAME = WebWXPlugin.class.getSimpleName();
     //---------------------------------------------
     private final String SHARE = "sharewx";
     private final String P_URL = "url";

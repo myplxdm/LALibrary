@@ -14,7 +14,7 @@ import com.liu.lalibrary.utils.JsonHelper;
 
 public class WebWindowPlugin extends WebPluginBase
 {
-    public static final String NAME = "webWindowPlugin";
+    public static final String NAME = WebWindowPlugin.class.getSimpleName();
     //fun name
     private final String WND_TO_URL = "tourl";
     private final String WND_CLOSE_WINDOW = "closewindow";
