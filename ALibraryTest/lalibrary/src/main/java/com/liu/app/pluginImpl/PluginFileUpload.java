@@ -3,11 +3,14 @@ package com.liu.app.pluginImpl;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.liu.app.DirManager;
 import com.liu.app.network.LjhHttpUtils;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.camera.PhotoProcActivity;
@@ -18,8 +21,11 @@ import com.liu.lalibrary.utils.AppUtils;
 import com.liu.lalibrary.utils.Utils;
 import com.liu.lalibrary.utils.imagecache.CommonUtil;
 import com.liu.lalibrary.utils.imagecache.ImageTools;
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -31,15 +37,19 @@ public class PluginFileUpload extends PluginBase
     public static final String NAME = PluginFileUpload.class.getSimpleName();
     public static final String P_URL = "url";
     public static final String P_RATION = "ration";
+    public static final String P_ASPECTX = "aspectX";//宽比例
+    public static final String P_ASPECTY = "aspectY";//高比例，1:1;16:9
     public static final String P_OUT_WIDTH = "owidth";
     public static final String P_OUT_HEIGHT = "oheight";
     public static final String P_UP_KEYS = "upkeys";
     public static final String P_UP_VALUES = "upvalues";
     //
     private String upUrl;
-    private float corpRation;
-    private int width;
-    private int height;
+    //private float corpRation;
+    private int aspectX = 1;
+    private int aspectY = 1;
+    private int width = 0;
+    private int height = 0;
     private IPluginEvent event;
     private String upKeys;
     private String upValues;
@@ -65,13 +75,20 @@ public class PluginFileUpload extends PluginBase
     @Override
     public boolean exec(String cmd, JSONObject params, IPluginEvent event)
     {
+        boolean isCrop = false;
         upUrl = params.getString(P_URL);
         width = params.getIntValue(P_OUT_WIDTH);
         height = params.getIntValue(P_OUT_HEIGHT);
         this.event = event;
-        if (params.containsKey(P_RATION))
+        if (params.containsKey(P_ASPECTX))
         {
-            corpRation = params.getFloat(P_RATION);
+            isCrop = true;
+            aspectX = params.getIntValue(P_ASPECTX);
+        }
+        if (params.containsKey(P_ASPECTY))
+        {
+            isCrop = true;
+            aspectY = params.getIntValue(P_ASPECTY);
         }
         if (params.containsKey(P_UP_KEYS) && params.containsKey(P_UP_VALUES))
         {
@@ -80,6 +97,7 @@ public class PluginFileUpload extends PluginBase
         }
         IPlugin pc = getActivity().getPluginByName(PluginPhotoChoose.NAME);
         if (pc == null)return false;
+        final boolean finalIsCrop = isCrop;
         pc.exec(null, null, new IPluginEvent()
         {
             @Override
@@ -87,9 +105,9 @@ public class PluginFileUpload extends PluginBase
             {
                 if (isSuccess)
                 {
-                    if (corpRation > 0)
+                    if (finalIsCrop && width > 0 && height > 0)
                     {
-                        PhotoProcActivity.show(path, corpRation, width, height, ImageTools.REQ_OPEN_CORP, getActivity());
+                        openCrop(path);
                         return;
                     }
                     uploadFile(path);
@@ -105,12 +123,39 @@ public class PluginFileUpload extends PluginBase
         return true;
     }
 
-    public static JSONObject packetParam(String url, float ration, int outWidth, int outHeight,
+    private void openCrop(String srcImagePath)
+    {
+        File file = new File(DirManager.inst().getDirByType(DirManager.DIR_CACHE, "crop.jpg"));
+
+        UCrop.Options options = new UCrop.Options();
+
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.NONE, UCropActivity.ALL);
+        options.setFreeStyleCropEnabled(true);
+
+        UCrop.of(Uri.parse(srcImagePath), Uri.fromFile(file))
+                .withOptions(options)
+                .withAspectRatio(aspectX, aspectY).withAspectRatio(1,1)
+                .start(getActivity());
+//        Uri uri;
+//        File file = new File(DirManager.inst().getDirByType(DirManager.DIR_CACHE, "crop.jpg"));
+//        if (file.exists()) file.delete();
+//        try
+//        {
+//            file.createNewFile();
+//        } catch (IOException e) {}
+//        ImageTools.openCrop(aspectX, aspectY, width, height, false, Uri.parse(srcImagePath),
+//                Uri.fromFile(file), ImageTools.REQ_OPEN_CORP, getActivity());
+//        PhotoProcActivity.show(srcImagePath, 1.0f * aspectX / aspectY, width, height, ImageTools.REQ_OPEN_CORP, getActivity());
+    }
+
+    public static JSONObject packetParam(String url, int aspectX, int aspectY, int outWidth, int outHeight,
                                          String httpKeys, String httpValues, int chooseType)
     {
         JSONObject json = new JSONObject();
         json.put(P_URL, url);
-        json.put(P_RATION, ration);
+        json.put(P_ASPECTX, aspectX);
+        json.put(P_ASPECTY, aspectY);
         json.put(P_OUT_WIDTH, outWidth);
         json.put(P_OUT_HEIGHT, outHeight);
         if (!TextUtils.isEmpty(httpKeys)) json.put(P_UP_KEYS, httpKeys);
@@ -119,14 +164,15 @@ public class PluginFileUpload extends PluginBase
         return json;
     }
 
-    public static JSONObject packetParam(String url, float ration, int outWidth, int outHeight,
+    public static JSONObject packetParam(String url, int aspectX, int aspectY, int outWidth, int outHeight,
                                          String httpKeys, String httpValues)
     {
-        return packetParam(url, ration, outWidth, outHeight, httpKeys, httpValues, PluginPhotoChoose.PHOTO_CHOOSE_CT_ALBUM);
+        return packetParam(url, aspectX, aspectY, outWidth, outHeight, httpKeys, httpValues, PluginPhotoChoose.PHOTO_CHOOSE_CT_ALBUM);
     }
 
     private void uploadFile(String path)
     {
+        if (TextUtils.isEmpty(path)) return;
         //Bitmap bmp = ImageTools.getPhotoFromSDCard(path, width, height);
         final ProgressDialog dlg = ProgressDialog.show(getActivity(), null, "正在上传文件...");
         //final String fileName = ImageTools.savePhotoToSDCard(bmp,
@@ -193,9 +239,17 @@ public class PluginFileUpload extends PluginBase
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ImageTools.REQ_OPEN_CORP && data != null)
+//        if (requestCode == ImageTools.REQ_OPEN_CORP && data != null)
+//        {
+//            uploadFile(data.getStringExtra(PhotoProcActivity.RESULT_FILE_NAME));
+//        }
+        if (requestCode == UCrop.REQUEST_CROP && data != null)
         {
-            uploadFile(data.getStringExtra(PhotoProcActivity.RESULT_FILE_NAME));
+            final Uri resultUri = UCrop.getOutput(data);
+            if (resultUri != null)
+            {
+                uploadFile(resultUri.getPath());
+            }
         }
     }
 

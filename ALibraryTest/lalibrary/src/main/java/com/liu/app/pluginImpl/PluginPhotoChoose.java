@@ -125,20 +125,20 @@ public class PluginPhotoChoose extends PluginBase
                 event.pluginResult(true, DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME), null);
             } else if (requestCode == ImageTools.REQ_CHOOSE_ALBUM)
             {
-                String path = ImageTools.getAlbumPath(wrActivity.get(), data);
-                if (path == null)
-                {
-                    Bitmap bmp = ImageTools.getAlbumImage(wrActivity.get(), data);
-                    if (bmp != null)
-                    {
-                        path = ImageTools.savePhotoToSDCard(bmp, DirManager.inst().getDirByType(DirManager.DIR_CACHE),
-                                                            TAKE_PHOTO_NAME, true);
-                        if (path != null) event.pluginResult(true, path, null);
-                    }
-                    event.pluginResult(false, null, null);
-                    return;
-                }
-                event.pluginResult(true, path, null);
+//                String path = ImageTools.getAlbumPath(wrActivity.get(), data);
+//                if (path == null)
+//                {
+//                    Bitmap bmp = ImageTools.getAlbumImage(wrActivity.get(), data);
+//                    if (bmp != null)
+//                    {
+//                        path = ImageTools.savePhotoToSDCard(bmp, DirManager.inst().getDirByType(DirManager.DIR_CACHE),
+//                                                            TAKE_PHOTO_NAME, true);
+//                        if (path != null) event.pluginResult(true, path, null);
+//                    }
+//                    event.pluginResult(false, null, null);
+//                    return;
+//                }
+                event.pluginResult(true, data.getData().toString(), null);
             }
         }
     }

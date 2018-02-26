@@ -647,9 +647,15 @@ public final class ImageTools
 
     public static void chooseAlbum(Activity act, int reqCode)
     {
-        Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        openAlbumIntent.setType("image/*.jpg;image/*.jpeg;image/*.png");
-        act.startActivityForResult(openAlbumIntent, reqCode);
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        act.startActivityForResult(Intent.createChooser(intent, "选择"), reqCode);
+
+//        Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//        openAlbumIntent.setType("image/*.jpg;image/*.jpeg;image/*.png");
+//        act.startActivityForResult(openAlbumIntent, reqCode);
     }
 
     public static String getAlbumPath(Activity act, Intent data)
@@ -743,6 +749,10 @@ public final class ImageTools
                                 int outputY, boolean retData, Uri imageUrl, Uri outUrl, int reqCode, Fragment act)
     {
         Intent intent = new Intent("com.android.camera.action.CROP");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
         intent.setDataAndType(imageUrl, "image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", aspectX);
@@ -761,6 +771,10 @@ public final class ImageTools
                                 int outputY, boolean retData, Uri imageUrl, Uri outUrl, int reqCode, Activity act)
     {
         Intent intent = new Intent("com.android.camera.action.CROP");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
         intent.setDataAndType(imageUrl, "image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", aspectX);
