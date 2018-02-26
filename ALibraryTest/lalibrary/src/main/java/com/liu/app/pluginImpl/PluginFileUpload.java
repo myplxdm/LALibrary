@@ -23,6 +23,7 @@ import com.liu.lalibrary.utils.imagecache.CommonUtil;
 import com.liu.lalibrary.utils.imagecache.ImageTools;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
+import com.yalantis.ucrop.model.AspectRatio;
 
 import java.io.File;
 import java.io.IOException;
@@ -132,10 +133,15 @@ public class PluginFileUpload extends PluginBase
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
         options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.NONE, UCropActivity.ALL);
         options.setFreeStyleCropEnabled(true);
+//       options.setAspectRatioOptions(1,
+//                new AspectRatio("WOW", 1, 2),
+//                new AspectRatio("MUCH", 3, 4),
+//                new AspectRatio("SO", 16, 9),
+//                new AspectRatio("ASPECT", 1, 1));
 
         UCrop.of(Uri.parse(srcImagePath), Uri.fromFile(file))
                 .withOptions(options)
-                .withAspectRatio(aspectX, aspectY).withAspectRatio(1,1)
+                .withAspectRatio(aspectX, aspectY)
                 .start(getActivity());
 //        Uri uri;
 //        File file = new File(DirManager.inst().getDirByType(DirManager.DIR_CACHE, "crop.jpg"));
