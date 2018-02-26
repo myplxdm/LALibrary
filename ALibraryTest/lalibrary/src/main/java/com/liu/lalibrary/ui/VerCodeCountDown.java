@@ -30,7 +30,7 @@ public class VerCodeCountDown
     {
         this.counter = counter;
         this.cdView = cdView;
-        this.cdFormat = cdFormat;
+        if (cdFormat != null) this.cdFormat = cdFormat;
         this.completeCB = completeCB;
         if (activity == null) return;
         ownerActivity = new WeakReference<Activity>(activity);
@@ -51,7 +51,7 @@ public class VerCodeCountDown
         task = service.scheduleWithFixedDelay(taskRun, 0, 1, TimeUnit.SECONDS);
     }
 
-    public void stop()
+    public void stop(boolean runCB)
     {
         if (task != null)
         {
@@ -63,6 +63,11 @@ public class VerCodeCountDown
             service.shutdown();
             service = null;
         }
+        if (runCB && completeCB != null)
+        {
+            completeCB.run();
+            completeCB = null;
+        }
     }
 
     private Runnable taskRun = new Runnable()
@@ -73,7 +78,7 @@ public class VerCodeCountDown
             Activity activity = ownerActivity.get();
             if (activity == null)
             {
-                stop();
+                stop(false);
                 return;
             }
             activity.runOnUiThread(uiRun);
@@ -88,12 +93,7 @@ public class VerCodeCountDown
             cdView.setText(String.format(cdFormat, startCount--));
             if (startCount == 1)
             {
-                stop();
-                if (completeCB != null)
-                {
-                    completeCB.run();
-                    completeCB = null;
-                }
+                stop(true);
             }
         }
     };
