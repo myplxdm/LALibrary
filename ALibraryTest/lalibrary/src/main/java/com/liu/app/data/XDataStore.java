@@ -15,10 +15,7 @@ public class XDataStore
     public static String ACCOUNT = "account";
     public static String ACC_SECRET = "acc_secret";
     public static String LOGIN_TYPE = "login_type";
-
-    public static final int LOGIN_WAY_MAIN = 0x0;
-    public static final int LOGIN_WAY_LOGIN = 0x1;
-    public static final int LOGIN_WAY_FIRST = 0x2;
+    public static String FIRST_RUN = "firstRun";
 
     private static class SingletonHolder
     {
@@ -68,12 +65,19 @@ public class XDataStore
 
     public int getLoginType()
     {
-        if (!sp.contains(LOGIN_TYPE))
-        {
-            sp.edit().putInt(LOGIN_TYPE, LOGIN_WAY_LOGIN);
-            return LOGIN_WAY_FIRST;
-        }
-        return sp.getInt(LOGIN_TYPE, LOGIN_WAY_LOGIN);
+        return sp.getInt(LOGIN_TYPE, 0);
+    }
+
+    public boolean isFirstRun()
+    {
+        boolean isHas = sp.getBoolean(FIRST_RUN, false);
+        if (!isHas) sp.edit().putBoolean(FIRST_RUN, true).commit();
+        return isHas;
+    }
+
+    public void resetFirstRun()
+    {
+        sp.edit().putBoolean(FIRST_RUN, false).commit();
     }
 
     public SharedPreferences.Editor getPutSP()
