@@ -2,7 +2,9 @@ package com.liu.app.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.liu.app.DirManager;
 import com.liu.lalibrary.utils.SPUtils;
 
@@ -78,6 +80,21 @@ public class XDataStore
     public void resetFirstRun()
     {
         sp.edit().putBoolean(FIRST_RUN, false).commit();
+    }
+
+    public void saveObject(Object obj)
+    {
+        sp.edit().putString(obj.getClass().getName(), JSON.toJSONString(obj)).commit();
+    }
+
+    public Object getObject(Class cls)
+    {
+        String json = sp.getString(cls.getName(), "");
+        if (!TextUtils.isEmpty(json))
+        {
+            return JSON.parseObject(json, cls);
+        }
+        return null;
     }
 
     public SharedPreferences.Editor getPutSP()
