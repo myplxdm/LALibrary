@@ -84,7 +84,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
         }
         //
         titleLocation = data.getIntExtra(IWebShell.WS_TITLE_LOCATION, LTitleView.TVL_MIDDLE);
-        exec(TV_SET_TITLE, JsonHelper.convert(P_TITLE, title, P_TITLE_LOCATION, titleLocation), null);
+        exec(TV_SET_TITLE, JsonHelper.convert(P_TB_TEXT, title, P_TITLE_LOCATION, titleLocation), null);
     }
 
     @Override
