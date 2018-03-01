@@ -2,6 +2,7 @@ package com.liu.app.web;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
@@ -129,7 +130,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
             int tl = JsonHelper.getInt(param, P_TITLE_LOCATION, LTitleView.TVL_MIDDLE);
             String txt = JsonHelper.getString(param, P_TB_TEXT, "");
             int ts = JsonHelper.getInt(param, P_TB_TEXT_SIZE, tv.getContext().getResources().getDimensionPixelOffset(R.dimen.title_view_title_text_size));
-            int color = JsonHelper.getInt(param, P_TB_TEXT_COLOR, R.color.colorTitleViewTitle);
+            int color = JsonHelper.getInt(param, P_TB_TEXT_COLOR, ContextCompat.getColor(shell.getActivity(), R.color.colorTitleViewTitle));
             if (txt.length() > TITLE_MAX_LEN)
             {
                 txt = txt.substring(0, TITLE_MAX_LEN) + "...";
