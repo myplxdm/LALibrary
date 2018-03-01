@@ -14,25 +14,26 @@ import com.umeng.analytics.MobclickAgent;
 
 public class UMengHelper
 {
-    public static void init(final AbsActivity absActivity, final String appkey, final String channelId)
+    public static void init(final Context context, final String appkey, final String channelId)
     {
-        if (AppUtils.getOSVersion() >= 23 && absActivity != null)
+        if (context == null) return;
+        if (AppUtils.getOSVersion() >= 23 && (context instanceof AbsActivity))
         {
-            absActivity.checkPermissions(new PermissionsUtil.PermissionCallback()
+            ((AbsActivity) context).checkPermissions(new PermissionsUtil.PermissionCallback()
             {
                 @Override
                 public void onPermission(boolean isOK)
                 {
                     if (isOK)
                     {
-                        MobclickAgent.UMAnalyticsConfig cfg = new MobclickAgent.UMAnalyticsConfig(absActivity, appkey, channelId);
+                        MobclickAgent.UMAnalyticsConfig cfg = new MobclickAgent.UMAnalyticsConfig(context, appkey, channelId);
                         MobclickAgent.startWithConfigure(cfg);
                     }
                 }
             }, Manifest.permission.READ_PHONE_STATE);
         }else
         {
-            MobclickAgent.UMAnalyticsConfig cfg = new MobclickAgent.UMAnalyticsConfig(absActivity, appkey, channelId);
+            MobclickAgent.UMAnalyticsConfig cfg = new MobclickAgent.UMAnalyticsConfig(context, appkey, channelId);
             MobclickAgent.startWithConfigure(cfg);
         }
     }
