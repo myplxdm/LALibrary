@@ -5,7 +5,7 @@
                 android:layout_height="match_parent">
 
     <com.liu.lalibrary.ui.titleview.LTitleView
-        android:background="#000"
+        android:background="#fff"
         android:id="@+id/titleView"
         android:layout_width="match_parent"
         android:layout_height="159px"/>
