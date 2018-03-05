@@ -65,6 +65,7 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
         list.add(new WebTitleViewPlugin());
         list.add(new WebSystemPlugin());
         list.add(new WebWindowPlugin());
+        list.add(new WebWXPlugin());
     }
 
     protected abstract int getReturnBtnResId();
