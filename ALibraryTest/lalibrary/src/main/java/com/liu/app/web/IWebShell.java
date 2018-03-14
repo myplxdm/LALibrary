@@ -18,7 +18,7 @@ public interface IWebShell
     public static final int REQ_OPEN_WEB_WINDOW = REQ_BASE + 10;
     //
     public static final String WS_CLOSE_RELOAD = "bCloseRelad";//当前关闭后，父窗体的web刷新
-    public static final String WS_CLOSE_PARENT_CLOSE_LEVEL = "closeParentCloseLevel";//当前窗体关闭后父窗体多级一并关闭
+    public static final String WS_CLOSE_PARENT_CLOSE_LEVEL = "num";//当前窗体关闭后父窗体多级一并关闭
     public static final String WS_CLOSE_EXEC_JS = "execJs";//当前关闭后，父窗体执行js
     public static final String WS_TITLE = "wct";
     public static final String WS_URL = "wcurl";

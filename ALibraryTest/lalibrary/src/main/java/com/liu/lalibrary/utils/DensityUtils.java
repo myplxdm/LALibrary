@@ -3,6 +3,7 @@ package com.liu.lalibrary.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.util.Size;
 import android.util.TypedValue;
 
@@ -80,5 +81,13 @@ public class DensityUtils
 		options.inJustDecodeBounds = true;
 		BitmapFactory.decodeResource(res, resId, options);
 		return new ViewSize(options.outWidth, options.outHeight);
+	}
+
+	public static ViewSize getResPixel(Context context, Drawable d)
+	{
+		float density = context.getResources().getDisplayMetrics().density;
+		int w = (int)(d.getIntrinsicWidth() * density);
+		int h = (int)(d.getIntrinsicHeight() * density);
+		return new ViewSize(w, h);
 	}
 }

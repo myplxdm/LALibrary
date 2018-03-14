@@ -20,7 +20,6 @@ public class WebWindowPlugin extends WebPluginBase
     private final String WND_CLOSE_WINDOW = "closewindow";
     //---------------------------------------------------
     private final String WND_EXIT_TO = "exitto";
-    private final String P_EXIT_NUM = "num";
     //---------------------------------------------------
     private final String WND_MASK_BACK = "maskback";
 
@@ -40,15 +39,11 @@ public class WebWindowPlugin extends WebPluginBase
             int titleLoc = JsonHelper.getInt(param, IWebShell.WS_TITLE_LOCATION, ITitleView.TVL_MIDDLE);
             shell.openWindow(isShowRB, url, title, titleLoc, bReload, nCloseLevel);
             isProc = true;
-        }else if (funName.equals(WND_CLOSE_WINDOW))
+        }else if (funName.equals(WND_CLOSE_WINDOW) || funName.equals(WND_EXIT_TO))
         {
             shell.closeWindow(param.getIntValue(IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL),
                     JsonHelper.getBoolen(param, IWebShell.WS_CLOSE_RELOAD, false),
                     JsonHelper.getString(param, IWebShell.WS_CLOSE_EXEC_JS, ""));
-            isProc = true;
-        }else if (funName.equals(WND_EXIT_TO))
-        {
-            AbsActivity.exitToNum(JsonHelper.getInt(param, P_EXIT_NUM, 0), null);
             isProc = true;
         }else if (funName.equals(WND_MASK_BACK))
         {
@@ -56,7 +51,7 @@ public class WebWindowPlugin extends WebPluginBase
             isProc = true;
         }
         isProc = isProc || (execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC ? false : true);
-        return procCallback(isProc, param, callback, shell);
+        return procCallback(isProc, callback, param.getString(P_ALIAS));
     }
 
     @Override
@@ -68,16 +63,10 @@ public class WebWindowPlugin extends WebPluginBase
         {
             shell.getWeb().reload();
         }
-        int nCloseLevel = data.getIntExtra(IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, 0);
-        if (nCloseLevel == 1) shell.getActivity().finish();
-        else if (nCloseLevel > 1)
-        {
-            shell.closeWindow(nCloseLevel - 1, false, "");
-        }
         String rj = data.getStringExtra(IWebShell.WS_CLOSE_EXEC_JS);
         if (!TextUtils.isEmpty(rj))
         {
-            shell.execJScript(rj);
+            shell.execJScript("javascript:" + rj);
         }
         return false;
     }

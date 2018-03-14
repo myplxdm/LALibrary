@@ -401,6 +401,12 @@ public abstract class AbsActivity extends AutoLayoutActivity
         }
     }
 
+    public static void popNum(int num, Intent data)
+    {
+        if (num >= actList.size())return;
+        AbsActivity.exitToNum(actList.size() - num - 1, data);
+    }
+
     public static void openNewTask(AbsActivity act, Class cls)
     {
         Intent i = new Intent(act, cls);

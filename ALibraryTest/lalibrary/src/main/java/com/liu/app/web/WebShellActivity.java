@@ -5,9 +5,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
+import com.liu.app.pluginImpl.PluginFileUpload;
+import com.liu.app.pluginImpl.PluginPhotoChoose;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.R;
 import com.liu.lalibrary.ui.FlowLayout;
+import com.liu.lalibrary.ui.RLTitleView;
 import com.liu.lalibrary.ui.titleview.ITitleView;
 import com.liu.lalibrary.ui.titleview.LTitleView;
 import com.liu.lalibrary.ui.webview.RLWebViewWrapper;
@@ -22,15 +25,15 @@ import java.util.ArrayList;
 
 public abstract class WebShellActivity extends AbsActivity implements IWebShell
 {
-    private LTitleView titleView;
-    private RLWebViewWrapper webView;
-    private LinearLayout llFlowWrapper;
-    private FlowLayout flowLayout;
+    protected LTitleView titleView;
+    protected RLWebViewWrapper webView;
+    protected LinearLayout llFlowWrapper;
+    protected FlowLayout flowLayout;
     //
-    private ArrayList<IWebPlugin> webPlugins = new ArrayList<>();
+    protected ArrayList<IWebPlugin> webPlugins = new ArrayList<>();
     //
-    private boolean bCloseReload;
-    private int nCloseLevel;
+    protected boolean bCloseReload;
+    protected int nCloseLevel;
 
     @Override
     protected int getRootViewId()
@@ -51,6 +54,8 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     @Override
     protected void onInitData(Intent data)
     {
+        addPlugin(new PluginPhotoChoose(this));
+        addPlugin(new PluginFileUpload(this));
         nCloseLevel = data.getIntExtra(IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, 0);
         bCloseReload = data.getBooleanExtra(IWebShell.WS_CLOSE_RELOAD, false);
 
@@ -66,6 +71,7 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
         list.add(new WebSystemPlugin());
         list.add(new WebWindowPlugin());
         list.add(new WebWXPlugin());
+        list.add(new WebPhotoPlugin());
     }
 
     protected abstract int getReturnBtnResId();
@@ -107,7 +113,7 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_OPEN_WEB_WINDOW && resultCode == RESULT_OK)
+        if ((requestCode == REQ_OPEN_WEB_WINDOW || requestCode == REQ_CODE_EXIT_TO) && data != null)
         {
             activeWebPluginEvent(IWebPlugin.EVENT_RESULT_DATA, JsonHelper.convert("requestCode",requestCode,
                                                                                 "resultCode", resultCode,
@@ -122,11 +128,11 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
         activeWebPluginEvent(IWebPlugin.EVENT_DEINIT, null);
     }
 
-    @Override
-    public void finish()
-    {
-        closeWindow(nCloseLevel, bCloseReload, "");
-    }
+//    @Override
+//    public void finish()
+//    {
+//        closeWindow(nCloseLevel, bCloseReload, "");
+//    }
 
     public static void openWindow(AbsActivity activity, Class cls, int returnResId, String url, String title, int titleLoc, boolean bCloseReload)
     {
@@ -136,6 +142,17 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
         i.putExtra(IWebShell.WS_CLOSE_RELOAD, bCloseReload);
         i.putExtra(IWebShell.WS_RETURN_RES_ID, returnResId);
         i.putExtra(IWebShell.WS_TITLE_LOCATION, titleLoc);
+        activity.startActivityForResult(i, IWebShell.REQ_OPEN_WEB_WINDOW);
+    }
+
+    public static void openWindow(AbsActivity activity, Class cls, int returnResId, String url, String title, boolean bCloseReload)
+    {
+        Intent i = new Intent(activity, cls);
+        i.putExtra(IWebShell.WS_TITLE, title);
+        i.putExtra(IWebShell.WS_URL, url);
+        i.putExtra(IWebShell.WS_CLOSE_RELOAD, bCloseReload);
+        i.putExtra(IWebShell.WS_RETURN_RES_ID, returnResId);
+        i.putExtra(IWebShell.WS_TITLE_LOCATION, RLTitleView.TITLE_ALIG_MIDDLE);
         activity.startActivityForResult(i, IWebShell.REQ_OPEN_WEB_WINDOW);
     }
 
@@ -205,10 +222,8 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     public void closeWindow(int closeLevel, boolean bCloseReload, String execJs)
     {
         Intent i = new Intent();
-        i.putExtra(WS_CLOSE_PARENT_CLOSE_LEVEL, closeLevel);
         i.putExtra(WS_CLOSE_RELOAD, bCloseReload);
         i.putExtra(WS_CLOSE_EXEC_JS, execJs);
-        setResult(RESULT_OK, i);
-        super.finish();
+        AbsActivity.popNum(closeLevel, i);
     }
 }

@@ -90,7 +90,7 @@ public class Utils
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.putExtra("address", tel);
         intent.putExtra("sms_body", body);
-        intent.setType("vnd.android-dir[表情]s-sms");
+        intent.setType("vnd.android-dirs-sms");
         act.startActivity(intent);
     }
 

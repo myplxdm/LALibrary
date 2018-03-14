@@ -104,8 +104,10 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
             isProc = true;
         } else if (funName.equals(TV_ADD_TXT_BTN))
         {
+
             index = tv.addTextView(LTitleView.TVL_RIGHT, param.getString(P_TB_TEXT),
-                    param.getIntValue(P_TB_TEXT_SIZE), param.getIntValue(P_TB_TEXT_COLOR), true);
+                    JsonHelper.getInt(param, P_TB_TEXT_SIZE, tv.getContext().getResources().getDimensionPixelOffset(R.dimen.title_view_btn_size)),
+                    JsonHelper.getInt(param, P_TB_TEXT_COLOR, 0xff000000), true);
             genBtnInfo(param, tv.getView(LTitleView.TVL_RIGHT, index));
             isProc = true;
         } else if (funName.equals(TV_MD_IMG_BTN_ICO))
@@ -159,7 +161,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
             isProc = true;
         }
         isProc = isProc || !(execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC);
-        return procCallback(isProc, param, callback, shell);
+        return procCallback(isProc, callback, param.getString(P_ALIAS));
     }
 
     @Override

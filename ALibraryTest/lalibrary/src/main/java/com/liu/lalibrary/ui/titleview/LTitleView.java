@@ -1,16 +1,18 @@
 package com.liu.lalibrary.ui.titleview;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,6 +23,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liu.lalibrary.R;
 import com.zhy.autolayout.AutoRelativeLayout;
+import com.zhy.autolayout.attr.AutoAttr;
 import com.zhy.autolayout.utils.AutoUtils;
 
 /**
@@ -55,23 +58,26 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     {
         super(context, attrs, defStyleAttr);
         llSet[0] = new LinearLayout(context);
-        llSet[0].setOrientation(LinearLayout.HORIZONTAL);
         AutoRelativeLayout.LayoutParams lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.CENTER_VERTICAL);
         addView(llSet[0], lp);
         //
         llSet[1] = new LinearLayout(context);
-        llSet[1].setOrientation(LinearLayout.HORIZONTAL);
         lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.CENTER_IN_PARENT);
         addView(llSet[1], lp);
         //
         llSet[2] = new LinearLayout(context);
-        llSet[2].setOrientation(LinearLayout.HORIZONTAL);
         lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.CENTER_VERTICAL);
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         addView(llSet[2], lp);
+
+        for (int i = 0;i < llSet.length;i++)
+        {
+            llSet[i].setOrientation(LinearLayout.HORIZONTAL);
+            llSet[i].setGravity(Gravity.CENTER_VERTICAL);
+        }
         //
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.LTitleView);
         if (attr != null)
@@ -84,17 +90,27 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
 
     private View addImageViewTo(int resId, LinearLayout ll, int space)
     {
-        Bitmap b = BitmapFactory.decodeResource(getResources(), resId);
+        Drawable bd = ContextCompat.getDrawable(getContext(), resId);
+        int w = (int)(bd.getIntrinsicWidth() * getResources().getDisplayMetrics().density);
+        int h = (int)(bd.getIntrinsicHeight() * getResources().getDisplayMetrics().density);
+
         ImageView iv = new ImageView(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(b.getWidth(), b.getHeight());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w, h);
         iv.setLayoutParams(lp);
-        iv.setImageBitmap(b);
-        ll.addView(iv);
+        iv.setImageDrawable(bd);
         if (space != 0)
         {
-            if (space < 0) lp.setMargins(space, 0, 0, 0);
+            if (space < 0) lp.setMargins(Math.abs(space), 0, 0, 0);
             else lp.setMargins(0, 0, space, 0);
         }
+        if (space > 0)
+        {
+            ll.addView(iv, 0, lp);
+        }else
+        {
+            ll.addView(iv, lp);
+        }
+        AutoUtils.autoSize(iv);
         return iv;
     }
 
@@ -111,22 +127,28 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
                     iv.setImageBitmap(resource);
                     iv.getLayoutParams().width = resource.getWidth();
                     iv.getLayoutParams().height = resource.getHeight();
-                    AutoUtils.auto(iv);
+                    AutoUtils.autoSize(iv, AutoAttr.BASE_HEIGHT);
                     iv.setTag(null);
                 } catch (Exception e)
                 {
                 }
             }
         };
-        Glide.with(getContext().getApplicationContext()).asBitmap().load(url).into(target);
-        iv.setTag(target);
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         if (space != 0)
         {
-            if (space < 0) lp.setMargins(space, 0, 0, 0);
+            if (space < 0) lp.setMargins(Math.abs(space), 0, 0, 0);
             else lp.setMargins(0, 0, space, 0);
         }
-        ll.addView(iv, lp);
+        if (space > 0)
+        {
+            ll.addView(iv, 0, lp);
+        }else
+        {
+            ll.addView(iv, lp);
+        }
+        Glide.with(getContext().getApplicationContext()).asBitmap().load(url).into(target);
+        iv.setTag(target);
         return iv;
     }
 
@@ -138,11 +160,17 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
         tv.setText(text);
         tv.setTextColor(textColor);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-        ll.addView(tv, lp);
         if (space != 0)
         {
-            if (space < 0) lp.setMargins(space, 0, 0, 0);
+            if (space < 0) lp.setMargins(Math.abs(space), 0, 0, 0);
             else lp.setMargins(0, 0, space, 0);
+        }
+        if (space > 0)
+        {
+            ll.addView(tv, 0, lp);
+        }else
+        {
+            ll.addView(tv, lp);
         }
         AutoUtils.auto(tv);
         return tv;
@@ -150,22 +178,6 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
 
     private void clickProc(View view, final int index, final int tvl)
     {
-//        if (tvl == TVL_MIDDLE)
-//        {
-//            if (!middelClickSetup)
-//            {
-//                middelClickSetup = true;
-//                llSet[tvl].setOnClickListener(new OnClickListener()
-//                {
-//                    @Override
-//                    public void onClick(View v)
-//                    {
-//                        listener.onViewClick(tvl, 0, v);
-//                    }
-//                });
-//            }
-//            return;
-//        }
         view.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -181,7 +193,7 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
-        View view = addImageViewTo(resId, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
+        View view = addImageViewTo(resId, ll, ((tvl == TVL_RIGHT ? 1 : 0) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
         return index;
     }
@@ -191,7 +203,7 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
-        View view = addImageViewTo(imageUrl, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
+        View view = addImageViewTo(imageUrl, ll, ((tvl == TVL_RIGHT ? 1 : 0) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
         return index;
     }
@@ -201,7 +213,7 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     {
         LinearLayout ll = llSet[tvl];
         int index = ll.getChildCount();
-        View view = addTextViewTo(text, textSize, textColor, ll, (Math.min(index, 1) * space * (tvl < TVL_RIGHT ? -1 : 1)));
+        View view = addTextViewTo(text, textSize, textColor, ll, ((tvl == TVL_RIGHT ? 1 : 0) * space * (tvl < TVL_RIGHT ? -1 : 1)));
         if (needClick) clickProc(view, index, tvl);
         return index;
     }
@@ -282,6 +294,11 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     public void setTitleViewListener(TitleViewListener listener)
     {
         this.listener = listener;
+    }
+
+    public void setSpace(int space)
+    {
+        this.space = space;
     }
 
 }

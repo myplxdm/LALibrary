@@ -31,6 +31,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 
 import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.utils.AppUtils;
@@ -464,6 +465,13 @@ public final class ImageTools
             flag = false;
         }
         return flag;
+    }
+
+    public static String savePhotoToSDCard(Bitmap photoBitmap, String path,boolean checkSD)
+    {
+        if (TextUtils.isEmpty(path))return path;
+        int index = path.lastIndexOf(File.separator);
+        return savePhotoToSDCard(photoBitmap,path.substring(0, index),path.substring(index + 1, path.length()), checkSD);
     }
 
     /**
