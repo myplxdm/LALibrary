@@ -90,12 +90,14 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
 
     private View addImageViewTo(int resId, LinearLayout ll, int space)
     {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(getResources(), resId, options);
+
         Drawable bd = ContextCompat.getDrawable(getContext(), resId);
-        int w = (int)(bd.getIntrinsicWidth() * getResources().getDisplayMetrics().density);
-        int h = (int)(bd.getIntrinsicHeight() * getResources().getDisplayMetrics().density);
 
         ImageView iv = new ImageView(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w, h);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(options.outWidth, options.outHeight);
         iv.setLayoutParams(lp);
         iv.setImageDrawable(bd);
         if (space != 0)
