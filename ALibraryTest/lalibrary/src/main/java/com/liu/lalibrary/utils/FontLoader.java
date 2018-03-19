@@ -2,6 +2,9 @@ package com.liu.lalibrary.utils;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -84,5 +87,14 @@ public class FontLoader
     public HashMap<String, Typeface> getFontMap()
     {
         return _fontMap;
+    }
+
+    public void setFont(int fontIndex, ViewGroup vg, boolean bSubView)
+    {
+        Typeface tf = getFont(fontIndex);
+        if (tf != null)
+        {
+            FontUtil.setButtonAndTextViewFont(tf, vg, bSubView);
+        }
     }
 }
