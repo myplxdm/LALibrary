@@ -4,20 +4,18 @@
 
 #define WEB_KEY                         "45c5-4d3e-b431-5"
 //
-#define RESULT_BUF_SIZE                 2048
 
 int g_err_no = 0;
 string g_str_err;
-char g_result[RESULT_BUF_SIZE];
+#define BUFFER_SIZE                     8 * 1024
 
 void encodeUrl(const char * url, const char * param, const char * ver, char * result, int resultSize)
 {
-    char in[RESULT_BUF_SIZE];
-    memset(in, 0, RESULT_BUF_SIZE);
-    memset(result, 0, resultSize);
+    char in[resultSize];
+    memset(in, 0, resultSize);
     int len = strlen(param);
     len = aes_ecb_encrypt_PKCS5Padding((char *)param, len, result, (char *)WEB_KEY, 128);
-    bin2Hex(g_result, len, in, RESULT_BUF_SIZE);
+    bin2Hex(result, len, in, resultSize);
     if(ver)
     {
         sprintf(result, "%sv=%s&sign=%s", url, ver, in);
@@ -49,39 +47,41 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_liu_app_JniApi_reqEncode(JNIEnv *e
         }
     }
 
-    encodeUrl(url, buffer.c_str(), ver_ ? env->GetStringUTFChars(ver_, 0) : NULL, g_result, RESULT_BUF_SIZE);
+    char result[BUFFER_SIZE];
+    encodeUrl(url, buffer.c_str(), ver_ ? env->GetStringUTFChars(ver_, 0) : NULL, result, BUFFER_SIZE);
 
     env->ReleaseStringUTFChars(url_, url);
 
-    return ctoJstring(env, g_result);
+    return ctoJstring(env, result);
 }
 
 extern "C" JNIEXPORT jstring JNICALL Java_com_liu_app_JniApi_decodeResult(JNIEnv *env, jobject instance, jstring str_)
 {
     const char *str = env->GetStringUTFChars(str_, 0);
 
-    char in[RESULT_BUF_SIZE];
-    memset(in, 0, RESULT_BUF_SIZE);
-    memset(g_result, 0, RESULT_BUF_SIZE);
+    char in[BUFFER_SIZE];
+    char out[BUFFER_SIZE];
+    memset(in, 0, BUFFER_SIZE);
+    memset(out, 0, BUFFER_SIZE);
     int len = hex2bin(str, (unsigned char *) in, strlen(str));
-    aes_ecb_decrypt_PKCS5Padding(in, len, g_result, (char *) WEB_KEY, 128);
+    aes_ecb_decrypt_PKCS5Padding(in, len, out, (char *) WEB_KEY, 128);
 
     env->ReleaseStringUTFChars(str_, str);
 
-    return ctoJstring(env, g_result);
+    return ctoJstring(env, out);
 }
 
 extern "C" JNIEXPORT jstring JNICALL Java_com_liu_app_JniApi_getString(JNIEnv *env, jobject instance, jstring value_)
 {
     const char *value = env->GetStringUTFChars(value_, 0);
 
-    char in[RESULT_BUF_SIZE];
-    char out[RESULT_BUF_SIZE];
-    memset(in, 0, RESULT_BUF_SIZE);
-    memset(out, 0, RESULT_BUF_SIZE);
+    char in[BUFFER_SIZE];
+    char out[BUFFER_SIZE];
+    memset(in, 0, BUFFER_SIZE);
+    memset(out, 0, BUFFER_SIZE);
     int len = strlen(value);
     len = aes_ecb_encrypt_PKCS5Padding((char *) value, len, out, (char *) WEB_KEY, 128);
-    bin2Hex(out, len, in, RESULT_BUF_SIZE);
+    bin2Hex(out, len, in, BUFFER_SIZE);
 
     env->ReleaseStringUTFChars(value_, value);
 
