@@ -25,6 +25,12 @@ public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefr
     protected int page = 1;
     protected int totalPage = 1;
 
+    public BaseTableViewAdapter(PullToRefreshBase listview, List dataList)
+    {
+        listview.setOnRefreshListener(this);
+        this.dataList = dataList;
+    }
+
     @Override
     public int getCount()
     {
