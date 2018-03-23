@@ -58,7 +58,7 @@ public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefr
         dataList.addAll(list);
     }
 
-    private void reqUrlData(final boolean isPullDownToRefresh, final PullToRefreshBase pullToRefreshBase)
+    public void reqUrlData(final boolean isPullDownToRefresh, final PullToRefreshBase pullToRefreshBase)
     {
         String url = getReqUrl(isPullDownToRefresh ? 1 : page + 1);
         if (!TextUtils.isEmpty(url))
