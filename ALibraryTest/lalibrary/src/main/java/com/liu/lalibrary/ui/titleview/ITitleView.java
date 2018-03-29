@@ -30,5 +30,6 @@ public interface ITitleView
     public void showView(int tvl, int index, boolean isShow);
     public void clearView(int tvl);
     public void setTitleViewListener(LTitleView.TitleViewListener listener);
+    public void setBottomLine(int color, int height);
     public Context getContext();
 }

@@ -16,6 +16,7 @@ public class WebShellImpl extends WebShellActivity
     {
         super.onInitView();
         titleView.setSpace(20);
+        titleView.setBottomLine(0xffdcdcdc,2);
     }
 
     @Override

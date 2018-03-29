@@ -298,6 +298,16 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
         this.listener = listener;
     }
 
+    @Override
+    public void setBottomLine(int color, int height)
+    {
+        View v = new View(getContext());
+        v.setBackgroundColor(color);
+        AutoRelativeLayout.LayoutParams lp = new AutoRelativeLayout.LayoutParams(AutoRelativeLayout.LayoutParams.MATCH_PARENT, height);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        addView(v, lp);
+    }
+
     public void setSpace(int space)
     {
         this.space = space;
