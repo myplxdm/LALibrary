@@ -31,7 +31,7 @@ public class WebWindowPlugin extends WebPluginBase
         boolean isProc = false;
         if (funName.equals(WND_TO_URL))
         {
-            boolean isShowRB = JsonHelper.getBoolen(param, IWebShell.WS_RETURN_RES_ID, true);
+            boolean isShowRB = JsonHelper.getBoolen(param, IWebShell.WS_SHOW_RETURN, true);
             String url = JsonHelper.getString(param, IWebShell.WS_URL, "");
             String title = JsonHelper.getString(param, IWebShell.WS_TITLE, "");
             boolean bReload = JsonHelper.getBoolen(param, IWebShell.WS_CLOSE_RELOAD, false);

@@ -24,6 +24,7 @@ public interface IWebShell
     public static final String WS_URL = "wcurl";
     public static final String WS_TITLE_LOCATION = "titleLoc";
     public static final String WS_RETURN_RES_ID = "btReturnResId";
+    public static final String WS_SHOW_RETURN = "bShowReturn";
 
     public void openWindow(boolean isShowReturn, String url, String title, int titleLoc, boolean bCloseReload, int closeLevel);
     public void closeWindow(int closeLevel, boolean bCloseReload, String execJs);
