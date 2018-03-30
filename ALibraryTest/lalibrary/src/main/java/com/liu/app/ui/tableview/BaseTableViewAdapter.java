@@ -13,6 +13,7 @@ import com.liu.lalibrary.AbsActivity;
 import com.refresh.PullToRefreshBase;
 import com.refresh.PullToRefreshBase.OnRefreshListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ import java.util.List;
 
 public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefreshListener
 {
-    protected List dataList;
+    protected List dataList = new ArrayList();
     protected int page = 1;
     protected int totalPage = 1;
 
@@ -46,11 +47,6 @@ public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefr
     public void setData(List list, boolean isAdd)
     {
         if (list == null || list.size() == 0)return;
-        if (dataList == null)
-        {
-            dataList = list;
-            return;
-        }
         if (!isAdd)
         {
             dataList.clear();
