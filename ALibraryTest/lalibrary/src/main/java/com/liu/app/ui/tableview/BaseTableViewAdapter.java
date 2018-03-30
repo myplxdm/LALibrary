@@ -95,7 +95,6 @@ public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefr
                                 Toast.makeText(activity, finalResult, Toast.LENGTH_LONG).show();
                             }
                         });
-                        return;
                     }
                     final boolean finalIsUpdate = isUpdate;
                     activity.runOnUiThread(new Runnable()
