@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fff"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="158px"
+        android:background="#fff"
+        android:gravity="center"
+        android:text="公益"
+        android:textColor="#000"
+        android:textSize="58px"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dcdcdc"/>
+
+    <RelativeLayout
+        android:layout_width="1200px"
+        android:layout_height="550px"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20px"
+        >
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="90px"
+            android:layout_marginTop="75px"
+            android:text="公益爱心值"
+            android:textColor="#000"
+            android:textSize="72px"/>
+
+        <Button
+            android:id="@+id/btnSeller"
+            android:layout_width="480px"
+            android:layout_height="130px"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="90px"
+            android:layout_marginTop="50px"
+            android:background="#ff8448"
+            android:text="公益爱心联盟商户"
+            android:textSize="50px"/>
+
+        <TextView
+            android:id="@+id/tvHeart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tvName"
+            android:layout_below="@id/tvName"
+            android:layout_marginTop="110px"
+            android:text="0"
+            android:textColor="#ff4e4e"
+            android:textSize="70px"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tvHeart"
+            android:layout_marginLeft="245px"
+            android:layout_toRightOf="@id/tvHeart"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tvName"
+                android:layout_below="@id/tvName"
+                android:text="0"
+                android:textColor="#ff4e4e"
+                android:textSize="70px"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvName"
+                android:layout_marginLeft="20px"
+                android:text="个"
+                android:textColor="#ff4e4e"
+                android:textSize="50px"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvHName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tvHeart"
+            android:layout_below="@id/tvHeart"
+            android:layout_marginTop="48px"
+            android:text="爱心值"
+            android:textColor="#000"
+            android:textSize="50px"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tvHName"
+            android:layout_marginLeft="100px"
+            android:layout_toRightOf="@id/tvHName"
+            android:text="分享活动"
+            android:textColor="#000"
+            android:textSize="50px"/>
+
+    </RelativeLayout>
+
+    <com.zhy.autolayout.widget.AutoRadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="145px"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbHelpPoor"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="精准扶贫"
+            android:textColor="@drawable/selector_main_bm_btn"
+            android:textSize="50px"/>
+
+        <RadioButton
+            android:id="@+id/rbActivity"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="公益活动"
+            android:textColor="@drawable/selector_main_bm_btn"
+            android:textSize="50px"/>
+
+        <RadioButton
+            android:id="@+id/rbCF"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="捐赠众筹"
+            android:textColor="@drawable/selector_main_bm_btn"
+            android:textSize="50px"/>
+
+    </com.zhy.autolayout.widget.AutoRadioGroup>
+
+    <com.refresh.PullToRefreshMenuView
+
+        android:id="@+id/prlHP"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <com.refresh.PullToRefreshMenuView
+        android:visibility="gone"
+        android:id="@+id/prlAct"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <com.refresh.PullToRefreshMenuView
+        android:visibility="gone"
+        android:id="@+id/prlCF"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>
+
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ff459bf2</color>
+    <color name="colorPrimaryDark">#ff459bf2</color>
+    <color name="colorAccent">#ff459bf2</color>
+    <color name="colorMainBmBtnSel">#000</color>
+    <color name="colorMainBmBtn">#999999</color>
+    <color name="colorWindowBg">#eef1f6</color>
+    <color name="colorSepLine">#dcdcdc</color>
+</resources>

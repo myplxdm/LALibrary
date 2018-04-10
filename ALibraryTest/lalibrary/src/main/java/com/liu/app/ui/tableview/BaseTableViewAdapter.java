@@ -22,9 +22,14 @@ import java.util.List;
 
 public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefreshListener
 {
-    protected List dataList = new ArrayList();
+    protected List dataList;
     protected int page = 1;
     protected int totalPage = 1;
+
+    public BaseTableViewAdapter(PullToRefreshBase listview)
+    {
+        listview.setOnRefreshListener(this);
+    }
 
     public BaseTableViewAdapter(PullToRefreshBase listview, List dataList)
     {
@@ -47,6 +52,11 @@ public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefr
     public void setData(List list, boolean isAdd)
     {
         if (list == null || list.size() == 0)return;
+        if (dataList == null)
+        {
+            dataList = list;
+            return;
+        }
         if (!isAdd)
         {
             dataList.clear();

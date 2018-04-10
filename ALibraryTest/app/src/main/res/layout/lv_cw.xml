@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <RelativeLayout
+        android:id="@+id/rlLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivLPhoto"
+            android:layout_width="514px"
+            android:layout_height="514px"
+            android:layout_marginTop="45px"/>
+
+        <TextView
+            android:id="@+id/tvLName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/ivLPhoto"
+            android:layout_alignRight="@id/ivLPhoto"
+            android:layout_below="@id/ivLPhoto"
+            android:layout_marginTop="38px"
+            android:lines="1"
+            android:text="11"
+            android:textColor="#000"
+            android:textSize="46px"/>
+
+        <LinearLayout
+            android:layout_below="@id/tvLName"
+            android:id="@+id/llLPU"
+            android:layout_width="match_parent"
+            android:layout_height="120px"
+            android:layout_alignLeft="@id/ivLPhoto"
+            android:layout_alignRight="@id/ivLPhoto"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvLAddr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="111"
+                android:textColor="#000"
+                android:textSize="36px"/>
+
+
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:text="0"
+                android:id="@+id/tvLPrice"
+                android:textSize="60px"
+                android:textColor="#ff8448"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="5px"
+                android:id="@+id/tvLUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元"
+                android:textColor="#000"
+                android:textSize="36px"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <RelativeLayout
+        android:id="@+id/rlRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/ivRPhoto"
+            android:layout_width="514px"
+            android:layout_height="514px"
+            android:layout_marginTop="45px"/>
+
+        <TextView
+            android:id="@+id/tvRName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/ivRPhoto"
+            android:layout_alignRight="@id/ivRPhoto"
+            android:layout_below="@id/ivRPhoto"
+            android:layout_marginTop="38px"
+            android:lines="1"
+            android:text="11"
+            android:textColor="#000"
+            android:textSize="46px"/>
+
+        <LinearLayout
+            android:layout_below="@id/tvRName"
+            android:id="@+id/llRPU"
+            android:layout_width="match_parent"
+            android:layout_height="120px"
+            android:layout_alignLeft="@id/ivRPhoto"
+            android:layout_alignRight="@id/ivRPhoto"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvRAddr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="111"
+                android:textColor="#000"
+                android:textSize="36px"/>
+
+
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:text="0"
+                android:id="@+id/tvRPrice"
+                android:textSize="60px"
+                android:textColor="#ff8448"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="5px"
+                android:id="@+id/tvRUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元"
+                android:textColor="#000"
+                android:textSize="36px"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+</LinearLayout>

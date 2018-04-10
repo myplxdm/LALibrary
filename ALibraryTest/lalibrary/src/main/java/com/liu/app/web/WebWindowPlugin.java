@@ -41,7 +41,7 @@ public class WebWindowPlugin extends WebPluginBase
             isProc = true;
         }else if (funName.equals(WND_CLOSE_WINDOW) || funName.equals(WND_EXIT_TO))
         {
-            shell.closeWindow(param.getIntValue(IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL),
+            shell.closeWindow(JsonHelper.getInt(param, IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, 1),
                     JsonHelper.getBoolen(param, IWebShell.WS_CLOSE_RELOAD, false),
                     JsonHelper.getString(param, IWebShell.WS_CLOSE_EXEC_JS, ""));
             isProc = true;
