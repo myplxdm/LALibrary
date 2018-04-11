@@ -7,4 +7,15 @@
         <attr name="width_space" format="dimension"/>
         <attr name="height_space" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="TBButton">
+        <attr name="photoWidth" format="integer"/>
+        <attr name="photoHeight" format="integer"/>
+        <attr name="tbTextColor" format="color"/>
+        <attr name="tbTextSize" format="integer"/>
+        <attr name="tbText" format="string"/>
+        <attr name="photoscr" format="reference"/>
+        <attr name="tbSpace" format="integer"/>
+
+    </declare-styleable>
+
 </resources>
