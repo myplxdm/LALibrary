@@ -35,9 +35,8 @@ public class WebWindowPlugin extends WebPluginBase
             String url = JsonHelper.getString(param, IWebShell.WS_URL, "");
             String title = JsonHelper.getString(param, IWebShell.WS_TITLE, "");
             boolean bReload = JsonHelper.getBoolen(param, IWebShell.WS_CLOSE_RELOAD, false);
-            int nCloseLevel = param.getIntValue(IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL);
             int titleLoc = JsonHelper.getInt(param, IWebShell.WS_TITLE_LOCATION, ITitleView.TVL_MIDDLE);
-            shell.openWindow(isShowRB, url, title, titleLoc, bReload, nCloseLevel);
+            shell.openWindow(isShowRB, url, title, titleLoc, bReload);
             isProc = true;
         }else if (funName.equals(WND_CLOSE_WINDOW) || funName.equals(WND_EXIT_TO))
         {

@@ -36,14 +36,14 @@ public class FilterOperView extends BaseView implements View.OnClickListener, Se
     private FilterOperViewListener  listener;
     private Bitmap                  filter_bitmap;
     //
-    private GPUFilter               gpuFilter;
+//    private GPUFilter               gpuFilter;
 
     public FilterOperView(AbsActivity activity, ViewGroup vg, int rid)
     {
         super(activity, vg, rid);
         initFilterBtn(rootViewGroup);
         initFilterProgress(activity, rootViewGroup, 0);
-        gpuFilter = new GPUFilter(rootViewGroup.getContext());
+//        gpuFilter = new GPUFilter(rootViewGroup.getContext());
     }
 
     private void initFilterBtn(View view)
@@ -73,33 +73,33 @@ public class FilterOperView extends BaseView implements View.OnClickListener, Se
     @Override
     public void onClick(View view)
     {
-        int i = view.getId();
-        if (i == R.id.ll_exposure)
-        {
-            seek_view.setShow(true);
-            seek_view.set("曝光度", R.id.ll_exposure, -100, 100, (int) (gpuFilter.getExposure() * 10));
-
-        } else if (i == R.id.ll_contrast)
-        {
-            seek_view.setShow(true);
-            seek_view.set("对比度", R.id.ll_contrast, 0, 40, (int) (gpuFilter.getContrast() * 10));
-
-        } else if (i == R.id.ll_sharpen)
-        {
-            seek_view.setShow(true);
-            seek_view.set("锐化", R.id.ll_sharpen, -40, 40, (int) (gpuFilter.getSharpen() * 10));
-
-        } else if (i == R.id.ll_saturation)
-        {
-            seek_view.setShow(true);
-            seek_view.set("饱和度", R.id.ll_saturation, 0, 20, (int) (gpuFilter.getSaturation() * 10));
-
-        } else if (i == R.id.btn_ok)
-        {
-            listener.onFilterClose();
-            rootViewGroup.setVisibility(View.GONE);
-
-        }
+//        int i = view.getId();
+//        if (i == R.id.ll_exposure)
+//        {
+//            seek_view.setShow(true);
+//            seek_view.set("曝光度", R.id.ll_exposure, -100, 100, (int) (gpuFilter.getExposure() * 10));
+//
+//        } else if (i == R.id.ll_contrast)
+//        {
+//            seek_view.setShow(true);
+//            seek_view.set("对比度", R.id.ll_contrast, 0, 40, (int) (gpuFilter.getContrast() * 10));
+//
+//        } else if (i == R.id.ll_sharpen)
+//        {
+//            seek_view.setShow(true);
+//            seek_view.set("锐化", R.id.ll_sharpen, -40, 40, (int) (gpuFilter.getSharpen() * 10));
+//
+//        } else if (i == R.id.ll_saturation)
+//        {
+//            seek_view.setShow(true);
+//            seek_view.set("饱和度", R.id.ll_saturation, 0, 20, (int) (gpuFilter.getSaturation() * 10));
+//
+//        } else if (i == R.id.btn_ok)
+//        {
+//            listener.onFilterClose();
+//            rootViewGroup.setVisibility(View.GONE);
+//
+//        }
     }
 
     //
@@ -110,13 +110,13 @@ public class FilterOperView extends BaseView implements View.OnClickListener, Se
 
     public void setImage(Bitmap bmp)
     {
-        gpuFilter.setImageBitmap(bmp);
+//        gpuFilter.setImageBitmap(bmp);
     }
 
     private Bitmap createFilterImage()
     {
         if (filter_bitmap != null && !filter_bitmap.isRecycled()) filter_bitmap.recycle();
-        filter_bitmap = gpuFilter.getImageBitmap();
+//        filter_bitmap = gpuFilter.getImageBitmap();
         return filter_bitmap;
     }
 
@@ -124,7 +124,7 @@ public class FilterOperView extends BaseView implements View.OnClickListener, Se
     @Override
     public void OnSeekOk(float progress, Object param)
     {
-        gpuFilter.saveValue();
+//        gpuFilter.saveValue();
 
         listener.onFilterViewFinish(false, filter_bitmap);
     }
@@ -135,23 +135,23 @@ public class FilterOperView extends BaseView implements View.OnClickListener, Se
         if (listener != null)
         {
             int id = (Integer)param;
-            if (id == R.id.ll_exposure)
-            {
-                gpuFilter.setExposure(progress);
-
-            } else if (id == R.id.ll_contrast)
-            {
-                gpuFilter.setContrast(progress);
-
-            } else if (id == R.id.ll_sharpen)
-            {
-                gpuFilter.setSharpen(progress);
-
-            } else if (id == R.id.ll_saturation)
-            {
-                gpuFilter.setSaturation(progress);
-
-            }
+//            if (id == R.id.ll_exposure)
+//            {
+//                gpuFilter.setExposure(progress);
+//
+//            } else if (id == R.id.ll_contrast)
+//            {
+//                gpuFilter.setContrast(progress);
+//
+//            } else if (id == R.id.ll_sharpen)
+//            {
+//                gpuFilter.setSharpen(progress);
+//
+//            } else if (id == R.id.ll_saturation)
+//            {
+//                gpuFilter.setSaturation(progress);
+//
+//            }
 
             createFilterImage();
 
@@ -162,7 +162,7 @@ public class FilterOperView extends BaseView implements View.OnClickListener, Se
     @Override
     public void OnSeekCancel()
     {
-        gpuFilter.resetValue();
+//        gpuFilter.resetValue();
         listener.onFilterViewFinish(true, createFilterImage());
     }
 

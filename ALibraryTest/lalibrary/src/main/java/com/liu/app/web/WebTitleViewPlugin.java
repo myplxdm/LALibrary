@@ -213,7 +213,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
         switch (bi.btnType)
         {
             case BTN_TYPE_NORMAL:
-                shell.openWindow(true, bi.openUrl, bi.title, LTitleView.TVL_MIDDLE, bi.closeReload, 0);
+                //shell.openWindow(true, bi.openUrl, bi.title, LTitleView.TVL_MIDDLE, bi.closeReload, 0);
                 break;
             case BTN_TYPE_PK:
                 Intent i = new Intent(Intent.ACTION_VIEW);

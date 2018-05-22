@@ -33,7 +33,6 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     protected ArrayList<IWebPlugin> webPlugins = new ArrayList<>();
     //
     protected boolean bCloseReload;
-    protected int nCloseLevel;
 
     @Override
     protected int getRootViewId()
@@ -56,7 +55,6 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     {
         addPlugin(new PluginPhotoChoose(this));
         addPlugin(new PluginFileUpload(this));
-        nCloseLevel = data.getIntExtra(IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, 0);
         bCloseReload = data.getBooleanExtra(IWebShell.WS_CLOSE_RELOAD, false);
 
         loadWebPlugins(webPlugins);
@@ -164,13 +162,12 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     }
 
     @Override
-    public void openWindow(boolean isShowReturn, String url, String title, int titleLoc, boolean bCloseReload, int closeLevel)
+    public void openWindow(boolean isShowReturn, String url, String title, int titleLoc, boolean bCloseReload)
     {
         Intent i = new Intent(this, getWebActivityClass());
         i.putExtra(IWebShell.WS_TITLE, title);
         i.putExtra(IWebShell.WS_URL, url);
         i.putExtra(IWebShell.WS_CLOSE_RELOAD, bCloseReload);
-        i.putExtra(IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, closeLevel);
         if (isShowReturn)
         {
             i.putExtra(IWebShell.WS_RETURN_RES_ID, getReturnBtnResId());

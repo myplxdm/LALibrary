@@ -19,8 +19,6 @@ public class WebPhotoPlugin extends WebPluginBase
     private final String P_UP_URL = "url";//上传图片的地址
     private final String P_PHOTO_CHOOSE_TYPE = "ct";//弹出选择框类型
     private final String P_UP_KEY = "upkey";//上传图片的key
-
-    private final String P_IS_CUT = "isCut";//是否裁剪，默认为否
     private final String P_CUT_ASPECTX = "aspectX";//宽比例
     private final String P_CUT_ASPECTY = "aspectY";//高比例
     private final String P_OUT_EDGE_PX = "edge";//输出最大宽高像素,大于这个值就等比例缩小
