@@ -30,7 +30,6 @@ public abstract class WebPluginBase implements IWebPlugin
     @Override
     public void deInit()
     {
-        webShell = null;
     }
 
     @Override
