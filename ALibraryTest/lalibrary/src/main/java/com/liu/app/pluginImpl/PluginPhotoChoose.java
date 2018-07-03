@@ -4,10 +4,15 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.dou361.dialogui.DialogUIUtils;
+import com.dou361.dialogui.bean.TieBean;
+import com.dou361.dialogui.listener.DialogUIItemListener;
 import com.liu.app.DirManager;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.plugins.IPluginEvent;
@@ -15,6 +20,8 @@ import com.liu.lalibrary.plugins.PluginBase;
 import com.liu.lalibrary.utils.AppUtils;
 import com.liu.lalibrary.utils.PermissionsUtil;
 import com.liu.lalibrary.utils.imagecache.ImageTools;
+
+import java.util.ArrayList;
 
 /**
  * Created by liu on 2017/9/1.
@@ -28,7 +35,6 @@ public class PluginPhotoChoose extends PluginBase
     public static final int PHOTO_CHOOSE_CT_TAKEPIC = 1;//相机
     public static final int PHOTO_CHOOSE_CT_BOTH = 2;//
     private final String TAKE_PHOTO_NAME = "photo.jpg";
-    private AlertView photoAlertView;
     private IPluginEvent event;
     private int chooseType = 2;//0 相册，1 相机 2 相册与相机
 
@@ -67,8 +73,8 @@ public class PluginPhotoChoose extends PluginBase
             if (act != null)
             {
                 act.checkPermissions(photoPermiss, Manifest.permission.CAMERA,
-                                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                     Manifest.permission.READ_EXTERNAL_STORAGE);
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE);
             }
         }
         return true;
@@ -83,30 +89,26 @@ public class PluginPhotoChoose extends PluginBase
             {
                 if (chooseType == 2)
                 {
-                    if (photoAlertView == null)
+                    new AlertView("上传图片", null, "取消", null,
+                            new String[]{"从相机打开", "从相册打开"}, wrActivity.get(),
+                            AlertView.Style.ActionSheet, new OnItemClickListener()
                     {
-                        photoAlertView = new AlertView("上传图片", null, "取消", null,
-                                new String[]{"从相机打开", "从相册打开"}, wrActivity.get(),
-                                AlertView.Style.ActionSheet, new OnItemClickListener()
+                        @Override
+                        public void onItemClick(Object o, int position)
                         {
-                            @Override
-                            public void onItemClick(Object o, int position)
+                            if (position == 0)
                             {
-                                if (position == 0)
-                                {
-                                    ImageTools.takePicture(getActivity(), DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME));
-                                } else if (position == 1)
-                                {
-                                    ImageTools.chooseAlbum(getActivity());
-                                }
+                                ImageTools.takePicture(getActivity(), DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME));
+                            } else if (position == 1)
+                            {
+                                ImageTools.chooseAlbum(getActivity());
                             }
-                        });
-                    }
-                    photoAlertView.show();
-                }else if (chooseType == 0) //相册
+                        }
+                    }).show();
+                } else if (chooseType == 0) //相册
                 {
                     ImageTools.chooseAlbum(getActivity());
-                }else //相机
+                } else //相机
                 {
                     ImageTools.takePicture(getActivity(), DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME));
                 }
@@ -148,6 +150,5 @@ public class PluginPhotoChoose extends PluginBase
     {
         super.onDestroy();
         event = null;
-        photoAlertView = null;
     }
 }

@@ -655,11 +655,13 @@ public final class ImageTools
 
     public static void chooseAlbum(Activity act, int reqCode)
     {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        act.startActivityForResult(Intent.createChooser(intent, "选择"), reqCode);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        Intent intent = new Intent(Intent.ACTION_PICK, null);
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        act.startActivityForResult(intent, reqCode);
 
 //        Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
 //        openAlbumIntent.setType("image/*.jpg;image/*.jpeg;image/*.png");
