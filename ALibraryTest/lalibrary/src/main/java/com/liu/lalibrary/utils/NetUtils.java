@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 
 import java.net.URL;
 import java.net.URLConnection;
@@ -49,6 +50,24 @@ public class NetUtils
 			}
 		}
 		return false;
+	}
+
+	public static String getLocalIP(Context context)
+	{
+		WifiManager m = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		if (m.isWifiEnabled())
+		{
+			return addressToIP(m.getConnectionInfo().getIpAddress());
+		}
+		return "";
+	}
+
+	public static String addressToIP(int addr)
+	{
+		return (addr & 0xFF ) + "." +
+				((addr >> 8 ) & 0xFF) + "." +
+				((addr >> 16 ) & 0xFF) + "." +
+				(addr >> 24 & 0xFF);
 	}
 
 	/**
