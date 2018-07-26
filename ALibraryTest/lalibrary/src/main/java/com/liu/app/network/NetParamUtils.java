@@ -54,4 +54,18 @@ public class NetParamUtils
         }
         return map;
     }
+
+    public static HashMap<String,String> formatParam(Object... args)
+    {
+        if (args.length % 2 == 0)
+        {
+            HashMap<String, String> map = new HashMap<>();
+            for (int i = 0;i < args.length;i+=2)
+            {
+                map.put((String)args[i], (String)args[i + 1]);
+            }
+            return map;
+        }
+        return null;
+    }
 }
