@@ -124,7 +124,14 @@ public class LjhHttpUtils
         return call;
     }
 
-    public Call post(final String url, HashMap<String, String> params, final IHttpRespListener listener)
+    public Call post(final String url, HashMap<String, String> params,
+                     final IHttpRespListener listener)
+    {
+        return this.post(url, params, null, listener);
+    }
+
+    public Call post(final String url, HashMap<String, String> params,
+                     HashMap<String,String> header, final IHttpRespListener listener)
     {
         if (!checkNetwork(listener))return null;
         FormBody.Builder builder = new FormBody.Builder();
@@ -135,7 +142,16 @@ public class LjhHttpUtils
                 builder.add(en.getKey(), en.getValue());
             }
         }
-        Call call = client.newCall(new Request.Builder().url(url).post(builder.build()).build());
+
+        Request.Builder rb = new Request.Builder().url(url);//.post(builder.build()).build();
+        if (header != null)
+        {
+            for (Map.Entry<String, String> en : header.entrySet())
+            {
+                rb.addHeader(en.getKey(), en.getValue());
+            }
+        }
+        Call call = client.newCall(rb.post(builder.build()).build());
         call.enqueue(new Callback()
         {
             @Override
@@ -154,7 +170,15 @@ public class LjhHttpUtils
         return call;
     }
 
-    public Call uploadFile(final String url, HashMap<String, String> params, HashMap<String, File> files, final IHttpRespListener listener)
+    public Call uploadFile(final String url, HashMap<String, String> params,
+                           HashMap<String, File> files, final IHttpRespListener listener)
+    {
+        return this.uploadFile(url, params, null, files, listener);
+    }
+
+    public Call uploadFile(final String url, HashMap<String, String> params,
+                           HashMap<String,String> header,
+                           HashMap<String, File> files, final IHttpRespListener listener)
     {
         if (!checkNetwork(listener))return null;
         MultipartBody.Builder builder = new MultipartBody.Builder();
@@ -170,8 +194,15 @@ public class LjhHttpUtils
         {
             builder.addFormDataPart(file.getKey(), file.getValue().getName(), RequestBody.create(null, file.getValue()));
         }
-        Request request = new Request.Builder().url(url).post(new ProgressRequestBody(builder.build(), listener)).build();
-        Call call = client.newCall(request);
+        Request.Builder rb = new Request.Builder().url(url);
+        if (header != null)
+        {
+            for (Map.Entry<String, String> en : header.entrySet())
+            {
+                rb.addHeader(en.getKey(), en.getValue());
+            }
+        }
+        Call call = client.newCall(rb.post(new ProgressRequestBody(builder.build(), listener)).build());
         call.enqueue(new Callback()
         {
             @Override
