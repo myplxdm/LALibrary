@@ -60,8 +60,7 @@ public class TBButton extends LinearLayout
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, space, 0, 0);
         tvName.setLayoutParams(lp);
-        tvName.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);;
-        float t = tvName.getTextSize();
+        tvName.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
         tvName.setTextColor(tc);
         tvName.setText(text);
         addView(tvName);

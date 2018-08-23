@@ -15,7 +15,14 @@
         <attr name="tbText" format="string"/>
         <attr name="photoscr" format="reference"/>
         <attr name="tbSpace" format="integer"/>
-
     </declare-styleable>
+    <declare-styleable name="TBTextView">
+        <attr name="topTextColor" format="color"/>
+        <attr name="topTextSize" format="integer"/>
+        <attr name="bottomTextColor" format="color"/>
+        <attr name="bottomTextSize" format="integer"/>
+        <attr name="topBottomSpace" format="integer"/>
+    </declare-styleable>
+
 
 </resources>
