@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -71,6 +72,7 @@ public class LjhHttpUtils
     {
         return SingletonHolder.INSTANCE;
     }
+
     public void setNetworkCheck(INetworkCheck check)
     {
         this.networkCheck = check;
@@ -91,7 +93,7 @@ public class LjhHttpUtils
         try
         {
             listener.onHttpReqResult(state, result);
-        }catch (Exception e)
+        } catch (Exception e)
         {
             MobclickAgent.reportError(null, "url = " + url + ", exception = " + e.getMessage());
         }
@@ -99,7 +101,7 @@ public class LjhHttpUtils
 
     public Call get(final String url, final IHttpRespListener listener)
     {
-        if (!checkNetwork(listener))return null;
+        if (!checkNetwork(listener)) return null;
         Call call = client.newCall(new Request.Builder().url(url).build());
         call.enqueue(new Callback()
         {
@@ -115,7 +117,7 @@ public class LjhHttpUtils
             {
                 if (response.code() != 200)
                 {
-                    onHttpReqResult(url, listener, HU_STATE_ERR_NO_200, String.format("%s(%d)",NERR_NO_NO_200,response.code()));
+                    onHttpReqResult(url, listener, HU_STATE_ERR_NO_200, String.format("%s(%d)", NERR_NO_NO_200, response.code()));
                     return;
                 }
                 onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
@@ -130,10 +132,37 @@ public class LjhHttpUtils
         return this.post(url, params, null, listener);
     }
 
-    public Call post(final String url, HashMap<String, String> params,
-                     HashMap<String,String> header, final IHttpRespListener listener)
+    public Call postJson(final String url, String json, final IHttpRespListener listener)
     {
-        if (!checkNetwork(listener))return null;
+        if (!checkNetwork(listener)) return null;
+        RequestBody body = FormBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback()
+        {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                onHttpReqResult(url, listener, HU_STATE_ERR, NERR_NETWORK);
+                LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
+            }
+        });
+        return call;
+    }
+
+    public Call post(final String url, HashMap<String, String> params,
+                     HashMap<String, String> header, final IHttpRespListener listener)
+    {
+        if (!checkNetwork(listener)) return null;
         FormBody.Builder builder = new FormBody.Builder();
         if (params != null)
         {
@@ -177,10 +206,10 @@ public class LjhHttpUtils
     }
 
     public Call uploadFile(final String url, HashMap<String, String> params,
-                           HashMap<String,String> header,
+                           HashMap<String, String> header,
                            HashMap<String, File> files, final IHttpRespListener listener)
     {
-        if (!checkNetwork(listener))return null;
+        if (!checkNetwork(listener)) return null;
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         if (params != null)
@@ -223,7 +252,7 @@ public class LjhHttpUtils
 
     public Call downFile(final String url, final String saveName, final IHttpRespListener listener)
     {
-        if (!checkNetwork(listener))return null;
+        if (!checkNetwork(listener)) return null;
         Request request = new Request.Builder().url(url).build();
         Call call = client.newCall(request);
         call.enqueue(new Callback()
@@ -285,10 +314,10 @@ public class LjhHttpUtils
 
     public Call reqCmd(NetReqCmd cmd, IHttpRespListener listener)
     {
-        if (!checkNetwork(listener))return null;
+        if (!checkNetwork(listener)) return null;
         if (!TextUtils.isEmpty(cmd.token))
         {
-            return post(String.format("%s?access_token=%s",cmd.url,cmd.url), NetParamUtils.objToMap(cmd.paramObj),listener);
+            return post(String.format("%s?access_token=%s", cmd.url, cmd.url), NetParamUtils.objToMap(cmd.paramObj), listener);
         }
         return post(cmd.url, NetParamUtils.objToMap(cmd.paramObj), listener);
     }

@@ -55,6 +55,20 @@ public class NetParamUtils
         return map;
     }
 
+    public static String formatToJson(Object... args)
+    {
+        if (args.length % 2 == 0)
+        {
+            JSONObject jo = new JSONObject();
+            for (int i = 0;i < args.length;i+=2)
+            {
+                jo.put((String) args[i], args[i + 1]);
+            }
+            return JSON.toJSONString(jo);
+        }
+        return null;
+    }
+
     public static HashMap<String,String> formatParam(Object... args)
     {
         if (args.length % 2 == 0)
@@ -62,7 +76,7 @@ public class NetParamUtils
             HashMap<String, String> map = new HashMap<>();
             for (int i = 0;i < args.length;i+=2)
             {
-                map.put((String)args[i], (String)args[i + 1]);
+                map.put((String)args[i], String.valueOf(args[i + 1]));
             }
             return map;
         }
