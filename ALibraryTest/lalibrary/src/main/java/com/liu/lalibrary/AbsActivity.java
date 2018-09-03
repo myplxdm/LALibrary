@@ -293,7 +293,7 @@ public abstract class AbsActivity extends AutoLayoutActivity
 
     public void toast(String text, int time)
     {
-        Toast.makeText(this, text, time);
+        Toast.makeText(this, text, time).show();
     }
 
     public int generateViewId()
