@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.liu.lalibrary.plugins.IPlugin;
 import com.liu.lalibrary.ui.view.BaseView;
@@ -290,6 +291,10 @@ public abstract class AbsActivity extends AutoLayoutActivity
         }, time);
     }
 
+    public void toast(String text, int time)
+    {
+        Toast.makeText(this, text, time);
+    }
 
     public int generateViewId()
     {
