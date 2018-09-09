@@ -94,7 +94,18 @@ public class FontLoader
         Typeface tf = getFont(fontIndex);
         if (tf != null)
         {
-            FontUtil.setButtonAndTextViewFont(tf, vg, bSubView);
+            for (int i = vg.getChildCount() - 1; i > -1; i--)
+            {
+                View v = vg.getChildAt(i);
+                if (v instanceof TextView)
+                {
+                    ((TextView) v).setTypeface(tf);
+                }
+                if (bSubView && v instanceof ViewGroup)
+                {
+                    setFont(fontIndex, (ViewGroup) v, true);
+                }
+            }
         }
     }
 }
