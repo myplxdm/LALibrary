@@ -97,6 +97,16 @@ public class XDataStore
         return null;
     }
 
+    public void saveString(String key, String val)
+    {
+        sp.edit().putString(key, val).commit();
+    }
+
+    public String getString(String key)
+    {
+        return sp.getString(key, "");
+    }
+
     public SharedPreferences.Editor getPutSP()
     {
         return sp.edit();
