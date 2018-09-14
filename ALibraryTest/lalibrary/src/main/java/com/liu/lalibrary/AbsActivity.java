@@ -296,6 +296,19 @@ public abstract class AbsActivity extends AutoLayoutActivity
         Toast.makeText(this, text, time).show();
     }
 
+    public void toastUIThread(final String text, final int time)
+    {
+        final AbsActivity self = this;
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Toast.makeText(self, text, time).show();
+            }
+        });
+    }
+
     public int generateViewId()
     {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
