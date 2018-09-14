@@ -49,6 +49,7 @@ public class VerCodeCountDown
         }
         startCount = counter;
         task = service.scheduleWithFixedDelay(taskRun, 0, 1, TimeUnit.SECONDS);
+        cdView.setEnabled(false);
     }
 
     public void stop(boolean runCB)
@@ -94,6 +95,7 @@ public class VerCodeCountDown
             if (startCount == 1)
             {
                 stop(true);
+                cdView.setEnabled(true);
             }
         }
     };
