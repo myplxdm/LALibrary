@@ -42,7 +42,6 @@ public class LjhHttpUtils
     public static final int HU_STATE_OK = 0x0;
     public static final int HU_STATE_NO_NET = 0x10;//无网络
     public static final int HU_STATE_ERR = 0x11;
-    public static final int HU_STATE_ERR_NO_200 = 0x12;//返回非200状态码
 
     private static class SingletonHolder
     {
@@ -115,12 +114,9 @@ public class LjhHttpUtils
             @Override
             public void onResponse(Call call, Response response) throws IOException
             {
-                if (response.code() != 200)
-                {
-                    onHttpReqResult(url, listener, HU_STATE_ERR_NO_200, String.format("%s(%d)", NERR_NO_NO_200, response.code()));
-                    return;
-                }
-                onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
+                onHttpReqResult(url, listener,
+                        response.code() == 200 ? HU_STATE_OK : response.code(),
+                        response.body().string());
             }
         });
         return call;
@@ -153,7 +149,9 @@ public class LjhHttpUtils
             @Override
             public void onResponse(Call call, Response response) throws IOException
             {
-                onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
+                onHttpReqResult(url, listener,
+                        response.code() == 200 ? HU_STATE_OK : response.code(),
+                        response.body().string());
             }
         });
         return call;
@@ -193,7 +191,9 @@ public class LjhHttpUtils
             @Override
             public void onResponse(Call call, Response response) throws IOException
             {
-                onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
+                onHttpReqResult(url, listener,
+                        response.code() == 200 ? HU_STATE_OK : response.code(),
+                        response.body().string());
             }
         });
         return call;
@@ -244,7 +244,9 @@ public class LjhHttpUtils
             @Override
             public void onResponse(Call call, Response response) throws IOException
             {
-                onHttpReqResult(url, listener, HU_STATE_OK, response.body().string());
+                onHttpReqResult(url, listener,
+                        response.code() == 200 ? HU_STATE_OK : response.code(),
+                        response.body().string());
             }
         });
         return call;
