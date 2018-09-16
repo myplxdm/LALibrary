@@ -2,8 +2,11 @@ package com.liu.app.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -15,6 +18,8 @@ import android.widget.TextView;
 import com.liu.lalibrary.R;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import java.util.HashMap;
+
 /**
  * Created by liu on 2018/4/10.
  */
@@ -23,6 +28,9 @@ public class TBButton extends LinearLayout
 {
     protected ImageView ivPhoto;
     protected TextView tvName;
+    private int photoSrcRes;
+    private int photoSelSrcRes;
+    private boolean isSel;
 
     public TBButton(Context context, @Nullable AttributeSet attrs)
     {
@@ -40,12 +48,13 @@ public class TBButton extends LinearLayout
         int ts = array.getInteger(R.styleable.TBButton_tbTextSize,0);
         int space = array.getInteger(R.styleable.TBButton_tbSpace,0);
         String text = array.getString(R.styleable.TBButton_tbText);
-        int ps = array.getResourceId(R.styleable.TBButton_photoscr,-1);
+        photoSrcRes = array.getResourceId(R.styleable.TBButton_photoscr,-1);
+        photoSelSrcRes = array.getResourceId(R.styleable.TBButton_photoselscr,-1);
         array.recycle();
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
         ivPhoto = new ImageView(context);
-        ivPhoto.setBackgroundResource(ps);
+        ivPhoto.setBackgroundResource(photoSrcRes);
         if (pw != 0 && ph != 0)
         {
             LayoutParams lp = new LayoutParams(pw, ph);
@@ -77,6 +86,12 @@ public class TBButton extends LinearLayout
     public TextView getTextView()
     {
         return tvName;
+    }
+
+    public void setSelect(boolean isSel)
+    {
+        this.isSel = isSel;
+        ivPhoto.setImageResource(isSel ? photoSelSrcRes : photoSrcRes);
     }
 
 }

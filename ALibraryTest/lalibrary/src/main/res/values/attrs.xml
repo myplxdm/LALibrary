@@ -14,6 +14,7 @@
         <attr name="tbTextSize" format="integer"/>
         <attr name="tbText" format="string"/>
         <attr name="photoscr" format="reference"/>
+        <attr name="photoselscr" format="reference"/>
         <attr name="tbSpace" format="integer"/>
     </declare-styleable>
     <declare-styleable name="TBTextView">
