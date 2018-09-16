@@ -94,21 +94,19 @@ public class LjhHttpUtils
             listener.onHttpReqResult(state, result);
         } catch (Exception e)
         {
+            listener.onHttpReqResult(HU_STATE_ERR, e.getMessage());
             MobclickAgent.reportError(null, "url = " + url + ", exception = " + e.getMessage());
         }
     }
 
-    public Call get(final String url, final IHttpRespListener listener)
+    public Call exeCall(final String url, Call call, final IHttpRespListener listener)
     {
-        if (!checkNetwork(listener)) return null;
-        Call call = client.newCall(new Request.Builder().url(url).build());
         call.enqueue(new Callback()
         {
             @Override
             public void onFailure(Call call, IOException e)
             {
                 onHttpReqResult(url, listener, HU_STATE_ERR, NERR_NETWORK);
-                LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
             }
 
             @Override
@@ -120,6 +118,13 @@ public class LjhHttpUtils
             }
         });
         return call;
+    }
+
+    public Call get(final String url, final IHttpRespListener listener)
+    {
+        if (!checkNetwork(listener)) return null;
+        Call call = client.newCall(new Request.Builder().url(url).build());
+        return exeCall(url, call, listener);
     }
 
     public Call post(final String url, HashMap<String, String> params,
@@ -137,24 +142,7 @@ public class LjhHttpUtils
                 .post(body)
                 .build();
         Call call = client.newCall(request);
-        call.enqueue(new Callback()
-        {
-            @Override
-            public void onFailure(Call call, IOException e)
-            {
-                onHttpReqResult(url, listener, HU_STATE_ERR, NERR_NETWORK);
-                LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException
-            {
-                onHttpReqResult(url, listener,
-                        response.code() == 200 ? HU_STATE_OK : response.code(),
-                        response.body().string());
-            }
-        });
-        return call;
+        return exeCall(url, call, listener);
     }
 
     public Call post(final String url, HashMap<String, String> params,
@@ -179,24 +167,7 @@ public class LjhHttpUtils
             }
         }
         Call call = client.newCall(rb.post(builder.build()).build());
-        call.enqueue(new Callback()
-        {
-            @Override
-            public void onFailure(Call call, IOException e)
-            {
-                onHttpReqResult(url, listener, HU_STATE_ERR, NERR_NETWORK);
-                LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException
-            {
-                onHttpReqResult(url, listener,
-                        response.code() == 200 ? HU_STATE_OK : response.code(),
-                        response.body().string());
-            }
-        });
-        return call;
+        return exeCall(url, call, listener);
     }
 
     public Call uploadFile(final String url, HashMap<String, String> params,
@@ -232,24 +203,7 @@ public class LjhHttpUtils
             }
         }
         Call call = client.newCall(rb.post(new ProgressRequestBody(builder.build(), listener)).build());
-        call.enqueue(new Callback()
-        {
-            @Override
-            public void onFailure(Call call, IOException e)
-            {
-                onHttpReqResult(url, listener, HU_STATE_ERR, e.getMessage());
-                LogUtils.LOGE(LjhHttpUtils.class, String.format("%s is err = %s", url, e.getMessage()));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException
-            {
-                onHttpReqResult(url, listener,
-                        response.code() == 200 ? HU_STATE_OK : response.code(),
-                        response.body().string());
-            }
-        });
-        return call;
+        return exeCall(url, call, listener);
     }
 
     public Call downFile(final String url, final String saveName, final IHttpRespListener listener)
