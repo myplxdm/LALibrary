@@ -296,6 +296,11 @@ public abstract class AbsActivity extends AutoLayoutActivity
         Toast.makeText(this, text, time).show();
     }
 
+    public void toast(String text)
+    {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
     public void toastUIThread(final String text, final int time)
     {
         final AbsActivity self = this;
