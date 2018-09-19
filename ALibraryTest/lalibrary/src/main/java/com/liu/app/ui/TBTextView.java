@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liu.lalibrary.R;
+import com.liu.lalibrary.utils.Utils;
 import com.zhy.autolayout.utils.AutoUtils;
 
 /**
@@ -49,6 +50,8 @@ public class TBTextView extends LinearLayout
         tvTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, array.getInteger(R.styleable.TBTextView_topTextSize,DEF_TEXT_SIZE));
         tvBottom.setTextColor(array.getColor(R.styleable.TBTextView_bottomTextColor,0xff000000));
         tvBottom.setTextSize(TypedValue.COMPLEX_UNIT_PX, array.getInteger(R.styleable.TBTextView_bottomTextSize,DEF_TEXT_SIZE));
+        tvTop.setText(Utils.safeStr(array.getString(R.styleable.TBTextView_topText)));
+        tvBottom.setText(Utils.safeStr(array.getString(R.styleable.TBTextView_bottomText)));
         ((LinearLayout.LayoutParams)tvBottom.getLayoutParams()).setMargins(0,array.getInteger(R.styleable.TBTextView_topBottomSpace,DEF_TB_SPACE),0,0);
         //
         array.recycle();

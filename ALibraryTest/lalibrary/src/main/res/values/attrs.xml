@@ -23,6 +23,8 @@
         <attr name="bottomTextColor" format="color"/>
         <attr name="bottomTextSize" format="integer"/>
         <attr name="topBottomSpace" format="integer"/>
+        <attr name="topText" format="string"/>
+        <attr name="bottomText" format="string"/>
     </declare-styleable>
 
 
