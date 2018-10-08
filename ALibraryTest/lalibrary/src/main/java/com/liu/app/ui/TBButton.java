@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.liu.lalibrary.R;
+import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import java.util.HashMap;
  * Created by liu on 2018/4/10.
  */
 
-public class TBButton extends LinearLayout
+public class TBButton extends AutoLinearLayout
 {
     protected ImageView ivPhoto;
     protected TextView tvName;

@@ -13,13 +13,14 @@ import android.widget.TextView;
 
 import com.liu.lalibrary.R;
 import com.liu.lalibrary.utils.Utils;
+import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.utils.AutoUtils;
 
 /**
  * Created by liu on 2018/8/23.
  */
 
-public class TBTextView extends LinearLayout
+public class TBTextView extends AutoLinearLayout
 {
     private TextView tvTop;
     private TextView tvBottom;
@@ -39,13 +40,14 @@ public class TBTextView extends LinearLayout
     public TBTextView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TBTextView);
         LayoutInflater.from(context).inflate(R.layout.tb_text_view, this, true);
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
         tvTop = (TextView) findViewById(R.id.tvTop);
         tvBottom = (TextView) findViewById(R.id.tvBottom);
         //
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TBTextView);
+
         tvTop.setTextColor(array.getColor(R.styleable.TBTextView_topTextColor,0xff000000));
         tvTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, array.getInteger(R.styleable.TBTextView_topTextSize,DEF_TEXT_SIZE));
         tvBottom.setTextColor(array.getColor(R.styleable.TBTextView_bottomTextColor,0xff000000));
@@ -55,7 +57,9 @@ public class TBTextView extends LinearLayout
         ((LinearLayout.LayoutParams)tvBottom.getLayoutParams()).setMargins(0,array.getInteger(R.styleable.TBTextView_topBottomSpace,DEF_TB_SPACE),0,0);
         //
         array.recycle();
-        AutoUtils.auto(this);
+
+        AutoUtils.auto(tvTop);
+        AutoUtils.auto(tvBottom);
     }
 
     public TextView getTopTextView()
