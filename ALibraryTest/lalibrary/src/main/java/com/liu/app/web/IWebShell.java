@@ -33,7 +33,7 @@ public interface IWebShell
     public IWebPlugin getWebPluginByName(String name);
     public View getView(int resId);
     public void execJScript(String js);
-    public void execPlugin(String funName, JSONObject json, String callback);
+    public void execPlugin(JSONObject json);
     public WebViewEx getWeb();
     public ITitleView getTitleView();
     public void jsCall(String funName, Object param);

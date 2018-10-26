@@ -101,7 +101,8 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
             case IWebPlugin.EVENT_EXEC:
                 for (IWebPlugin p : webPlugins)
                 {
-                    if (p.exec(data.getString("funName"), (JSONObject) data.get("param"), data.getString("callback"))) break;
+                    if (p.exec(data.getString(IWebPlugin.METHOD),
+                            data, data.getString(IWebPlugin.CALLBACK))) break;
                 }
                 break;
         }
@@ -156,9 +157,9 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
 
     /********************  IWebShell   ********************/
     @Override
-    public void execPlugin(String funName, JSONObject param, String callback)
+    public void execPlugin(JSONObject param)
     {
-        activeWebPluginEvent(IWebPlugin.EVENT_EXEC, JsonHelper.convert("funName",funName, "param", param, "callback", callback));
+        activeWebPluginEvent(IWebPlugin.EVENT_EXEC, param);
     }
 
     @Override

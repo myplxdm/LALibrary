@@ -31,7 +31,6 @@ public class VersionManager
     public interface OnVersionListener
     {
         public void onRecvVersion(VersionInfo ver);
-
         //
         public int onGetUpdateType(VersionInfo ver);
 

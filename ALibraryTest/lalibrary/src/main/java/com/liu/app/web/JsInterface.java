@@ -35,7 +35,7 @@ public class JsInterface
                 for (int i = 0;i < ary.size();i++)
                 {
                     js = ary.getJSONObject(i);
-                    shell.execPlugin(js.getString("method"), js, js.getString("callback"));
+                    shell.execPlugin(js);
                 }
             }
         });
