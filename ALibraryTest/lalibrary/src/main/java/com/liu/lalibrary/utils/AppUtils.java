@@ -82,9 +82,10 @@ public class AppUtils
 	{
 		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<ActivityManager.RunningServiceInfo> ri = am.getRunningServices(Integer.MAX_VALUE);
+		String name = cls.getName();
 		for (int i = ri.size() - 1;i > -1;i--)
 		{
-			if (ri.get(i).service.getClassName().equals(cls.getName()))
+			if (ri.get(i).service.getClassName().equals(name))
 			{
 				return true;
 			}
