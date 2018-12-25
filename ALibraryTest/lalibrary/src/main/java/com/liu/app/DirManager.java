@@ -1,8 +1,11 @@
 package com.liu.app;
 
+import android.Manifest;
 import android.content.Context;
 
+import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.utils.AppUtils;
+import com.liu.lalibrary.utils.PermissionsUtil;
 import com.liu.lalibrary.utils.imagecache.CommonUtil;
 import com.liu.lalibrary.utils.imagecache.FileHelper;
 
@@ -32,16 +35,27 @@ public class DirManager
 
     private DirManager() {}
 
-    public void init(Context context)
+    public void init(AbsActivity context)
     {
-        appPath = CommonUtil.getRootFilePath() + AppUtils.getAppName(context);
-        FileHelper.createDirectory(appPath);
-        int i = 0;
-        for (String path : dirTypes)
+        appPath = CommonUtil.getRootFilePath() + context.getPackageName();
+        context.checkPermissions(new PermissionsUtil.PermissionCallback()
         {
-            dirNames[i] = appPath + File.separator + path;
-            FileHelper.createDirectory(dirNames[i++]);
-        }
+            @Override
+            public void onPermission(boolean isOK)
+            {
+                if (isOK)
+                {
+                    FileHelper.createDirectory(appPath);
+                    int i = 0;
+                    for (String path : dirTypes)
+                    {
+                        dirNames[i] = appPath + File.separator + path;
+                        FileHelper.createDirectory(dirNames[i++]);
+                    }
+                }
+            }
+        }, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     public String getDirByType(int type)

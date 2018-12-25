@@ -98,7 +98,7 @@ public class PluginContacts extends PluginBase
                         name = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                     }
 
-                    event.pluginResult(true, name + "-" + phoneNumbers.toString(), null);
+                    event.pluginResult(true, name + "," + phoneNumbers.toString(), null);
                     return;
                 }
                 event.pluginResult(false, null, null);

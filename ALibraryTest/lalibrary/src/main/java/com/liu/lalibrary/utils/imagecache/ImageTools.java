@@ -32,6 +32,7 @@ import android.provider.MediaStore.Images.Media;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.utils.AppUtils;
@@ -184,21 +185,31 @@ public final class ImageTools
         return bytes;
     }
 
+    public static void base64ToFile(String base64Code, String savePath) throws Exception
+    {
+        byte[] buffer = Base64.decode(base64Code, Base64.DEFAULT);
+        FileOutputStream out = new FileOutputStream(savePath);
+        out.write(buffer);
+        out.close();
+    }
+
     /**
      * Base64 to byte[] //
      */
-    // public static byte[] base64ToBytes(String base64) throws IOException {
-    // byte[] bytes = Base64.decode(base64);
-    // return bytes;
-    // }
-    //
-    // /**
-    // * Byte[] to base64
-    // */
-    // public static String bytesTobase64(byte[] bytes) {
-    // String base64 = Base64.encode(bytes);
-    // return base64;
-    // }
+    public static byte[] base64ToBytes(String base64) throws IOException
+    {
+        byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
+        return bytes;
+    }
+
+    /**
+     * Byte[] to base64
+     */
+    public static String bytesTobase64(byte[] bytes)
+    {
+        String base64 = new String(Base64.encode(bytes, Base64.DEFAULT));
+        return base64;
+    }
 
     /**
      * Create reflection images
@@ -216,10 +227,10 @@ public final class ImageTools
         matrix.preScale(1, -1);
 
         Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, h / 2, w,
-                                                     h / 2, matrix, false);
+                h / 2, matrix, false);
 
         Bitmap bitmapWithReflection = Bitmap.createBitmap(w, (h + h / 2),
-                                                          Config.ARGB_8888);
+                Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmapWithReflection);
         canvas.drawBitmap(bitmap, 0, 0, null);
@@ -230,8 +241,8 @@ public final class ImageTools
 
         Paint paint = new Paint();
         LinearGradient shader = new LinearGradient(0, bitmap.getHeight(), 0,
-                                                   bitmapWithReflection.getHeight() + reflectionGap, 0x70ffffff,
-                                                   0x00ffffff, TileMode.CLAMP);
+                bitmapWithReflection.getHeight() + reflectionGap, 0x70ffffff,
+                0x00ffffff, TileMode.CLAMP);
         paint.setShader(shader);
         // Set the Transfer mode to be porter duff and destination in
         paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
@@ -322,7 +333,7 @@ public final class ImageTools
         float sy = ((float) h / height);
         matrix.postScale(sx, sy);
         Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height,
-                                            matrix, true);
+                matrix, true);
         return new BitmapDrawable(res, newbmp);
     }
 
@@ -467,11 +478,11 @@ public final class ImageTools
         return flag;
     }
 
-    public static String savePhotoToSDCard(Bitmap photoBitmap, String path,boolean checkSD)
+    public static String savePhotoToSDCard(Bitmap photoBitmap, String path, boolean checkSD)
     {
-        if (TextUtils.isEmpty(path))return path;
+        if (TextUtils.isEmpty(path)) return path;
         int index = path.lastIndexOf(File.separator);
-        return savePhotoToSDCard(photoBitmap,path.substring(0, index),path.substring(index + 1, path.length()), checkSD);
+        return savePhotoToSDCard(photoBitmap, path.substring(0, index), path.substring(index + 1, path.length()), checkSD);
     }
 
     /**
@@ -501,7 +512,7 @@ public final class ImageTools
             if (photoBitmap != null)
             {
                 if (photoBitmap.compress(jpg ? Bitmap.CompressFormat.JPEG
-                                                 : Bitmap.CompressFormat.PNG, 100, fileOutputStream))
+                        : Bitmap.CompressFormat.PNG, 100, fileOutputStream))
                 {
                     fileOutputStream.flush();
                 }
@@ -633,7 +644,7 @@ public final class ImageTools
         if (AppUtils.getOSVersion() >= 24)
         {
             imageUri = FileProvider.getUriForFile(act, act.getPackageName() + ".fileprovider", new File(path));
-        }else
+        } else
         {
             imageUri = Uri.fromFile(new File(path));
         }

@@ -127,12 +127,6 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
         activeWebPluginEvent(IWebPlugin.EVENT_DEINIT, null);
     }
 
-//    @Override
-//    public void finish()
-//    {
-//        closeWindow(nCloseLevel, bCloseReload, "");
-//    }
-
     public static void openWindow(AbsActivity activity, Class cls, int returnResId, String url, String title, int titleLoc, boolean bCloseReload)
     {
         Intent i = new Intent(activity, cls);

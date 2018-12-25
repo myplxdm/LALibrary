@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.liu.app.pluginImpl.PluginFileUpload;
 import com.liu.lalibrary.plugins.IPluginEvent;
 import com.liu.lalibrary.utils.JsonHelper;
+import com.liu.lalibrary.utils.imagecache.ImageTools;
 
 /**
  * Created by liu on 2018/3/9.
@@ -15,14 +16,16 @@ import com.liu.lalibrary.utils.JsonHelper;
 
 public class WebPhotoPlugin extends WebPluginBase
 {
-    private final String UPLOAD_PHOTO = "photoup";//上传图片
+    private final String CMD_UPLOAD_PHOTO = "photoup";//上传图片
     private final String P_UP_URL = "url";//上传图片的地址
     private final String P_PHOTO_CHOOSE_TYPE = "ct";//弹出选择框类型
     private final String P_UP_KEY = "upkey";//上传图片的key
     private final String P_CUT_ASPECTX = "aspectX";//宽比例
     private final String P_CUT_ASPECTY = "aspectY";//高比例
     private final String P_OUT_EDGE_PX = "edge";//输出最大宽高像素,大于这个值就等比例缩小
-
+    private final String CMD_BASE64_TO_File = "base64ToFile";//保存base64到文件
+    private final String P_BTF_BASE64 = "base64";
+    private final String P_BTF_NAME = "name";
     //
     private String callback;
     private String alias;
@@ -33,7 +36,7 @@ public class WebPhotoPlugin extends WebPluginBase
     {
         final IWebShell shell = webShell.get();
         if (shell == null) return false;
-        if (funName.equals(UPLOAD_PHOTO))
+        if (funName.equals(CMD_UPLOAD_PHOTO))
         {
             String url = JsonHelper.getString(param, P_UP_URL, "");
             String key = JsonHelper.getString(param, P_UP_KEY, "");
@@ -67,6 +70,23 @@ public class WebPhotoPlugin extends WebPluginBase
                         }
                     });
             this.callback = callback;
+        }else if (funName.equals(CMD_BASE64_TO_File))
+        {
+            String base = JsonHelper.getString(param, P_BTF_BASE64, "");
+            String name = JsonHelper.getString(param, P_BTF_NAME, "");
+            String path = (String) shell.pluginCallback(IWebShell.PCB_GET_SAVE_PATH, null);
+            if (!TextUtils.isEmpty(base) && !TextUtils.isEmpty(name) && !TextUtils.isEmpty(path))
+            {
+                try
+                {
+                    ImageTools.base64ToFile(base, path + name);
+                    procCallback(true, true, callback, param.getString(P_ALIAS));
+                } catch (Exception e)
+                {
+                    procCallback(true, false, callback, param.getString(P_ALIAS));
+                }
+            }
+            return true;
         }
         return false;
     }
