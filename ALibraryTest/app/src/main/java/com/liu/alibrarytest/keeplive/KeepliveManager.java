@@ -1,6 +1,8 @@
 package com.liu.alibrarytest.keeplive;
 
 import android.app.Activity;
+import android.app.job.JobScheduler;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -58,5 +60,9 @@ public class KeepliveManager
         intent = new Intent(activity, ProtService.class);
         activity.stopService(intent);
         receiver.stopScreenReceiverListener();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            ((JobScheduler)activity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).cancelAll();
+        }
     }
 }
