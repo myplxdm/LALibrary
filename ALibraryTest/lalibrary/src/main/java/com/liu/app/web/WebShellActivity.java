@@ -112,7 +112,7 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == REQ_OPEN_WEB_WINDOW || requestCode == REQ_CODE_EXIT_TO) && data != null)
+//        if ((requestCode == REQ_OPEN_WEB_WINDOW || requestCode == REQ_CODE_EXIT_TO) && data != null)
         {
             activeWebPluginEvent(IWebPlugin.EVENT_RESULT_DATA, JsonHelper.convert("requestCode",requestCode,
                                                                                 "resultCode", resultCode,
