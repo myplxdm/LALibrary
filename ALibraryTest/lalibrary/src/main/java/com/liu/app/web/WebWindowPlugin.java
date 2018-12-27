@@ -57,7 +57,7 @@ public class WebWindowPlugin extends WebPluginBase
     public boolean onActivityResult(int requestCode, int resultCode, Intent data)
     {
         IWebShell shell = webShell.get();
-        if (shell == null) return false;
+        if (shell == null || data == null) return false;
         if (data.getBooleanExtra(IWebShell.WS_CLOSE_RELOAD, false))
         {
             shell.getWeb().reload();
