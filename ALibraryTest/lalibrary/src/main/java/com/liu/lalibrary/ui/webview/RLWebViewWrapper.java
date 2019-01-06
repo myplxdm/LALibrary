@@ -66,6 +66,12 @@ public class RLWebViewWrapper extends RelativeLayout implements WebViewEx.WebVie
 		web.loadUrl(url);
 		pb.setVisibility(showPB ? View.VISIBLE : View.GONE);
 	}
+
+	//true, 只要网页有错就加载本地出错页面
+	public void setHaveErrRedirect(boolean isRedirect)
+	{
+		web.setHaveErrRedirect(isRedirect);
+	}
 	
 	@SuppressLint("JavascriptInterface")
 	public void setJsInterface(Object js, String jsName)

@@ -36,6 +36,8 @@ public class WebViewEx extends WebView
 	private Context			mContext;
 	private boolean 		err;
 	private String			lastUrl;
+	private String 			selfLoadUrl;
+	private boolean			isErrRedirect;
 
 	public WebViewEx(Context context)
 	{
@@ -53,6 +55,18 @@ public class WebViewEx extends WebView
 	{
 		super(context, attrs, defStyle);
 		setup(context);
+	}
+
+	@Override
+	public void loadUrl(String url)
+	{
+		super.loadUrl(url);
+		selfLoadUrl = url;
+	}
+
+	public void setHaveErrRedirect(boolean isRedirect)
+	{
+		isErrRedirect = isRedirect;
 	}
 
 	@SuppressLint({ "NewApi", "SetJavaScriptEnabled" })
@@ -146,31 +160,34 @@ public class WebViewEx extends WebView
 
 	class WebViewClientEx extends WebViewClient
 	{
+
+		protected void error(String failingUrl, WebView view, int errorCode, String description)
+		{
+			if (isErrRedirect || failingUrl.equals(selfLoadUrl))
+			{
+				lastUrl = failingUrl;
+				loadUrl(ERR_URL);
+				err = true;
+				if (webEvent != null)
+				{
+					webEvent.onReceivedError(view, errorCode, description, failingUrl);
+				}
+			}
+		}
+
 		@SuppressLint("NewApi")
 		@Override
 		public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error)
 		{
 			super.onReceivedError(view, request, error);
-			lastUrl = request.getUrl().toString();
-			loadUrl(ERR_URL);
-			err = true;
-			if (webEvent != null)
-			{
-				webEvent.onReceivedError(view, error.getErrorCode(), error.getDescription().toString(), lastUrl);
-			}
+			error(request.getUrl().toString(), view, error.getErrorCode(), error.getDescription().toString());
 		}
 
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl)
 		{
 			super.onReceivedError(view, errorCode, description, failingUrl);			
-			lastUrl = failingUrl;
-			loadUrl(ERR_URL);
-			err = true;
-			if (webEvent != null)
-			{
-				webEvent.onReceivedError(view, errorCode, description, failingUrl);
-			}
+			error(failingUrl, view, errorCode, description);
 		}
 
 		@Override
