@@ -63,4 +63,15 @@ public class VerifyUtils
         }
         return false;
     }
+
+    public static boolean verifyEmail(String email)
+    {
+        if (!TextUtils.isEmpty(email))
+        {
+            String IDCardRegex = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+            return email.matches(IDCardRegex);
+        }
+        return false;
+
+    }
 }
