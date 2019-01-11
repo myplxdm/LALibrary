@@ -145,6 +145,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
             {
                 tv.mdTxtView(titleLocation, titleIndex, txt);
             }
+            genBtnInfo(param, tv.getView(LTitleView.TVL_MIDDLE, 0));
             isProc = true;
         } else if (funName.equals(TV_SET_RETURN))
         {
@@ -174,7 +175,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
     private void genBtnInfo(JSONObject param, View view)
     {
         BtnInfo bi = new BtnInfo();
-        bi.btnType = param.getIntValue(P_BTN_TYPE);
+        bi.btnType = JsonHelper.getInt(param, P_BTN_TYPE, BTN_TYPE_NORMAL);
         bi.closeReload = JsonHelper.getBoolen(param, P_CLOSE_RELOAD, false);
         bi.openUrl = JsonHelper.getString(param, P_URL, "");
         bi.title = JsonHelper.getString(param, P_TITLE, "");
