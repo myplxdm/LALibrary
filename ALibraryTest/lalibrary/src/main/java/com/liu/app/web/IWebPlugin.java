@@ -27,4 +27,7 @@ public interface IWebPlugin
     public int execOther(String method, JSONObject param, String callback);//用于继承扩展
     public boolean exec(String method, JSONObject param, String callback);//返回是否执行
     public boolean onActivityResult(int requestCode, int resultCode, Intent data);
+    public void onResume();
+    public void onPause();
+    public void onStop();
 }

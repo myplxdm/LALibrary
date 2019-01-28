@@ -65,4 +65,8 @@ public abstract class WebPluginBase implements IWebPlugin
     {
         return this.procCallback(isProc, true, callback, Utils.safeStr(alias));
     }
+
+    public void onResume(){}
+    public void onPause(){}
+    public void onStop(){}
 }
