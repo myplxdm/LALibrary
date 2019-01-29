@@ -14,6 +14,9 @@ public interface IWebPlugin
     public static final int EVENT_DEINIT = 1;
     public static final int EVENT_RESULT_DATA = 2;
     public static final int EVENT_EXEC = 3;
+    public static final int EVENT_PAUSE = 4;
+    public static final int EVENT_RESUME = 5;
+    public static final int EVENT_STOP = 6;
     //
     public static final int EXEC_OTHER_NO_PROC = 0;//不需要处理
     public static final int EXEC_OTHER_BASE_PROC = 1;//由父类处理回调

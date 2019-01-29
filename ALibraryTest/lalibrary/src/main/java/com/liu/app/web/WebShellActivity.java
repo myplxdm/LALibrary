@@ -105,6 +105,24 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
                             data, data.getString(IWebPlugin.CALLBACK))) break;
                 }
                 break;
+            case IWebPlugin.EVENT_PAUSE:
+                for (IWebPlugin p : webPlugins)
+                {
+                   p.onPause();
+                }
+                break;
+            case IWebPlugin.EVENT_RESUME:
+                for (IWebPlugin p : webPlugins)
+                {
+                    p.onResume();
+                }
+                break;
+            case IWebPlugin.EVENT_STOP:
+                for (IWebPlugin p : webPlugins)
+                {
+                    p.onStop();
+                }
+                break;
         }
     }
 
