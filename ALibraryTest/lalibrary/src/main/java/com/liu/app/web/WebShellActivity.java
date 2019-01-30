@@ -139,6 +139,27 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     }
 
     @Override
+    protected void onPause()
+    {
+        super.onPause();
+        activeWebPluginEvent(IWebPlugin.EVENT_PAUSE, null);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        activeWebPluginEvent(IWebPlugin.EVENT_RESUME, null);
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        activeWebPluginEvent(IWebPlugin.EVENT_STOP, null);
+    }
+
+    @Override
     protected void onDestroy()
     {
         super.onDestroy();
