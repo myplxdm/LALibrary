@@ -349,6 +349,11 @@ public abstract class AbsActivity extends AutoLayoutActivity
         }
     }
 
+    public void callActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        onActivityResult(requestCode, resultCode, data);
+    }
+
     /*************** Permissions *****************/
 
     public synchronized void checkPermissions(PermissionsUtil.PermissionCallback cb, String... permissions)
