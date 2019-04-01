@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/ALibraryTest.iml" filepath="$PROJECT_DIR$/ALibraryTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lalibrary/lalibrary.iml" filepath="$PROJECT_DIR$/lalibrary/lalibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pospay/pospay.iml" filepath="$PROJECT_DIR$/pospay/pospay.iml" />
     </modules>
   </component>
 </project>
