@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.liu.alibrarytest">
+
+    <permission
+        android:name="com.liu.alibrarytest.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature"/>
+
+    <!-- Required -->
+    <uses-permission android:name="com.liu.alibrarytest.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!--获取当前地理位置要的权限-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- 仅网络定位的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"/>
+
+        <!-- keeplive start -->
+        <activity android:name=".keeplive.SinglePixelActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
+                  android:excludeFromRecents="true"
+                  android:finishOnTaskLaunch="false"
+                  android:launchMode="singleInstance"
+                  android:theme="@style/SingleActivityStyle"/>
+
+        <!--注册Service-->
+        <service android:name=".keeplive.service.GoKLService"
+                 android:enabled="true"
+                 android:exported="true"
+                 android:process=":go_service"/>
+        <service android:name=".keeplive.service.CancelNoticeService"
+                 android:enabled="true"
+                 android:exported="true"
+                 android:process=":service"/>
+        <service android:name=".keeplive.service.ProtService"
+                 android:enabled="true"
+                 android:exported="true"
+                 android:process=":muisc_service"/>
+        <service android:name=".keeplive.service.AliveJobService"
+                 android:permission="android.permission.BIND_JOB_SERVICE"
+                 />
+        <!-- keeplive end -->
+        <receiver
+            android:process=":go_service"
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+                <category android:name="com.liu.alibrarytest" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Required since JCore 1.1.7. SDK 核心功能-->
+        <provider
+            android:process=":go_service"
+            android:name="cn.jpush.android.service.DataProvider"
+            android:authorities="com.liu.alibrarytest.DataProvider"
+            android:exported="false" />
+
+        <!-- Required since JMessage 2.7.0 SDK 核心功能-->
+        <provider
+            android:process=":go_service"
+            android:name="cn.jpush.im.android.helpers.ipc.IMProvider"
+            android:authorities="com.liu.alibrarytest.IMProvider"
+            android:exported="false" />
+
+        <!-- Required SDK核心功能-->
+        <receiver
+            android:process=":go_service"
+            android:name="cn.jpush.android.service.AlarmReceiver"
+            android:exported="false" />
+
+        <!-- Required JMessage SDK核心功能-->
+        <receiver
+            android:process=":go_service"
+            android:name="cn.jpush.im.android.helpers.IMReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
+
+        <meta-data
+            android:name="design_width"
+            android:value="1242">
+        </meta-data>
+        <meta-data
+            android:name="design_height"
+            android:value="2208">
+        </meta-data>
+
+    </application>
+
+</manifest>
