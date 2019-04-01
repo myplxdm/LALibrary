@@ -3,11 +3,8 @@ package com.liu.app.wx;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.liu.lalibrary.log.LogUtils;
-
-import junit.framework.Assert;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -144,9 +141,6 @@ public class ImageURLUtil
     public static Bitmap extractThumbNail(final String path, final int height,
                                           final int width, final boolean crop)
     {
-        Assert.assertTrue(path != null && !path.equals("") && height > 0
-                                  && width > 0);
-
         BitmapFactory.Options options = new BitmapFactory.Options();
 
         try
