@@ -36,13 +36,13 @@ public class BocPosPay extends BasePosPay
             {
                 jo.put(key, bundle.getString(key));
             }
+            if (!status)
+            {
+                jo.put(OPER_ERROR, data.getStringExtra("msg"));
+            }
         }
         jo.put(PAY_TYPE, String.valueOf(payType));
         jo.put(OPER_STATUS, status);
-        if (!status)
-        {
-            jo.put(OPER_ERROR, data.getStringExtra("msg"));
-        }
         return jo;
     }
 
@@ -84,7 +84,7 @@ public class BocPosPay extends BasePosPay
         {
             keys.add("orderNo");
             vals.add(json.getString("orderNo"));
-        }else if (!TextUtils.isEmpty(payDate))
+        }else
         {
             keys.add("cardNo");
             vals.add(json.getString("cardNo"));
@@ -93,16 +93,18 @@ public class BocPosPay extends BasePosPay
             vals.add(Utils.safeStr(json.getString("authNo")));
 
             keys.add("tranDate");
-            vals.add(payDate.substring(0,4));
+            vals.add(payDate.substring(0,8));
 
             keys.add("tranTime");
-            vals.add(payDate.substring(4));
+            vals.add(payDate.substring(8));
 
             keys.add("refundAmt");
             vals.add(price);
-
-            payDate = payDate.substring(0,4);
-            isCancel = getCurMDDateStr().equals(payDate);
+        }
+        if (!TextUtils.isEmpty(payDate))
+        {
+            payDate = payDate.substring(0,8);
+            isCancel = getCurDateStr().equals(payDate);
         }
         keys.add("tranType");
         vals.add(isCancel ? CANCEL_TT_TYPE[payType] : REFUND_TT_TYPE[payType]);

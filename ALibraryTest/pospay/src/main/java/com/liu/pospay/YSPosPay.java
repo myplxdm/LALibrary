@@ -40,7 +40,7 @@ public class YSPosPay extends BasePosPay
         String msg = json.getString(AppHelper.RESULT_MSG);
         String td = json.getString(AppHelper.TRANS_DATA);
         JSONObject res = null;
-        if (code.equals(RC_SUCCESS) && !TextUtils.isEmpty(td))
+        if (!TextUtils.isEmpty(td) && code.equals(RC_SUCCESS))
         {
             res = JSONObject.parseObject(td);
             res.put(OPER_STATUS, res.getString("resCode").equals("00"));
@@ -49,7 +49,7 @@ public class YSPosPay extends BasePosPay
         {
             res = new JSONObject();
             res.put(OPER_STATUS, false);
-            res.put(OPER_ERROR, msg);
+            res.put(OPER_ERROR, Utils.safeStr(msg));
         }
         res.put(PAY_TYPE, String.valueOf(payType));
         return res;

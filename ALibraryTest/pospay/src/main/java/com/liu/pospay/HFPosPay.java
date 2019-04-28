@@ -2,6 +2,8 @@ package com.liu.pospay;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -20,7 +22,27 @@ public class HFPosPay extends BasePosPay
     @Override
     public JSONObject onResponse(int requestCode, int resultCode, Intent data)
     {
-        return null;
+        if (requestCode != REQ_CODE_HF) return null;
+        JSONObject jo = new JSONObject();
+        Bundle bundle = null;
+        boolean status = false;
+        if (data != null && (bundle = data.getExtras()) != null)
+        {
+            for (String key : bundle.keySet())
+            {
+                jo.put(key, bundle.getString(key));
+            }
+            String code = jo.getString("responseCode");
+            status = code.equals("00");
+            if (!status)
+            {
+                String err = jo.getString("message");
+                jo.put(OPER_ERROR, TextUtils.isEmpty(err) ? getErrString(code) : err);
+            }
+        }
+        jo.put(PAY_TYPE, String.valueOf(payType));
+        jo.put(OPER_STATUS, status);//
+        return jo;
     }
 
     @Override
@@ -32,8 +54,6 @@ public class HFPosPay extends BasePosPay
         //
         this.payType = payType;
         String cid = payType == PAY_TYPE_CARD ? PAY_TYPE_VAL[2] : "scan";
-        //String mpt = PAY_TYPE_VAL[payType];
-
         String req = String.format("%s://%s/payment?" +
                         "channelId=%s&" +
                         "ordAmt=%s&" +
@@ -48,85 +68,63 @@ public class HFPosPay extends BasePosPay
     public void refund(AbsActivity activity, boolean isCancel, String curNo, String price, String param)
     {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-
         this.curNo = curNo;
         respTransType = RESP_REFUND;
         //
-        JSONObject jo = JSON.parseObject(param);
+        JSONObject json = JSON.parseObject(param);
+        String payDate = json.getString("transDate");
+        int payType = Integer.parseInt(json.getString("payType"));
+        if (!TextUtils.isEmpty(payDate))
+        {
+            isCancel = getCurDateStr().equals(payDate);
+        }
+        String[] keys,vals;
         String req;
         if (isCancel)
         {
-            req = String.format("%s://%s/paymentVoid?" +
-                            "oriVoucherNo=%s&" +
-                            "merOrdId=%s&",SCHEME, HOST,
-                    jo.getString("voucherNo"), curNo);
+            if (payType == PAY_TYPE_CARD)
+            {
+                keys = new String[]{"channelId","oriVoucherNo","merOrdId"};
+                vals = new String[]{"acquire",json.getString("voucherNo"),curNo};
+            }else
+            {
+                keys = new String[]{"channelId","mobilePayType","oriVoucherNo","merOrdId"};
+                vals = new String[]{"scan",json.getString("mobilePayType"),json.getString("voucherNo"),curNo};
+            }
+            req = String.format("%s://%s/paymentVoid?",SCHEME, HOST) + catParam(keys,vals);
         }else
         {
-            req = String.format("%s://%s/refund?" +
-                            "ordAmt=%s&" +
-                            "oriMerOrdId=%s&",SCHEME, HOST,
-                    jo.getString("merOrdId"), curNo);
+            keys = new String[]{"ordAmt","oriSelfOrdId","merOrdId"};
+            vals = new String[]{price,json.getString("merOrdId"),curNo};
+            req = String.format("%s://%s/refund?",SCHEME, HOST) + catParam(keys,vals);
         }
         Uri uri = Uri.parse(req);
         intent.setData(uri);
         activity.startActivityForResult(intent, REQ_CODE_HF);
     }
 
-    /*
-    @Override
-    public void pay(AbsActivity activity, JSONObject param)
+    private String catParam(String[] keys, String[] vals)
     {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-
-        curNo = param.getString(ORDER);
-        respTransType = RESP_PAY;
-        //
-        int payType = param.getIntValue(PAY_TYPE);
-        String cid = payType == PAY_TYPE_CARD ? PAY_TYPE_VAL[2] : "scan";
-        //String mpt = PAY_TYPE_VAL[payType];
-
-        String req = String.format("%s://%s/payment?" +
-                        "channelId=%s&" +
-                        "ordAmt=%s&" +
-                        "merOrdId=%s&", SCHEME, HOST,
-                        cid, param.getString(PRICE), curNo);
-        Uri uri = Uri.parse(req);
-        intent.setData(uri);
-        activity.startActivityForResult(intent, REQ_CODE_HF);
-    }
-
-    @Override
-    public void refund(AbsActivity activity, JSONObject param)
-    {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-
-        curNo = param.getString(ORDER);
-        respTransType = RESP_REFUND;
-        //
-        JSONObject jo = JSON.parseObject(param.getString(REFUND_PARAM));
-        String req;
-        if (param.getBoolean(IS_CANCEL))
+        if (keys != null && vals != null && keys.length == vals.length)
         {
-            req = String.format("%s://%s/paymentVoid?" +
-                            "oriVoucherNo=%s&" +
-                            "merOrdId=%s&",SCHEME, HOST,
-                            jo.getString("voucherNo"), curNo);
-        }else
-        {
-            req = String.format("%s://%s/refund?" +
-                            "ordAmt=%s&" +
-                            "oriMerOrdId=%s&",SCHEME, HOST,
-                            jo.getString("merOrdId"), curNo);
+            StringBuffer sb = new StringBuffer();
+            sb.append(keys[0] + "=" + vals[0]);
+            for (int i = 1;i < keys.length;i++)
+            {
+                sb.append("&" + keys[i] + "=" + vals[i]);
+            }
+            return sb.toString();
         }
-        Uri uri = Uri.parse(req);
-        intent.setData(uri);
-        activity.startActivityForResult(intent, REQ_CODE_HF);
+        return "";
     }
 
-    @Override
-    public JSONObject onResponse(int requestCode, int resultCode, int payType, Intent data)
+    private String getErrString(String code)
     {
-        if (requestCode != REQ_CODE_BOC) return null;
-        return null;
-    }*/
+        if (code.equals("TF")) return "交易失败";
+        else if (code.equals("PE")) return "入参错误";
+        else if (code.equals("UL")) return "未登录或取消登录";
+        else if (code.equals("UF")) return "未查到";
+        else if (code.equals("TP")) return "交易处理中";
+        return "未知错误";
+    }
 }

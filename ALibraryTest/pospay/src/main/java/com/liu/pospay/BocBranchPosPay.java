@@ -26,15 +26,16 @@ public class BocBranchPosPay extends BasePosPay
         if (data != null && !TextUtils.isEmpty (str = data.getExtras().getString("transData")))
         {
             jo = JSON.parseObject(str);
+            if (!status)
+            {
+                jo.put(OPER_ERROR, data.getStringExtra("reason"));
+            }
         }else jo = new JSONObject();
 
         jo.put("orderNo", curNo);
         jo.put(PAY_TYPE, String.valueOf(payType));
         jo.put(OPER_STATUS, status);
-        if (!status)
-        {
-            jo.put(OPER_ERROR, data.getStringExtra("reason"));
-        }
+
         return jo;
     }
 
@@ -69,11 +70,11 @@ public class BocBranchPosPay extends BasePosPay
 
         int payType = Integer.parseInt(json.getString("payType"));
         String payDate = json.getString("date");
-        if (!TextUtils.isEmpty(payDate) && payType == PAY_TYPE_CARD)
+        if (payType == PAY_TYPE_CARD && !TextUtils.isEmpty(payDate))
         {
             isCancel = getCurDateStr().equals(payDate);
         }
-        vs[0] = isCancel ? "手动退款" : "退货";
+        vs[0] = payType == PAY_TYPE_CARD ? (isCancel ? "手动退款" : "退货") : "手动退款";
         vs[1] = price;
         vs[2] = payType == PAY_TYPE_CARD ? json.getString("traceNo") : json.getString("orderNo");
         vs[3] = curNo;

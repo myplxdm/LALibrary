@@ -4,8 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,32 +21,30 @@ public abstract class BasePosPay implements IPosPay
     {
         PackageManager pkg = paramContext.getPackageManager();
         Intent i = new Intent("android.intent.action.VIEW");
+        //中国银行总行
         i.setComponent(new ComponentName("com.yada.spos.cashierplatfrom", "com.yada.spos.cashierplatfrom.InvokeActivity"));
         if (pkg.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY).size() > 0)
             return new BocPosPay();
+        //中国银行分行
         i.setComponent(new ComponentName("com.landicorp.boc", "com.landicorp.boc.activity.TopAcitivity"));
         if (pkg.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY).size() > 0)
             return new BocBranchPosPay();
-        i.setComponent(null);
-        i.setData(Uri.parse("payment//com.pnr.pospp/paymentVoid"));
-        if (pkg.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY).size() > 0)
-            return new HFPosPay();
+        //银商
         if (isHasPackname(paramContext, "com.ums.tss.mastercontrol"))
         {
             return new YSPosPay();
         }
+        //汇付
+        if (isHasPackname(paramContext, "com.chinapnr.nl.addpay"))
+        {
+            return new HFPosPay();
+        }
         return null;
-    }
-
-    public static boolean isPos()
-    {
-        return android.os.Build.MODEL.indexOf("APOS") != -1;
     }
 
     public static boolean isHasPackname(Context context, String pn)
     {
-        try
-        {
+        try {
             context.getPackageManager()
                     .getApplicationInfo(pn,
                             PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -57,11 +53,6 @@ public abstract class BasePosPay implements IPosPay
         {
         }
         return false;
-    }
-
-    public static boolean isPosFZMarket(Context context)
-    {
-        return isHasPackname(context, "com.yada.spos.cashierplatfrom");
     }
 
     protected void insertKV(Intent paramIntent, String[] keys, String[] vals)
