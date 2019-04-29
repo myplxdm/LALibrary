@@ -37,20 +37,11 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation ('com.github.chrisbanes:PhotoView:2.0.0')
-    {
-        exclude group: 'com.android.support'
-    }
     implementation ('com.github.ksoichiro:androidpagecontrol:0.1.1')
-    {
-        exclude group: 'com.android.support'
-    }
     implementation 'com.github.bumptech.glide:glide:4.2.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
     implementation 'com.squareup.okhttp3:okhttp:3.8.1'
     implementation ('com.jude:rollviewpager:1.4.5')
-    {
-        exclude group: 'com.android.support'
-    }
     implementation 'com.cocosw:bottomsheet:1.+@aar'
     implementation 'com.alibaba:fastjson:1.2.55'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
@@ -60,11 +51,5 @@ dependencies {
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     implementation 'com.bigkoo:alertview:1.0.3'
     implementation ('com.dou361.dialogui:jjdxm-dialogui:1.0.3')
-    {
-        exclude group: 'com.android.support'
-    }
     implementation ('com.github.yalantis:ucrop:2.2.1')
-    {
-        exclude group: 'com.squareup.okhttp3'
-    }
 }
