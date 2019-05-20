@@ -55,7 +55,10 @@ public class TBButton extends AutoLinearLayout
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
         ivPhoto = new ImageView(context);
-        ivPhoto.setBackgroundResource(photoSrcRes);
+        if (photoSrcRes != -1)
+        {
+            ivPhoto.setBackgroundResource(photoSrcRes);
+        }
         if (pw != 0 && ph != 0)
         {
             LayoutParams lp = new LayoutParams(pw, ph);

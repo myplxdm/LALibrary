@@ -6,7 +6,8 @@ import android.content.Intent;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.cocosw.bottomsheet.BottomSheet;
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.R;
 import com.liu.lalibrary.loader.LoaderBase;
@@ -156,14 +157,24 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     {
         if (shareType == (WX_SHARE_TYPE_FIREND | WX_SHARE_TYPE_TIMELINE))
         {
-            new BottomSheet.Builder(activity, R.style.BottomSheetStyleDialog).title("分享").sheet(R.menu.menu_wx_share).listener(new DialogInterface.OnClickListener()
+            new AlertView("分享", null, "取消", null, new String[]{"发送给朋友", "分享朋友圈"},
+                    activity, AlertView.Style.ActionSheet, new OnItemClickListener()
             {
                 @Override
-                public void onClick(DialogInterface dialog, int which)
+                public void onItemClick(Object o, int position)
                 {
-                    sendUrl(title, desc, imgUrl, url, which == 1);
+                    if (position == -1)return;
+                    sendUrl(title, desc, imgUrl, url, position == 1);
                 }
-            }).grid().build().show();
+            }).show();
+//            new BottomSheet.Builder(activity, R.style.BottomSheetStyleDialog).title("分享").sheet(R.menu.menu_wx_share).listener(new DialogInterface.OnClickListener()
+//            {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which)
+//                {
+//                    sendUrl(title, desc, imgUrl, url, which == 1);
+//                }
+//            }).grid().build().show();
         } else
         {
             sendUrl(title, desc, imgUrl, url, (shareType & WX_SHARE_TYPE_TIMELINE) == WX_SHARE_TYPE_TIMELINE);

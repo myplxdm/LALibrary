@@ -3,11 +3,11 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.myplxdm'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -35,14 +35,13 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api 'com.cocosw:bottomsheet:1.+@aar'
-    api ('com.github.chrisbanes:PhotoView:2.0.0')
-    api ('com.github.ksoichiro:androidpagecontrol:0.1.1')
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.github.chrisbanes:PhotoView:2.0.0'
+    api 'com.github.ksoichiro:androidpagecontrol:0.1.1'
     api 'com.github.bumptech.glide:glide:4.2.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
     api 'com.squareup.okhttp3:okhttp:3.8.1'
-    api ('com.jude:rollviewpager:1.4.5')
+    api 'com.jude:rollviewpager:1.4.5'
     api 'com.alibaba:fastjson:1.2.55'
     api 'de.hdodenhof:circleimageview:3.0.0'
     api 'com.makeramen:roundedimageview:2.3.0'
@@ -50,6 +49,6 @@ dependencies {
     api 'com.umeng.analytics:analytics:latest.integration'
     api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     api 'com.bigkoo:alertview:1.0.3'
-    api ('com.dou361.dialogui:jjdxm-dialogui:1.0.3')
-    api ('com.github.yalantis:ucrop:2.2.1')
+    api 'com.dou361.dialogui:jjdxm-dialogui:1.0.3'
+    api 'com.github.yalantis:ucrop:2.2.1'
 }
