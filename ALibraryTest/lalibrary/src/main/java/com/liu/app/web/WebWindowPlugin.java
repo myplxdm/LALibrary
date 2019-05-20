@@ -22,6 +22,8 @@ public class WebWindowPlugin extends WebPluginBase
     private final String WND_EXIT_TO = "exitto";
     //---------------------------------------------------
     private final String WND_MASK_BACK = "maskback";
+    //
+    private final String WND_RELOAD = "reload";
 
     @Override
     public boolean exec(String funName, JSONObject param, String callback)
@@ -47,6 +49,10 @@ public class WebWindowPlugin extends WebPluginBase
         }else if (funName.equals(WND_MASK_BACK))
         {
             shell.getActivity().maskBack(true);
+            isProc = true;
+        }else if (funName.equals(WND_RELOAD))
+        {
+            shell.getWeb().reload();
             isProc = true;
         }
         isProc = isProc || (execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC ? false : true);
