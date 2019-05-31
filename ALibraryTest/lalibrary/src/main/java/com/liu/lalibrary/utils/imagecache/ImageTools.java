@@ -110,7 +110,7 @@ public final class ImageTools
      *
      * @param inputStream
      * @return
-     * @throws Exception
+     * @throws
      */
     public static Bitmap inputStreamToBitmap(InputStream inputStream)
             throws Exception
@@ -158,17 +158,19 @@ public final class ImageTools
      * @param
      * @return
      */
-    public static byte[] bitmapToBytes(Bitmap bm)
+    public static byte[] bitmapToBytes(Bitmap bm, Bitmap.CompressFormat cf)
     {
         byte[] bytes = null;
         if (bm != null)
         {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            bm.compress(cf, 100, baos);
             bytes = baos.toByteArray();
         }
         return bytes;
     }
+
+
 
     /**
      * Drawable transfer to bytes
@@ -180,8 +182,7 @@ public final class ImageTools
     {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
         Bitmap bitmap = bitmapDrawable.getBitmap();
-        byte[] bytes = bitmapToBytes(bitmap);
-        ;
+        byte[] bytes = bitmapToBytes(bitmap, Bitmap.CompressFormat.JPEG);
         return bytes;
     }
 

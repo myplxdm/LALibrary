@@ -1,26 +1,21 @@
 package com.liu.alibrarytest;
 
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.liu.alibrarytest.keeplive.KeepliveManager;
 import com.liu.app.pluginImpl.PluginContacts;
+import com.liu.app.wx.WXSDK;
 import com.liu.lalibrary.AbsActivity;
-import com.liu.lalibrary.plugins.IPluginEvent;
-
-import java.util.Locale;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ryt.mtzf.R;
 
 public class MainActivity extends AbsActivity
 {
@@ -40,7 +35,6 @@ public class MainActivity extends AbsActivity
     protected void onInitView()
     {
         ButterKnife.bind(this);
-        KeepliveManager.inst().startKepplive(this);
         mToBack = true;
 
     }
@@ -49,7 +43,6 @@ public class MainActivity extends AbsActivity
     protected void onDestroy()
     {
         super.onDestroy();
-        KeepliveManager.inst().stopKeeplive(this);
     }
 
     @Override
@@ -64,23 +57,7 @@ public class MainActivity extends AbsActivity
         switch (view.getId())
         {
             case R.id.btnOpen:
-                getPluginByName(PluginContacts.NAME).exec(PluginContacts.CMD_OPEN_CONTACTS_VIEW, null, new IPluginEvent()
-                {
-                    @Override
-                    public void pluginResult(boolean isSuccess, String result, Object param)
-                    {
-                        if (isSuccess)
-                        {
-                            System.out.print(result);
-                        }
-                    }
-
-                    @Override
-                    public void pluginClose(boolean isSuccess, String result)
-                    {
-
-                    }
-                });
+                //WXSDK.inst().showShareMenu(this,"","","","",WXSDK.WX_SHARE_TYPE_FIREND);
                 break;
             case R.id.btnStop:
                 break;
