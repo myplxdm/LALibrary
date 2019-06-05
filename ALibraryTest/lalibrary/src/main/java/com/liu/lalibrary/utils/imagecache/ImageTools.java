@@ -158,13 +158,13 @@ public final class ImageTools
      * @param
      * @return
      */
-    public static byte[] bitmapToBytes(Bitmap bm, Bitmap.CompressFormat cf)
+    public static byte[] bitmapToBytes(Bitmap bm, Bitmap.CompressFormat cf, int quality)
     {
         byte[] bytes = null;
         if (bm != null)
         {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bm.compress(cf, 100, baos);
+            bm.compress(cf, quality, baos);
             bytes = baos.toByteArray();
         }
         return bytes;
