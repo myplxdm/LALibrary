@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.liu.lalibrary.plugins.IPluginEvent;
 import com.liu.lalibrary.plugins.PluginBase;
 import com.liu.lalibrary.utils.AppUtils;
 import com.liu.lalibrary.utils.PermissionsUtil;
+import com.liu.lalibrary.utils.imagecache.FileHelper;
 import com.liu.lalibrary.utils.imagecache.ImageTools;
 
 import java.util.ArrayList;
@@ -120,26 +122,26 @@ public class PluginPhotoChoose extends PluginBase
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK)
+        if (resultCode == Activity.RESULT_OK && event != null)
         {
             if (requestCode == ImageTools.REQ_TAKE_PIC)
             {
                 event.pluginResult(true, DirManager.inst().getDirByType(DirManager.DIR_CACHE, TAKE_PHOTO_NAME), null);
             } else if (requestCode == ImageTools.REQ_CHOOSE_ALBUM)
             {
-//                String path = ImageTools.getAlbumPath(wrActivity.get(), data);
-//                if (path == null)
-//                {
-//                    Bitmap bmp = ImageTools.getAlbumImage(wrActivity.get(), data);
-//                    if (bmp != null)
-//                    {
-//                        path = ImageTools.savePhotoToSDCard(bmp, DirManager.inst().getDirByType(DirManager.DIR_CACHE),
-//                                                            TAKE_PHOTO_NAME, true);
-//                        if (path != null) event.pluginResult(true, path, null);
-//                    }
-//                    event.pluginResult(false, null, null);
-//                    return;
-//                }
+                String path = FileHelper.getUriPath(getActivity(), Uri.parse(data.getData().toString()));//ImageTools.getAlbumPath(wrActivity.get(), data);
+                if (path == null)
+                {
+                    Bitmap bmp = ImageTools.getAlbumImage(wrActivity.get(), data);
+                    if (bmp != null)
+                    {
+                        path = ImageTools.savePhotoToSDCard(bmp, DirManager.inst().getDirByType(DirManager.DIR_CACHE),
+                                                            TAKE_PHOTO_NAME, true);
+                        if (path != null) event.pluginResult(true, path, null);
+                    }
+                    event.pluginResult(false, "", null);
+                    return;
+                }
                 event.pluginResult(true, data.getData().toString(), null);
             }
         }

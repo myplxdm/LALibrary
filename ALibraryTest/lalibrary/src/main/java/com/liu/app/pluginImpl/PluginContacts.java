@@ -64,7 +64,7 @@ public class PluginContacts extends PluginBase
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_CONTACTS && data != null)
+        if (requestCode == REQ_CODE_CONTACTS && data != null && event != null)
         {
             Cursor cursor = null;
             Cursor phone = null;

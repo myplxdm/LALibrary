@@ -252,7 +252,7 @@ public class PluginFileUpload extends PluginBase
 //        {
 //            uploadFile(data.getStringExtra(PhotoProcActivity.RESULT_FILE_NAME));
 //        }
-        if (requestCode == UCrop.REQUEST_CROP && data != null)
+        if (requestCode == UCrop.REQUEST_CROP && data != null && event != null)
         {
             final Uri resultUri = UCrop.getOutput(data);
             if (resultUri != null)
