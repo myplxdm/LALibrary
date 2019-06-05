@@ -182,7 +182,7 @@ public final class ImageTools
     {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
         Bitmap bitmap = bitmapDrawable.getBitmap();
-        byte[] bytes = bitmapToBytes(bitmap, Bitmap.CompressFormat.JPEG);
+        byte[] bytes = bitmapToBytes(bitmap, Bitmap.CompressFormat.JPEG, 100);
         return bytes;
     }
 
