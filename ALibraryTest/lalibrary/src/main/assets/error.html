@@ -55,7 +55,7 @@
 
 		function reload(){
 			if(browser.versions.android){
-				android.reload();
+				window.android.exec('[{"method":"reload"}]');
 			}else{
 			
                 var url = "ios:exec:[{\"method\":\"reload\"}]";
