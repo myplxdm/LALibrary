@@ -87,7 +87,7 @@ public class XDataStore
         sp.edit().putString(obj.getClass().getName(), JSON.toJSONString(obj)).commit();
     }
 
-    public Object getObject(Class cls)
+    public <T> T getObject(Class<T> cls)
     {
         String json = sp.getString(cls.getName(), "");
         if (!TextUtils.isEmpty(json))
