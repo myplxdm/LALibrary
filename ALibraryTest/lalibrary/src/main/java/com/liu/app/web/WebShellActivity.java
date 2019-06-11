@@ -238,9 +238,9 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     }
 
     @Override
-    public WebViewEx getWeb()
+    public RLWebViewWrapper getWeb()
     {
-        return webView.getWeb();
+        return webView;
     }
 
     @Override

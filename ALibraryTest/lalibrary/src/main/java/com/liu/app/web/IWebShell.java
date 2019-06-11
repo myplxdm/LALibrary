@@ -5,6 +5,7 @@ import android.view.View;
 import com.alibaba.fastjson.JSONObject;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.ui.titleview.ITitleView;
+import com.liu.lalibrary.ui.webview.RLWebViewWrapper;
 import com.liu.lalibrary.ui.webview.WebViewEx;
 
 /**
@@ -35,7 +36,7 @@ public interface IWebShell
     public View getView(int resId);
     public void execJScript(String js);
     public void execPlugin(JSONObject json);
-    public WebViewEx getWeb();
+    public RLWebViewWrapper getWeb();
     public ITitleView getTitleView();
     public void jsCall(String funName, Object param);
     public Object pluginCallback(String funName, Object param);

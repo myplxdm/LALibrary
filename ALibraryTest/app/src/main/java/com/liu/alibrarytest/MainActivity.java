@@ -8,8 +8,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.liu.app.pluginImpl.PluginContacts;
+import com.liu.app.web.WebShellActivity;
 import com.liu.app.wx.WXSDK;
 import com.liu.lalibrary.AbsActivity;
+import com.liu.lalibrary.ui.RLTitleView;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 
 import butterknife.BindView;
@@ -57,7 +59,9 @@ public class MainActivity extends AbsActivity
         switch (view.getId())
         {
             case R.id.btnOpen:
-                //WXSDK.inst().showShareMenu(this,"","","","",WXSDK.WX_SHARE_TYPE_FIREND);
+                WebShellImpl.openWindow(this, WebShellImpl.class,
+                        R.mipmap.i_exit, "http://192.168.1.100:1024/#/11.html",
+                        "", RLTitleView.TITLE_ALIG_MIDDLE, false);
                 break;
             case R.id.btnStop:
                 break;

@@ -67,6 +67,13 @@ public class RLWebViewWrapper extends RelativeLayout implements WebViewEx.WebVie
 		pb.setVisibility(showPB ? View.VISIBLE : View.GONE);
 	}
 
+	public void reload()
+	{
+		web.reload();
+		web.setVisibility(View.INVISIBLE);
+		pb.setVisibility(View.VISIBLE);
+	}
+
 	//true, 只要网页有错就加载本地出错页面
 	public void setHaveErrRedirect(boolean isRedirect)
 	{
@@ -88,12 +95,14 @@ public class RLWebViewWrapper extends RelativeLayout implements WebViewEx.WebVie
 	public void onReceivedError(WebView view, int errorCode, String description, String failingUrl)
 	{
 		pb.setVisibility(View.GONE);
+		web.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	public void onPageFinished(WebView view, String url)
 	{
 		pb.setVisibility(View.GONE);
+		web.setVisibility(View.VISIBLE);
 	}
 
 	@Override
