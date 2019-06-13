@@ -43,10 +43,9 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:3.8.1'
     api 'com.jude:rollviewpager:1.4.5'
     api 'com.alibaba:fastjson:1.2.55'
-    api 'org.litepal.android:core:1.5.1'
     api 'com.umeng.analytics:analytics:latest.integration'
     api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     api 'com.bigkoo:alertview:1.0.3'
-    api 'com.dou361.dialogui:jjdxm-dialogui:1.0.3'
+//    api 'com.dou361.dialogui:jjdxm-dialogui:1.0.3'
     api 'com.github.yalantis:ucrop:2.2.1'
 }

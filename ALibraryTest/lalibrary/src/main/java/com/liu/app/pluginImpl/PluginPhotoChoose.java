@@ -5,15 +5,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.view.Gravity;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
-import com.dou361.dialogui.DialogUIUtils;
-import com.dou361.dialogui.bean.TieBean;
-import com.dou361.dialogui.listener.DialogUIItemListener;
 import com.liu.app.DirManager;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.plugins.IPluginEvent;
@@ -22,8 +17,6 @@ import com.liu.lalibrary.utils.AppUtils;
 import com.liu.lalibrary.utils.PermissionsUtil;
 import com.liu.lalibrary.utils.imagecache.FileHelper;
 import com.liu.lalibrary.utils.imagecache.ImageTools;
-
-import java.util.ArrayList;
 
 /**
  * Created by liu on 2017/9/1.
