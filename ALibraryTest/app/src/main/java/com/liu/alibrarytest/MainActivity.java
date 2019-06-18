@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.liu.app.data.XDataStore;
 import com.liu.app.pluginImpl.PluginContacts;
 import com.liu.app.web.WebShellActivity;
 import com.liu.app.wx.WXSDK;
@@ -38,7 +39,15 @@ public class MainActivity extends AbsActivity
     {
         ButterKnife.bind(this);
         mToBack = true;
-
+        XDataStore.inst().init(this, "test");
+        TestObj t = new TestObj();
+        t.access_token = "111";
+        t.expires_in = 20;
+        t.refresh_token = "qqq";
+        t.scope = "qwe";
+        XDataStore.inst().saveObject(t);
+        TestObj s = XDataStore.inst().getObject(TestObj.class);
+        System.out.println(s.access_token);
     }
 
     @Override

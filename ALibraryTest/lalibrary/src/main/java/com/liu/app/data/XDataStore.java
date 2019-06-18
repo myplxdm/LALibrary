@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.liu.app.DirManager;
-import com.liu.lalibrary.utils.SPUtils;
 
 /**
  * Created by liu on 2018/2/23.
@@ -84,7 +82,9 @@ public class XDataStore
 
     public void saveObject(Object obj)
     {
-        sp.edit().putString(((Class) obj).getName(), JSON.toJSONString(obj)).commit();
+        String key = obj.getClass().getName();
+        String val = JSON.toJSONString(obj);
+        sp.edit().putString(key, val).commit();
     }
 
     public <T> T getObject(Class<T> cls)
