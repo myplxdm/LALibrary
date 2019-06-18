@@ -84,7 +84,7 @@ public class XDataStore
 
     public void saveObject(Object obj)
     {
-        sp.edit().putString(obj.getClass().getName(), JSON.toJSONString(obj)).commit();
+        sp.edit().putString(((Class) obj).getName(), JSON.toJSONString(obj)).commit();
     }
 
     public <T> T getObject(Class<T> cls)
