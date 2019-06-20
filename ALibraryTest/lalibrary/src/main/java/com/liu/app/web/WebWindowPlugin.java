@@ -24,6 +24,8 @@ public class WebWindowPlugin extends WebPluginBase
     private final String WND_MASK_BACK = "maskback";
     //
     private final String WND_RELOAD = "reload";
+    //
+    private boolean isNextSelfClose;
 
     @Override
     public boolean exec(String funName, JSONObject param, String callback)
@@ -36,9 +38,9 @@ public class WebWindowPlugin extends WebPluginBase
             boolean isShowRB = JsonHelper.getBoolen(param, IWebShell.WS_SHOW_RETURN, true);
             String url = JsonHelper.getString(param, IWebShell.WS_URL, "");
             String title = JsonHelper.getString(param, IWebShell.WS_TITLE, "");
-            boolean bReload = JsonHelper.getBoolen(param, IWebShell.WS_CLOSE_RELOAD, false);
+            isNextSelfClose = JsonHelper.getBoolen(param, IWebShell.WS_IS_NEXT_SELF_CLOSE, false);
             int titleLoc = JsonHelper.getInt(param, IWebShell.WS_TITLE_LOCATION, ITitleView.TVL_MIDDLE);
-            shell.openWindow(isShowRB, url, title, titleLoc, bReload);
+            shell.openWindow(isShowRB, url, title, titleLoc);
             isProc = true;
         }else if (funName.equals(WND_CLOSE_WINDOW) || funName.equals(WND_EXIT_TO))
         {
@@ -73,6 +75,7 @@ public class WebWindowPlugin extends WebPluginBase
         {
             shell.execJScript("javascript:" + rj);
         }
+        if (isNextSelfClose) shell.closeWindow(1, false, "");
         return false;
     }
 }

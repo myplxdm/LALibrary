@@ -20,6 +20,7 @@ public interface IWebShell
     public static final String PCB_GET_SAVE_PATH = "savePath";
     //
     public static final String WS_CLOSE_RELOAD = "bCloseRelad";//当前关闭后，父窗体的web刷新
+    public static final String WS_IS_NEXT_SELF_CLOSE = "isNextSelfClose";//上层窗体关闭时同时关闭自己
     public static final String WS_CLOSE_PARENT_CLOSE_LEVEL = "num";//当前窗体关闭后父窗体多级一并关闭
     public static final String WS_CLOSE_EXEC_JS = "execJs";//当前关闭后，父窗体执行js
     public static final String WS_TITLE = "wct";
@@ -28,7 +29,7 @@ public interface IWebShell
     public static final String WS_RETURN_RES_ID = "btReturnResId";
     public static final String WS_SHOW_RETURN = "bShowReturn";
 
-    public void openWindow(boolean isShowReturn, String url, String title, int titleLoc, boolean bCloseReload);
+    public void openWindow(boolean isShowReturn, String url, String title, int titleLoc);
     public void closeWindow(int closeLevel, boolean bCloseReload, String execJs);
     public AbsActivity getActivity();
     public Class getWebActivityClass();

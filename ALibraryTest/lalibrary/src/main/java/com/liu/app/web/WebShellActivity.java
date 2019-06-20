@@ -165,23 +165,21 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
         activeWebPluginEvent(IWebPlugin.EVENT_DEINIT, null);
     }
 
-    public static void openWindow(AbsActivity activity, Class cls, int returnResId, String url, String title, int titleLoc, boolean bCloseReload)
+    public static void openWindow(AbsActivity activity, Class cls, int returnResId, String url, String title, int titleLoc)
     {
         Intent i = new Intent(activity, cls);
         i.putExtra(IWebShell.WS_TITLE, title);
         i.putExtra(IWebShell.WS_URL, url);
-        i.putExtra(IWebShell.WS_CLOSE_RELOAD, bCloseReload);
         i.putExtra(IWebShell.WS_RETURN_RES_ID, returnResId);
         i.putExtra(IWebShell.WS_TITLE_LOCATION, titleLoc);
         activity.startActivityForResult(i, IWebShell.REQ_OPEN_WEB_WINDOW);
     }
 
-    public static void openWindow(AbsActivity activity, Class cls, int returnResId, String url, String title, boolean bCloseReload)
+    public static void openWindow(AbsActivity activity, Class cls, int returnResId, String url, String title)
     {
         Intent i = new Intent(activity, cls);
         i.putExtra(IWebShell.WS_TITLE, title);
         i.putExtra(IWebShell.WS_URL, url);
-        i.putExtra(IWebShell.WS_CLOSE_RELOAD, bCloseReload);
         i.putExtra(IWebShell.WS_RETURN_RES_ID, returnResId);
         i.putExtra(IWebShell.WS_TITLE_LOCATION, RLTitleView.TITLE_ALIG_MIDDLE);
         activity.startActivityForResult(i, IWebShell.REQ_OPEN_WEB_WINDOW);
@@ -195,12 +193,11 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     }
 
     @Override
-    public void openWindow(boolean isShowReturn, String url, String title, int titleLoc, boolean bCloseReload)
+    public void openWindow(boolean isShowReturn, String url, String title, int titleLoc)
     {
         Intent i = new Intent(this, getWebActivityClass());
         i.putExtra(IWebShell.WS_TITLE, title);
         i.putExtra(IWebShell.WS_URL, url);
-        i.putExtra(IWebShell.WS_CLOSE_RELOAD, bCloseReload);
         if (isShowReturn)
         {
             i.putExtra(IWebShell.WS_RETURN_RES_ID, getReturnBtnResId());
