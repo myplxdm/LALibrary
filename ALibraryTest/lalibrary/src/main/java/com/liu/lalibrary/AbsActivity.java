@@ -425,6 +425,7 @@ public abstract class AbsActivity extends AutoLayoutActivity
         exitToData = data;
         for (int i = actList.size() - 1; i > num; i--)
         {
+            delActivity(actList.get(i));
             actList.get(i).finish();
         }
     }

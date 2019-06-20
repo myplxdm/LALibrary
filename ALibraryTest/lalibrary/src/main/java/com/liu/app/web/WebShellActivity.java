@@ -251,6 +251,7 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
         Intent i = new Intent();
         i.putExtra(WS_CLOSE_RELOAD, bCloseReload);
         i.putExtra(WS_CLOSE_EXEC_JS, execJs);
+
         AbsActivity.popNum(closeLevel, i);
     }
 }
