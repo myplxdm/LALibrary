@@ -2,9 +2,11 @@ package com.liu.app.web;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.liu.lalibrary.AbsActivity;
+import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.ui.titleview.ITitleView;
 import com.liu.lalibrary.utils.JsonHelper;
 
@@ -75,7 +77,11 @@ public class WebWindowPlugin extends WebPluginBase
         {
             shell.execJScript("javascript:" + rj);
         }
-        if (isNextSelfClose) shell.closeWindow(1, false, "");
+        Log.d("------", "isNextSelfClose = " + String.valueOf(isNextSelfClose));
+        if (isNextSelfClose)
+        {
+            shell.closeWindow(1, false, "");
+        }
         return false;
     }
 }
