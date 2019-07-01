@@ -64,6 +64,7 @@ public class VerCodeCountDown
             service.shutdown();
             service = null;
         }
+        cdView.setEnabled(true);
         if (runCB && completeCB != null)
         {
             completeCB.run();
