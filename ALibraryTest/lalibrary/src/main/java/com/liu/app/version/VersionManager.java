@@ -26,7 +26,7 @@ public class VersionManager
     public static final int VM_TYPE_AUTO = 1;//默认处理
     public static final int VM_TYPE_LOCK = 2;//锁定，这个用于pos这种情况，升级由第三方市场安装情况下
 
-    private boolean isClickUpdate;
+//    private boolean isClickUpdate;
 
     public interface OnVersionListener
     {
@@ -153,13 +153,12 @@ public class VersionManager
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                if (!lock && !isClickUpdate)
+                if (!lock)
                 {
                     update(activity, url);
                 }
                 if (enforce)
                 {
-                    isClickUpdate = true;
                     AlertDialogHelper.closeDlg(dialog, true);
                 }
             }

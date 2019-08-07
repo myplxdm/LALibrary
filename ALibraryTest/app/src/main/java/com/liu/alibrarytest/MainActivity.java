@@ -70,7 +70,7 @@ public class MainActivity extends AbsActivity
             case R.id.btnOpen:
                 WebShellImpl.openWindow(this, WebShellImpl.class,
                         R.mipmap.i_exit, "http://192.168.1.100:1024/#/11.html",
-                        "", RLTitleView.TITLE_ALIG_MIDDLE, false);
+                        "", RLTitleView.TITLE_ALIG_MIDDLE);
                 break;
             case R.id.btnStop:
                 break;

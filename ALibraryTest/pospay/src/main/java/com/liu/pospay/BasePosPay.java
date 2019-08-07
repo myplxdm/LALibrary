@@ -4,6 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
+import com.liu.lalibrary.AbsActivity;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -74,6 +77,11 @@ public abstract class BasePosPay implements IPosPay
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMdd");
         Date date = new Date(System.currentTimeMillis());
         return simpleDateFormat.format(date);
+    }
+
+    @Override
+    public void signIn(AbsActivity activity)
+    {
     }
 
     public boolean isActivityResult()

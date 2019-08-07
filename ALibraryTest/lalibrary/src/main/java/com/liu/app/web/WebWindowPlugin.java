@@ -44,13 +44,19 @@ public class WebWindowPlugin extends WebPluginBase
             int titleLoc = JsonHelper.getInt(param, IWebShell.WS_TITLE_LOCATION, ITitleView.TVL_MIDDLE);
             shell.openWindow(isShowRB, url, title, titleLoc);
             isProc = true;
-        }else if (funName.equals(WND_CLOSE_WINDOW) || funName.equals(WND_EXIT_TO))
+        }else if (funName.equals(WND_CLOSE_WINDOW))
         {
             shell.closeWindow(JsonHelper.getInt(param, IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, 1),
                     JsonHelper.getBoolen(param, IWebShell.WS_CLOSE_RELOAD, false),
                     JsonHelper.getString(param, IWebShell.WS_CLOSE_EXEC_JS, ""));
             isProc = true;
-        }else if (funName.equals(WND_MASK_BACK))
+        }else if (funName.equals(WND_EXIT_TO))
+        {
+            shell.closeWindow(AbsActivity.getNumByExitTo(JsonHelper.getInt(param, IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, 1)),
+                    JsonHelper.getBoolen(param, IWebShell.WS_CLOSE_RELOAD, false),
+                    JsonHelper.getString(param, IWebShell.WS_CLOSE_EXEC_JS, ""));
+            isProc = true;
+        } else if (funName.equals(WND_MASK_BACK))
         {
             shell.getActivity().maskBack(true);
             isProc = true;

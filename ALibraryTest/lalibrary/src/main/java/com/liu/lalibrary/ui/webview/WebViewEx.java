@@ -75,33 +75,21 @@ public class WebViewEx extends WebView
 		mContext = context;
 		this.requestFocusFromTouch();
 		WebSettings settings = this.getSettings();
-		settings.setJavaScriptEnabled(true);
-		settings.setJavaScriptCanOpenWindowsAutomatically(true);
+//		settings.setJavaScriptEnabled(true);
+//		settings.setJavaScriptCanOpenWindowsAutomatically(true);
 		settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
-		settings.setDomStorageEnabled(true);
-		settings.setBlockNetworkImage(true);
-		// settings.setRenderPriority(RenderPriority.HIGH);
-		// try
-		// {
-		// Method gingerbread_getMethod =
-		// WebSettings.class.getMethod("setNavDump", new Class[] { boolean.class
-		// });
-		//
-		// if (android.os.Build.VERSION.SDK_INT <
-		// android.os.Build.VERSION_CODES.HONEYCOMB
-		// && android.os.Build.MANUFACTURER.contains("HTC"))
-		// {
-		// gingerbread_getMethod.invoke(settings, true);
-		// }
-		// } catch (Exception e)
-		// {
-		// }
-		// if (android.os.Build.VERSION.SDK_INT >
-		// android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-		// settings.setAllowUniversalAccessFromFileURLs(true);
-		// settings.setDomStorageEnabled(true);
-		 settings.setGeolocationEnabled(true);
-		// settings.getUserAgentString();
+//		settings.setDomStorageEnabled(true);
+//		settings.setBlockNetworkImage(true);
+//		 settings.setGeolocationEnabled(true);
+		settings.setJavaScriptCanOpenWindowsAutomatically(true);//设置js可以直接打开窗口，如window.open()，默认为false
+		settings.setJavaScriptEnabled(true);//是否允许JavaScript脚本运行，默认为false。设置true时，会提醒可能造成XSS漏洞
+		settings.setSupportZoom(true);//是否可以缩放，默认true
+		settings.setUseWideViewPort(true);//设置此属性，可任意比例缩放。大视图模式
+		settings.setLoadWithOverviewMode(true);//和setUseWideViewPort(true)一起解决网页自适应问题
+		settings.setAppCacheEnabled(true);//是否使用缓存
+		settings.setDomStorageEnabled(true);//开启本地DOM存储
+		settings.setLoadsImagesAutomatically(true); // 加载图片
+		settings.setMediaPlaybackRequiresUserGesture(false);
 		client = new WebViewClientEx();
 		setWebViewClient(client);
 		setWebChromeClient(new WebChromeClientEx(context, this));
@@ -195,7 +183,7 @@ public class WebViewEx extends WebView
 		{
 			super.onPageFinished(view, url);
 			err = url.equals(ERR_URL);
-			getSettings().setBlockNetworkImage(false);
+//			getSettings().setBlockNetworkImage(false);
 			if (webEvent != null)
 			{
 				webEvent.onPageFinished(view, url);

@@ -417,6 +417,11 @@ public abstract class AbsActivity extends AutoLayoutActivity
         }
     }
 
+    public static int getNumByExitTo(int num)
+    {
+        return actList.size() - num - 1;
+    }
+
     //从当前界面返回到第几个界面 a -> b -> c ,num = 1 , back to b
     public static void exitToNum(int num, Intent data)
     {

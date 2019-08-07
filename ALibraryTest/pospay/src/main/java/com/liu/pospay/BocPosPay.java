@@ -117,7 +117,18 @@ public class BocPosPay extends BasePosPay
 
 
         insertKV(intent, (String[])keys.toArray(new String[0]), (String[])vals.toArray(new String[0]));
-        activity.startActivityForResult(intent, 288);
+        activity.startActivityForResult(intent, REQ_CODE_BOC);
+    }
+
+    @Override
+    public void signIn(AbsActivity activity)
+    {
+        String[] keys = {"channelName", "tranType"};
+        String[] vals = {"cardPay", "1"};
+        Intent i = new Intent();
+        i.setComponent(new ComponentName("com.yada.spos.cashierplatfrom", "com.yada.spos.cashierplatfrom.InvokeActivity"));
+        insertKV(i, keys, vals);
+        activity.startActivityForResult(i, REQ_CODE_BOC);
     }
 
     /*
