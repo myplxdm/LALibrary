@@ -131,6 +131,17 @@ public class BocPosPay extends BasePosPay
         activity.startActivityForResult(i, REQ_CODE_BOC);
     }
 
+    @Override
+    public void query(AbsActivity activity, JSONObject param)
+    {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.yada.spos.cashierplatfrom", "com.yada.spos.cashierplatfrom.InvokeActivity"));
+        String[] keys = { "channelName", "tranType", "oldAppOrderNo" };
+        String[] vals = {param.getString("channelName"),param.getString("tranType"),param.getString("oldAppOrderNo")};
+        insertKV(intent, keys, vals);
+        activity.startActivityForResult(intent, REQ_CODE_BOC);
+    }
+
     /*
     @Override
     public void pay(AbsActivity activity, JSONObject param)

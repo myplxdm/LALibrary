@@ -39,6 +39,7 @@ public interface IPosPay
     public JSONObject onResponse(int requestCode, int resultCode, Intent data);
     public void pay(AbsActivity activity, String curNo, String price, int payType);
     public void refund(AbsActivity activity, boolean isCancel, String curNo, String price, String param);
-    public void signIn(AbsActivity activity);
+    public void signIn(AbsActivity activity);//签到
+    public void query(AbsActivity activity, JSONObject param);
     public boolean isActivityResult();
 }

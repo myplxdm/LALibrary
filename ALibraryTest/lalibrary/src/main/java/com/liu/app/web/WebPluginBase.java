@@ -44,28 +44,24 @@ public abstract class WebPluginBase implements IWebPlugin
         return IWebPlugin.EXEC_OTHER_NO_PROC;
     }
 
-    protected boolean procCallback(boolean isProc, String callback, JSONObject values)
+    protected boolean procCallback(boolean isSuccess, String callback, JSONObject param, JSONObject values)
     {
         IWebShell shell = webShell.get();
         if (shell == null)return false;
-        if (isProc && !TextUtils.isEmpty(callback))
+        if (!TextUtils.isEmpty(callback))
         {
+            if (values == null)
+            {
+                values = new JSONObject();
+            }
+            values.put(METHOD, Utils.safeStr(param.getString(METHOD)));
+            values.put(P_ALIAS, Utils.safeStr(param.getString(P_ALIAS)));
+            values.put(SUCCESS, true);
             shell.execJScript("javascript:" + callback.replaceAll("#", values.toJSONString()));
+            return true;
         }
-        return isProc;
+        return true;
     }
-
-    protected boolean procCallback(boolean isProc, boolean isSuccess, String callback, String alias)
-    {
-        return this.procCallback(isProc, callback, JsonHelper.convert(SUCCESS,isSuccess,
-                                                               METHOD,Utils.safeStr(alias)));
-    }
-
-    protected boolean procCallback(boolean isProc, String callback, String alias)
-    {
-        return this.procCallback(isProc, true, callback, Utils.safeStr(alias));
-    }
-
     public void onResume(){}
     public void onPause(){}
     public void onStop(){}

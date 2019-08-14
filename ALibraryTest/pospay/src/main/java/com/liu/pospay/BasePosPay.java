@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
+import com.alibaba.fastjson.JSONObject;
 import com.liu.lalibrary.AbsActivity;
 
 import java.text.SimpleDateFormat;
@@ -82,6 +83,12 @@ public abstract class BasePosPay implements IPosPay
     @Override
     public void signIn(AbsActivity activity)
     {
+    }
+
+    @Override
+    public void query(AbsActivity activity, JSONObject param)
+    {
+
     }
 
     public boolean isActivityResult()

@@ -43,7 +43,8 @@ public class WebPhotoPlugin extends WebPluginBase
             alias = JsonHelper.getString(param, P_ALIAS, "");
             if (TextUtils.isEmpty(url) || TextUtils.isEmpty(key))
             {
-                return procCallback(true, false, callback, param.getString(P_ALIAS));
+                procCallback(true, callback, param, null);
+                return true;
             }
             shell.getActivity().getPluginByName(PluginFileUpload.NAME).exec(null,
                     PluginFileUpload.packetParam(url, param.getIntValue(P_CUT_ASPECTX),
@@ -80,10 +81,10 @@ public class WebPhotoPlugin extends WebPluginBase
                 try
                 {
                     ImageTools.base64ToFile(base, path + name);
-                    procCallback(true, true, callback, param.getString(P_ALIAS));
+                    procCallback(true, callback, param, null);
                 } catch (Exception e)
                 {
-                    procCallback(true, false, callback, param.getString(P_ALIAS));
+                    procCallback(true, callback, param, null);
                 }
             }
             return true;
@@ -95,9 +96,8 @@ public class WebPhotoPlugin extends WebPluginBase
     {
         if (isSuccess)
         {
-            procCallback(true, callback, JsonHelper.convert(SUCCESS, isSuccess,
-                    METHOD, alias,
-                    "result", result));
+            procCallback(true, callback, JsonHelper.convert(METHOD, alias, P_ALIAS, alias),
+                    JsonHelper.convert("result", result));
         }else
         {
             Toast.makeText(webShell.get().getActivity(), result, Toast.LENGTH_LONG).show();

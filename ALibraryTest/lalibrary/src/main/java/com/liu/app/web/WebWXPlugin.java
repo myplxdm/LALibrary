@@ -62,7 +62,9 @@ public class WebWXPlugin extends WebPluginBase implements WXSDK.WXSDXListener
             isProc = true;
         }
         isProc = isProc || (execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC ? false : true);
-        return procCallback(isProc, callback, param.getString(P_ALIAS));
+        if (!isProc)return false;
+        procCallback(true, callback, param, null);
+        return true;
     }
 
     @Override
