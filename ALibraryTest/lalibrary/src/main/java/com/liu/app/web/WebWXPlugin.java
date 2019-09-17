@@ -31,6 +31,8 @@ public class WebWXPlugin extends WebPluginBase implements WXSDK.WXSDXListener
     private final String P_NONCE_STR = "nonceStr";
     private final String P_TIME_STAMP = "timeStamp";
     private final String P_SIGN = "sign";
+    private String payCallback;
+    private String authCallback;
 
     @Override
     public boolean exec(String funName, JSONObject param, String callback)
@@ -49,7 +51,8 @@ public class WebWXPlugin extends WebPluginBase implements WXSDK.WXSDXListener
         {
             WXSDK.inst().setListener(this);
             WXSDK.inst().loginWx();
-            isProc = true;
+            authCallback = callback;
+            return true;
         }else if (funName.equals(PAY))
         {
             WXSDK.inst().setListener(this);
@@ -59,7 +62,8 @@ public class WebWXPlugin extends WebPluginBase implements WXSDK.WXSDXListener
                     JsonHelper.getString(param, P_NONCE_STR, ""),
                     JsonHelper.getString(param, P_TIME_STAMP, ""),
                     JsonHelper.getString(param, P_SIGN, ""));
-            isProc = true;
+            payCallback = callback;
+            return true;
         }
         isProc = isProc || (execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC ? false : true);
         if (!isProc)return false;
@@ -77,20 +81,19 @@ public class WebWXPlugin extends WebPluginBase implements WXSDK.WXSDXListener
     @Override
     public void onWXResp(BaseResp baseResp)
     {
-
     }
 
     @Override
     public void onWXResult(int type, JSONObject result)
     {
         String js = null;
-        if (type == WXSDK.TYPE_PAY_RESULT)
+        if (type == WXSDK.TYPE_PAY_RESULT && payCallback != null)
         {
-            js = String.format("javascript:pay_callback(%d)", result.getIntValue(WXSDK.WX_FIELD_ERRCODE));
+            js = String.format("javascript:" + payCallback + "(%d)", result.getIntValue(WXSDK.WX_FIELD_ERRCODE));
 
-        } else if (type == WXSDK.TYPE_LOGIN_RESULT)
+        } else if (type == WXSDK.TYPE_LOGIN_RESULT && authCallback != null)
         {
-            js = String.format("javascript:weioauth_callback('%s','%s')",
+            js = String.format("javascript:" + authCallback + "('%s','%s')",
                     result.getString(WXSDK.WX_FIELD_OPENID),
                     result.getString(WXSDK.WX_FIELD_UNIONID));
         }
