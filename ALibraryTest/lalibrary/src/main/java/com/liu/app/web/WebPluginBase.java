@@ -56,7 +56,7 @@ public abstract class WebPluginBase implements IWebPlugin
             }
             values.put(METHOD, Utils.safeStr(param.getString(METHOD)));
             values.put(P_ALIAS, Utils.safeStr(param.getString(P_ALIAS)));
-            values.put(SUCCESS, true);
+            values.put(SUCCESS, isSuccess);
             shell.execJScript("javascript:" + callback.replaceAll("#", values.toJSONString()));
             return true;
         }
