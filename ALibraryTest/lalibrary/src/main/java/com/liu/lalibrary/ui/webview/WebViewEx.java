@@ -5,6 +5,8 @@ import java.io.File;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -194,12 +196,19 @@ public class WebViewEx extends WebView
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request)
 		{
-			if (webEvent == null || webEvent.shouldOverrideUrlLoading(view, request.getUrl().toString()))
-			{
-				view.loadUrl(request.getUrl().toString());
-			}
 			err = false;
-			return true;
+			String scheme = request.getUrl().toString();
+			if (webEvent == null || webEvent.shouldOverrideUrlLoading(view, scheme))
+			{
+				if (!scheme.startsWith("http"))
+				{
+					Uri uri = Uri.parse(scheme);
+					Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+					mContext.startActivity(intent);
+				} else view.loadUrl(scheme);
+				return true;
+			}
+			return super.shouldOverrideUrlLoading(view, request);
 		}
 
 		@Override
@@ -207,10 +216,16 @@ public class WebViewEx extends WebView
 		{
 			if (webEvent == null || webEvent.shouldOverrideUrlLoading(view, url))
 			{
-				view.loadUrl(url);
+				if (!url.startsWith("http"))
+				{
+					Uri uri = Uri.parse(url);
+					Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+					mContext.startActivity(intent);
+				}else view.loadUrl(url);
+				return true;
 			}
 			err = false;
-			return true;
+			return super.shouldOverrideUrlLoading(view, url);
 		}
 	}
 }
