@@ -14,6 +14,11 @@ public class JsonHelper
         return json.containsKey(key) ? json.getIntValue(key) : defInt;
     }
 
+    public static long getLong(JSONObject json, String key, long defLong)
+    {
+        return json.containsKey(key) ? json.getLongValue(key) : defLong;
+    }
+
     public static String getString(JSONObject json, String key, String defStr)
     {
         return json.containsKey(key) ? json.getString(key) : defStr;
