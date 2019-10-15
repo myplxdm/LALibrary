@@ -57,6 +57,8 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
     private final String TV_MD_TXT_BTN_TITLE = "mdtxtbtntitle";
     private final String TV_CLEAR_ALL_BTN = "clsallbtn";
     private final String TV_LEFT_IMG_BTN = "addleftimgbtn";
+    private final String TV_SHOW_RETURN = "isShowReturn";
+    private final String P_IS_SHOW = "isShow";
     //--------------------------------------------
     public static final String TV_ADD_TAG = "addtag";
     private final String P_TAP_DATA = "tapdata";
@@ -151,6 +153,10 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
         {
             returnBtnIndex = tv.addImageView(LTitleView.TVL_LEFT, param.getIntValue(P_IB_RES_ID), true);
             isProc = true;
+        } else if (funName.equals(TV_SHOW_RETURN))
+        {
+            tv.showView(LTitleView.TVL_LEFT, returnBtnIndex, param.getBooleanValue(P_IS_SHOW));
+            isProc = true;
         } else if (funName.equals(TV_ADD_TAG))
         {
             index = tv.addImageView(LTitleView.TVL_MIDDLE, param.getString(P_IB_IMG_URL), true);
@@ -161,6 +167,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
             shell.jsCall(funName, JsonHelper.getString(param, P_TAP_DATA, ""));
             isProc = true;
         }
+
         isProc = isProc || !(execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC);
         if (!isProc)return false;
         procCallback(true, callback, param, null);
@@ -216,7 +223,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
         switch (bi.btnType)
         {
             case BTN_TYPE_NORMAL:
-                //shell.openWindow(true, bi.openUrl, bi.title, LTitleView.TVL_MIDDLE, bi.closeReload, 0);
+                shell.openWindow(true, bi.openUrl, bi.title, LTitleView.TVL_RIGHT);
                 break;
             case BTN_TYPE_PK:
                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -225,7 +232,8 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
                 shell.getActivity().startActivityForResult(i, IWebShell.REQ_PK);
                 break;
             case BTN_TYPE_JS:
-                shell.execJScript("javascript:" + "event_callback(#)".replaceAll("#", JsonHelper.convertToStr("method", (String) bi.data)));
+                shell.execJScript("javascript:" + "event_callback(#)".replaceAll("#", (String) bi.data));
+                //shell.execJScript("javascript:" + "event_callback(#)".replaceAll("#", JsonHelper.convertToStr("method", (String) bi.data)));
                 break;
             case BTN_TYPE_UI:
                 shell.pluginCallback((String) bi.data, null);

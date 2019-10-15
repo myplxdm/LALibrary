@@ -52,7 +52,7 @@ public class WebWindowPlugin extends WebPluginBase
             isProc = true;
         }else if (funName.equals(WND_EXIT_TO))
         {
-            shell.closeWindow(AbsActivity.getNumByExitTo(JsonHelper.getInt(param, IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, 1)),
+            shell.closeWindow(JsonHelper.getInt(param, IWebShell.WS_CLOSE_PARENT_CLOSE_LEVEL, 1),
                     JsonHelper.getBoolen(param, IWebShell.WS_CLOSE_RELOAD, false),
                     JsonHelper.getString(param, IWebShell.WS_CLOSE_EXEC_JS, ""));
             isProc = true;
@@ -85,7 +85,6 @@ public class WebWindowPlugin extends WebPluginBase
         {
             shell.execJScript("javascript:" + rj);
         }
-        Log.d("------", "isNextSelfClose = " + String.valueOf(isNextSelfClose));
         if (isNextSelfClose)
         {
             shell.closeWindow(1, false, "");

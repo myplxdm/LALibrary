@@ -233,10 +233,15 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     {
         LinearLayout ll = llSet[tvl];
         if (index >= ll.getChildCount()) return null;
-        ImageView iv = (ImageView) ll.getChildAt(index);
-        iv.setImageResource(resId);
-        AutoUtils.auto(iv);
-        return iv;
+        View v = ll.getChildAt(index);
+        if (v instanceof ImageView)
+        {
+            ImageView iv = (ImageView) ll.getChildAt(index);
+            iv.setImageResource(resId);
+            AutoUtils.auto(iv);
+            return iv;
+        }
+        return null;
     }
 
     @Override
@@ -244,34 +249,39 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     {
         LinearLayout ll = llSet[tvl];
         if (index >= ll.getChildCount()) return null;
-        final ImageView iv = (ImageView) ll.getChildAt(index);
-        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>()
+        View v = ll.getChildAt(index);
+        if (v instanceof ImageView)
         {
-            @Override
-            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
+            final ImageView iv = (ImageView) ll.getChildAt(index);
+            SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>()
             {
-                try
+                @Override
+                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition)
                 {
-                    iv.setImageBitmap(resource);
-                    iv.getLayoutParams().width = resource.getWidth();
-                    iv.getLayoutParams().height = resource.getHeight();
-                    AutoUtils.auto(iv);
-                    iv.setTag(null);
-                } catch (Exception e)
-                {
+                    try
+                    {
+                        iv.setImageBitmap(resource);
+                        iv.getLayoutParams().width = resource.getWidth();
+                        iv.getLayoutParams().height = resource.getHeight();
+                        AutoUtils.auto(iv);
+                        iv.setTag(null);
+                    } catch (Exception e)
+                    {
+                    }
                 }
-            }
-        };
-        Glide.with(getContext().getApplicationContext()).asBitmap().load(imageUrl).into(target);
-        iv.setTag(target);
-        return iv;
+            };
+            Glide.with(getContext().getApplicationContext()).asBitmap().load(imageUrl).into(target);
+            iv.setTag(target);
+            return iv;
+        }
+        return null;
     }
 
     @Override
     public View mdTxtView(int tvl, int index, String text)
     {
         LinearLayout ll = llSet[tvl];
-        if (index >= ll.getChildCount()) return null;
+        if (index >= ll.getChildCount() || !(ll.getChildAt(index) instanceof TextView)) return null;
         TextView tv = (TextView) ll.getChildAt(index);
         tv.setText(text);
         return tv;
