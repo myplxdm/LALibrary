@@ -11,8 +11,10 @@
         <attr name="photoWidth" format="integer"/>
         <attr name="photoHeight" format="integer"/>
         <attr name="tbTextColor" format="color"/>
+        <attr name="tbTextSelColor" format="color"/>
         <attr name="tbTextSize" format="integer"/>
         <attr name="tbText" format="string"/>
+        <attr name="select" format="boolean"/>
         <attr name="photoscr" format="reference"/>
         <attr name="photoselscr" format="reference"/>
         <attr name="tbSpace" format="integer"/>

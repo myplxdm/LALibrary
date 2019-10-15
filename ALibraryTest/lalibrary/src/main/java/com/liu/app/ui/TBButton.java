@@ -31,6 +31,8 @@ public class TBButton extends AutoLinearLayout
     protected TextView tvName;
     private int photoSrcRes;
     private int photoSelSrcRes;
+    private int textColor;
+    private int textSelColor;
     private boolean isSel;
 
     public TBButton(Context context, @Nullable AttributeSet attrs)
@@ -45,9 +47,11 @@ public class TBButton extends AutoLinearLayout
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TBButton);
         int pw = array.getInteger(R.styleable.TBButton_photoWidth,0);
         int ph =  array.getInteger(R.styleable.TBButton_photoHeight,0);
-        int tc = array.getColor(R.styleable.TBButton_tbTextColor,0);
+        textColor = array.getColor(R.styleable.TBButton_tbTextColor,0);
+        textSelColor = array.getColor(R.styleable.TBButton_tbTextSelColor,textColor);
         int ts = array.getInteger(R.styleable.TBButton_tbTextSize,0);
         int space = array.getInteger(R.styleable.TBButton_tbSpace,0);
+        boolean sel = array.getBoolean(R.styleable.TBButton_select,false);
         String text = array.getString(R.styleable.TBButton_tbText);
         photoSrcRes = array.getResourceId(R.styleable.TBButton_photoscr,-1);
         photoSelSrcRes = array.getResourceId(R.styleable.TBButton_photoselscr,-1);
@@ -74,12 +78,13 @@ public class TBButton extends AutoLinearLayout
         lp.setMargins(0, space, 0, 0);
         tvName.setLayoutParams(lp);
         tvName.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
-        tvName.setTextColor(tc);
+        tvName.setTextColor(textColor);
         tvName.setText(text);
         addView(tvName);
         //
         AutoUtils.auto(ivPhoto);
         AutoUtils.auto(tvName);
+        setSelect(sel);
     }
 
     public ImageView getImageView()
@@ -94,8 +99,12 @@ public class TBButton extends AutoLinearLayout
 
     public void setSelect(boolean isSel)
     {
-        this.isSel = isSel;
-        ivPhoto.setImageResource(isSel ? photoSelSrcRes : photoSrcRes);
+        if (this.isSel != isSel)
+        {
+            this.isSel = isSel;
+            ivPhoto.setImageResource(isSel ? photoSelSrcRes : photoSrcRes);
+            tvName.setTextColor(isSel ? textSelColor : textColor);
+        }
     }
 
 }
