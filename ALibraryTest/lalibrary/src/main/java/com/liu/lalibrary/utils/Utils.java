@@ -3,14 +3,10 @@ package com.liu.lalibrary.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.CookieManager;
@@ -87,11 +83,14 @@ public class Utils
 
     public static void sendSms(Activity act, String tel, String body)
     {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.putExtra("address", tel);
-        intent.putExtra("sms_body", body);
-        intent.setType("vnd.android-dirs-sms");
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+tel));
+        intent.putExtra("sms_body", body); //短信内容
         act.startActivity(intent);
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.putExtra("address", tel);
+//        intent.putExtra("sms_body", body);
+//        intent.setType("vnd.android-dirs-sms");
+//        act.startActivity(intent);
     }
 
     public static String idCardReplaceWithStar(String idCard)

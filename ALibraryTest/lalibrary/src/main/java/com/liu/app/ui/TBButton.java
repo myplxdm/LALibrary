@@ -2,24 +2,17 @@ package com.liu.app.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.liu.lalibrary.R;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.utils.AutoUtils;
-
-import java.util.HashMap;
 
 /**
  * Created by liu on 2018/4/10.
