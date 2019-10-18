@@ -97,6 +97,16 @@ public class XDataStore
         return null;
     }
 
+    public void saveBoolean(String key, boolean val)
+    {
+        sp.edit().putBoolean(key, val).commit();
+    }
+
+    public boolean getBoolean(String key, boolean def)
+    {
+        return sp.getBoolean(key, def);
+    }
+
     public void saveString(String key, String val)
     {
         sp.edit().putString(key, val).commit();
