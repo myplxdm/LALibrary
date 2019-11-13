@@ -232,8 +232,7 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
                 shell.getActivity().startActivityForResult(i, IWebShell.REQ_PK);
                 break;
             case BTN_TYPE_JS:
-                shell.execJScript("javascript:" + "event_callback(#)".replaceAll("#", (String) bi.data));
-                //shell.execJScript("javascript:" + "event_callback(#)".replaceAll("#", JsonHelper.convertToStr("method", (String) bi.data)));
+                shell.execJScript("javascript:" + "event_callback(#)".replaceAll("#", JsonHelper.convertToStr("method", (String) bi.data)));
                 break;
             case BTN_TYPE_UI:
                 shell.pluginCallback((String) bi.data, null);

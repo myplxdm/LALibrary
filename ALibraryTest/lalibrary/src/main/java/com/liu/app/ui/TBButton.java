@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.liu.lalibrary.R;
 import com.zhy.autolayout.AutoLinearLayout;
+import com.zhy.autolayout.attr.AutoAttr;
 import com.zhy.autolayout.utils.AutoUtils;
 
 /**
@@ -75,7 +76,7 @@ public class TBButton extends AutoLinearLayout
         tvName.setText(text);
         addView(tvName);
         //
-        AutoUtils.auto(ivPhoto);
+        AutoUtils.autoSize(ivPhoto, AutoAttr.BASE_HEIGHT);
         AutoUtils.auto(tvName);
         setSelect(sel);
     }
