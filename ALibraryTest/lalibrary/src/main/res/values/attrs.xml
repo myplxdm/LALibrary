@@ -28,5 +28,7 @@
         <attr name="topText" format="string"/>
         <attr name="bottomText" format="string"/>
     </declare-styleable>
-
+    <declare-styleable name="NoPaddingTextView">
+        <attr name="ttSize" format="dimension" />
+    </declare-styleable>
 </resources>
