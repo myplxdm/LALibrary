@@ -27,20 +27,13 @@ public class NoPaddingTextView extends AppCompatTextView
 
     public NoPaddingTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-                R.styleable.NoPaddingTextView, 0, 0);
-        int textSize = a.getDimensionPixelSize(R.styleable.NoPaddingTextView_ttSize, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()));
         Paint paint = new Paint();
-        paint.setTextSize(textSize);
+        paint.setTextSize(getTextSize());
         final Paint.FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
-
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, a.getDimension(R.styleable.NoPaddingTextView_ttSize, 12));
         int top = (int) Math.ceil(Math.abs((fontMetricsInt.top - fontMetricsInt.ascent) / 2.0));
-        setPadding(0, -(Math.abs(fontMetricsInt.top - fontMetricsInt.ascent) + top)
+        setPadding(0, -(Math.abs(fontMetricsInt.top - fontMetricsInt.ascent) + top) / 2
                 , 0,
                 fontMetricsInt.top - fontMetricsInt.ascent);
-        a.recycle();
     }
 //    //文本画笔
 //    private TextPaint textPaint;
