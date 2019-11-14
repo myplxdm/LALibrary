@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liu.lalibrary.R;
+import com.liu.lalibrary.ui.NoPaddingTextView;
 import com.liu.lalibrary.utils.Utils;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -22,8 +23,8 @@ import com.zhy.autolayout.utils.AutoUtils;
 
 public class TBTextView extends AutoLinearLayout
 {
-    private TextView tvTop;
-    private TextView tvBottom;
+    private NoPaddingTextView tvTop;
+    private NoPaddingTextView tvBottom;
     private final int DEF_TEXT_SIZE = 20;
     private final int DEF_TB_SPACE = 10;
 
@@ -44,8 +45,8 @@ public class TBTextView extends AutoLinearLayout
         LayoutInflater.from(context).inflate(R.layout.tb_text_view, this, true);
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
-        tvTop = (TextView) findViewById(R.id.tvTop);
-        tvBottom = (TextView) findViewById(R.id.tvBottom);
+        tvTop = findViewById(R.id.tvTop);
+        tvBottom = findViewById(R.id.tvBottom);
         //
 
         tvTop.setTextColor(array.getColor(R.styleable.TBTextView_topTextColor,0xff000000));

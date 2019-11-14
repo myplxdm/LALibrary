@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.liu.lalibrary.R;
+import com.liu.lalibrary.ui.NoPaddingTextView;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.attr.AutoAttr;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -22,7 +23,7 @@ import com.zhy.autolayout.utils.AutoUtils;
 public class TBButton extends AutoLinearLayout
 {
     protected ImageView ivPhoto;
-    protected TextView tvName;
+    protected NoPaddingTextView tvName;
     private int photoSrcRes;
     private int photoSelSrcRes;
     private int textColor;
@@ -67,7 +68,7 @@ public class TBButton extends AutoLinearLayout
             addView(ivPhoto, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
         ////////////////////////////////
-        tvName = new TextView(context);
+        tvName = new NoPaddingTextView(context);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, space, 0, 0);
         tvName.setLayoutParams(lp);
