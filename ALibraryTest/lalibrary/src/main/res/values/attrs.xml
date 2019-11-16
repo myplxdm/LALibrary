@@ -9,6 +9,7 @@
         <attr name="useMinWidth" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="TBButton">
+        <attr name="photocircular" format="boolean"/>
         <attr name="photoWidth" format="integer"/>
         <attr name="photoHeight" format="integer"/>
         <attr name="tbTextColor" format="color"/>
