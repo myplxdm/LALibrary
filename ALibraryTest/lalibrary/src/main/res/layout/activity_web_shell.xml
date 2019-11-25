@@ -16,26 +16,4 @@
         android:layout_height="match_parent"
         android:layout_below="@id/titleView"/>
 
-    <LinearLayout
-        android:layout_below="@id/titleView"
-        android:visibility="gone"
-        android:id="@+id/llFlowWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#bc000000"
-        android:orientation="vertical">
-
-        <com.liu.lalibrary.ui.FlowLayout
-            android:background="#fff"
-            android:id="@+id/flowLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="50px"
-            android:paddingLeft="30px"
-            android:paddingRight="30px"
-            android:paddingTop="50px"
-            app:height_space="50px"
-            app:width_space="30px"/>
-
-    </LinearLayout>
 </RelativeLayout>

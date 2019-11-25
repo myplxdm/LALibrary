@@ -33,6 +33,9 @@ public class FlowLayout extends ViewGroup {
     // 行的最大宽度，除去边距的宽度
     private int mMaxWidth;
 
+    //
+    private boolean useMinWidth;//开启后整个组件宽度为一行最大宽度
+
     public FlowLayout(Context context) {
         this(context, null);
     }
@@ -42,10 +45,10 @@ public class FlowLayout extends ViewGroup {
 
         // 获取自定义属性
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout);
-        horizontal_space = array.getDimension(R.styleable.FlowLayout_width_space,0);
-        vertical_space =  array.getDimension(R.styleable.FlowLayout_height_space,0);
+        horizontal_space = array.getDimension(R.styleable.FlowLayout_hor_space,0);
+        vertical_space =  array.getDimension(R.styleable.FlowLayout_ver_space,0);
+        useMinWidth = array.getBoolean(R.styleable.FlowLayout_useMinWidth, false);
         array.recycle();
-
     }
 
     @Override
@@ -94,16 +97,18 @@ public class FlowLayout extends ViewGroup {
 
         // ******************** 测量自己 *********************
         // 测量自己只需要计算高度，宽度肯定会被填充满的
+        int maxLineWidth = 0;
         int height = getPaddingTop() + getPaddingBottom();
         for (int i = 0; i < mLines.size(); i++) {
             // 所有行的高度
             height += mLines.get(i).height;
+            maxLineWidth = Math.max(mLines.get(i).usedWidth, maxLineWidth);
         }
         // 所有竖直的间距
         height += (mLines.size() - 1) * vertical_space;
 
         // 测量
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(useMinWidth ? maxLineWidth : width, height);
     }
 
     @Override

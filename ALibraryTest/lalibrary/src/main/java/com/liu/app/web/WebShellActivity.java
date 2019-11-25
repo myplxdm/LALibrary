@@ -44,8 +44,6 @@ public abstract class WebShellActivity extends AbsActivity implements IWebShell
     {
         titleView = (LTitleView) findViewById(R.id.titleView);
         webView = (RLWebViewWrapper) findViewById(R.id.webView);
-        llFlowWrapper = (LinearLayout) findViewById(R.id.llFlowWrapper);
-        flowLayout = (FlowLayout) findViewById(R.id.flowLayout);
         webView.setJsInterface(new JsInterface(this), JsInterface.JS_NAME);
     }
 

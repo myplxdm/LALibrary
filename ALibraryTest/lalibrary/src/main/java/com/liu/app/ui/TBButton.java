@@ -16,6 +16,8 @@ import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.attr.AutoAttr;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by liu on 2018/4/10.
  */
@@ -50,13 +52,20 @@ public class TBButton extends AutoLinearLayout
         String text = array.getString(R.styleable.TBButton_tbText);
         photoSrcRes = array.getResourceId(R.styleable.TBButton_photoscr,-1);
         photoSelSrcRes = array.getResourceId(R.styleable.TBButton_photoselscr,-1);
+        boolean useCir = array.getBoolean(R.styleable.TBButton_photocircular, false);
         array.recycle();
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
-        ivPhoto = new ImageView(context);
+        if (useCir)
+        {
+            ivPhoto = new CircleImageView(context);
+        }else
+        {
+            ivPhoto = new ImageView(context);
+        }
         if (photoSrcRes != -1)
         {
-            ivPhoto.setBackgroundResource(photoSrcRes);
+            ivPhoto.setImageResource(photoSrcRes);
         }
         if (pw != 0 && ph != 0)
         {

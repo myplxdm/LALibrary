@@ -210,8 +210,6 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
                 }
                 break;
             case LTitleView.TVL_MIDDLE:
-                clickBtnInfo(shell, mapBtnInfo.get(view));
-                break;
             case LTitleView.TVL_RIGHT:
                 clickBtnInfo(shell, mapBtnInfo.get(view));
                 break;

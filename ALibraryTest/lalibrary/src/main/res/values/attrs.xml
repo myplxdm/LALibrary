@@ -4,10 +4,12 @@
         <attr name="auto_textSize_base_width" format="boolean"></attr>
     </declare-styleable>
     <declare-styleable name="FlowLayout">
-        <attr name="width_space" format="dimension"/>
-        <attr name="height_space" format="dimension"/>
+        <attr name="hor_space" format="dimension"/>
+        <attr name="ver_space" format="dimension"/>
+        <attr name="useMinWidth" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="TBButton">
+        <attr name="photocircular" format="boolean"/>
         <attr name="photoWidth" format="integer"/>
         <attr name="photoHeight" format="integer"/>
         <attr name="tbTextColor" format="color"/>
