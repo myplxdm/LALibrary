@@ -108,7 +108,7 @@ public class AppUtils
 			}
 			return isIbo;
 		}
-		return false;
+		return true;
 	}
 
 }
