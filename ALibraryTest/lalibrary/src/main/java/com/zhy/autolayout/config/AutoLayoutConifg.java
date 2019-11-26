@@ -3,7 +3,9 @@ package com.zhy.autolayout.config;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 
+import com.liu.lalibrary.AbsActivity;
 import com.zhy.autolayout.utils.L;
 import com.zhy.autolayout.utils.ScreenUtils;
 
@@ -26,6 +28,8 @@ public class AutoLayoutConifg
     private int mDesignHeight;
 
     private boolean useDeviceSize;
+
+    private int screenDir;
 
 
     private AutoLayoutConifg()
@@ -53,14 +57,25 @@ public class AutoLayoutConifg
         return sIntance;
     }
 
+    public int getScreenDir()
+    {
+        Configuration mConfiguration = AbsActivity.curActivity.getResources().getConfiguration();
+        return mConfiguration.orientation;
+    }
 
     public int getScreenWidth()
     {
+        int dir = getScreenDir();
+        if (dir == Configuration.ORIENTATION_LANDSCAPE)
+            return mScreenHeight;
         return mScreenWidth;
     }
 
     public int getScreenHeight()
     {
+        int dir = getScreenDir();
+        if (dir == Configuration.ORIENTATION_LANDSCAPE)
+            return mScreenWidth;
         return mScreenHeight;
     }
 
@@ -74,11 +89,9 @@ public class AutoLayoutConifg
         return mDesignHeight;
     }
 
-
     public void init(Context context)
     {
         getMetaData(context);
-
         int[] screenSize = ScreenUtils.getScreenSize(context, useDeviceSize);
         mScreenWidth = screenSize[0];
         mScreenHeight = screenSize[1];
