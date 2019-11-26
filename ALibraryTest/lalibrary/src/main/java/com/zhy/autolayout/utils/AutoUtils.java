@@ -109,7 +109,6 @@ public class AutoUtils
         return (int) (val * 1.0f / designWidth * screenWidth);
     }
 
-
     public static int getPercentWidthSizeBigger(int val)
     {
         int screenWidth = AutoLayoutConifg.getInstance().getScreenWidth();

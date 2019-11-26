@@ -65,27 +65,29 @@ public class AutoLayoutConifg
 
     public int getScreenWidth()
     {
-        int dir = getScreenDir();
-        if (dir == Configuration.ORIENTATION_LANDSCAPE)
+        if (getScreenDir() == Configuration.ORIENTATION_LANDSCAPE)
             return mScreenHeight;
         return mScreenWidth;
     }
 
     public int getScreenHeight()
     {
-        int dir = getScreenDir();
-        if (dir == Configuration.ORIENTATION_LANDSCAPE)
+        if (getScreenDir() == Configuration.ORIENTATION_LANDSCAPE)
             return mScreenWidth;
         return mScreenHeight;
     }
 
     public int getDesignWidth()
     {
+        if (getScreenDir() == Configuration.ORIENTATION_LANDSCAPE)
+            return mDesignHeight;
         return mDesignWidth;
     }
 
     public int getDesignHeight()
     {
+        if (getScreenDir() == Configuration.ORIENTATION_LANDSCAPE)
+            return mDesignWidth;
         return mDesignHeight;
     }
 
