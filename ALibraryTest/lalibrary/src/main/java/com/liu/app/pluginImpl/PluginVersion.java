@@ -12,7 +12,7 @@ import com.liu.lalibrary.utils.JsonHelper;
  * Created by liu on 2019/1/15.
  */
 
-public class PluginVersion extends PluginBase
+public abstract class PluginVersion extends PluginBase
 {
     public static final String NAME = PluginVersion.class.getSimpleName();
     public static final String CMD_CHECK = "check";
@@ -60,6 +60,12 @@ public class PluginVersion extends PluginBase
                 {
                     return getActivity();
                 }
+
+                @Override
+                public VersionInfo getVserionInfo(String result)
+                {
+                    return getVersionInfo(result);
+                }
             });
             return true;
         }else if (cmd.equals(CMD_UPDATE))
@@ -72,4 +78,6 @@ public class PluginVersion extends PluginBase
         }
         return false;
     }
+
+    public abstract VersionInfo getVersionInfo(String result);
 }

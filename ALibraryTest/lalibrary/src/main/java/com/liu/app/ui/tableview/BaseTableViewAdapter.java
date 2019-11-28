@@ -76,7 +76,7 @@ public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefr
                     if (state == LjhHttpUtils.HU_STATE_OK && !TextUtils.isEmpty(result))
                     {
                         result = decodeNetResult(result);
-                        List list = getData(JSON.parseObject(result, NetResult.class));
+                        List list = getData(result);
                         if (list != null && list.size() > 0)
                         {
                             if (isPullDownToRefresh) BaseTableViewAdapter.this.page = 1;
@@ -133,7 +133,7 @@ public abstract class BaseTableViewAdapter extends BaseAdapter implements OnRefr
     }
 
     protected abstract String getReqUrl(int page);
-    protected abstract List getData(NetResult nr);
+    protected abstract List getData(String result);
     protected abstract String decodeNetResult(String result);
     protected abstract AbsActivity getActivity();
 }

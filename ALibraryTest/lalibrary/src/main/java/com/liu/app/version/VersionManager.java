@@ -31,8 +31,10 @@ public class VersionManager
         public void onRecvVersion(VersionInfo ver);
         //
         public int onGetUpdateType(VersionInfo ver);
-
+        //
         public AbsActivity onVMGetActivity();
+        //
+        public VersionInfo getVserionInfo(String result);
     }
 
     public void req(String url, final OnVersionListener listener)
@@ -46,10 +48,9 @@ public class VersionManager
                 {
                     try
                     {
-                        NetResult nr = JSON.parseObject(result, NetResult.class);
-                        if (nr.state == 0)
+                        final VersionInfo vi = listener.getVserionInfo(result);
+                        if (vi != null)
                         {
-                            final VersionInfo vi = JSON.parseObject(nr.obj, VersionInfo.class);
                             final AbsActivity activity = listener.onVMGetActivity();
                             if (activity == null)return;
                             listener.onRecvVersion(vi);
