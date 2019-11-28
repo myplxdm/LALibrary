@@ -4,11 +4,9 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.liu.app.network.LjhHttpUtils;
-import com.liu.app.network.NetResult;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.ui.AlertDialogHelper;

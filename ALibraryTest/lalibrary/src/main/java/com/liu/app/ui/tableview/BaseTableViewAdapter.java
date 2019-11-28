@@ -1,19 +1,15 @@
 package com.liu.app.ui.tableview;
 
 import android.text.TextUtils;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.liu.app.network.LjhHttpUtils;
-import com.liu.app.network.NetResult;
 import com.liu.lalibrary.AbsActivity;
 import com.refresh.PullToRefreshBase;
 import com.refresh.PullToRefreshBase.OnRefreshListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

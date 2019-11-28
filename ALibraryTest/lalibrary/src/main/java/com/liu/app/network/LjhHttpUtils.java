@@ -2,13 +2,9 @@ package com.liu.app.network;
 
 import android.text.TextUtils;
 
-import com.liu.app.UMengHelper;
-import com.liu.app.network.model.NetReqCmd;
 import com.liu.lalibrary.log.LogUtils;
 import com.liu.lalibrary.utils.INetworkCheck;
 import com.liu.lalibrary.utils.NetConnManager;
-import com.liu.lalibrary.utils.Utils;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,10 +34,12 @@ public class LjhHttpUtils
     private final String NERR_NETWORK = "网络错误";
     private final String NERR_NO_NETWORK = "当前无网络";
     private final String NERR_NO_NO_200 = "请求出错";
+    private final String NERR_CONTENT_EMPTY = "服务器返回空数据";
     //
     public static final int HU_STATE_OK = 0x0;
     public static final int HU_STATE_NO_NET = 0x10;//无网络
-    public static final int HU_STATE_ERR = 0x11;
+    public static final int HU_STATE_ERR = 0x11;//请求出错
+    public static final int HU_CONTENT_EMPTY = 0x12;//服务器返回内容空
 
     private static class SingletonHolder
     {
@@ -79,7 +77,7 @@ public class LjhHttpUtils
 
     private boolean checkNetwork(IHttpRespListener listener)
     {
-        if (networkCheck != null && !NetConnManager.inst().isConnect())
+        if (networkCheck != null && !networkCheck.isConnect())
         {
             listener.onHttpReqResult(HU_STATE_NO_NET, NERR_NO_NETWORK);
             return false;
@@ -91,11 +89,15 @@ public class LjhHttpUtils
     {
         try
         {
+            if (state == HU_STATE_OK && TextUtils.isEmpty(result))
+            {
+                listener.onHttpReqResult(HU_CONTENT_EMPTY, NERR_CONTENT_EMPTY);
+                return;
+            }
             listener.onHttpReqResult(state, result);
         } catch (Exception e)
         {
             listener.onHttpReqResult(HU_STATE_ERR, e.getMessage());
-            MobclickAgent.reportError(null, "url = " + url + ", exception = " + e.getMessage());
         }
     }
 
@@ -266,15 +268,5 @@ public class LjhHttpUtils
             }
         });
         return call;
-    }
-
-    public Call reqCmd(NetReqCmd cmd, IHttpRespListener listener)
-    {
-        if (!checkNetwork(listener)) return null;
-        if (!TextUtils.isEmpty(cmd.token))
-        {
-            return post(String.format("%s?access_token=%s", cmd.url, cmd.url), NetParamUtils.objToMap(cmd.paramObj), listener);
-        }
-        return post(cmd.url, NetParamUtils.objToMap(cmd.paramObj), listener);
     }
 }
