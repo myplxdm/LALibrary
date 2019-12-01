@@ -129,12 +129,6 @@ public class LjhHttpUtils
         return exeCall(url, call, listener);
     }
 
-    public Call post(final String url, HashMap<String, String> params,
-                     final IHttpRespListener listener)
-    {
-        return this.post(url, params, null, listener);
-    }
-
     public Call postJson(final String url, String json, final IHttpRespListener listener)
     {
         if (!checkNetwork(listener)) return null;
@@ -145,6 +139,29 @@ public class LjhHttpUtils
                 .build();
         Call call = client.newCall(request);
         return exeCall(url, call, listener);
+    }
+
+    public Call postJson(final String url, String json,
+                         HashMap<String,String> header, final IHttpRespListener listener)
+    {
+        if (!checkNetwork(listener)) return null;
+        RequestBody body = FormBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        Request.Builder rb = new Request.Builder().url(url);
+        if (header != null)
+        {
+            for (Map.Entry<String, String> en : header.entrySet())
+            {
+                rb.addHeader(en.getKey(), en.getValue());
+            }
+        }
+        Call call = client.newCall(rb.post(body).build());
+        return exeCall(url, call, listener);
+    }
+
+    public Call post(final String url, HashMap<String, String> params,
+                     final IHttpRespListener listener)
+    {
+        return this.post(url, params, null, listener);
     }
 
     public Call post(final String url, HashMap<String, String> params,
