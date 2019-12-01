@@ -46,6 +46,7 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
     public static final String WX_FIELD_HEADIMGURL = "headimgurl";
     public static final String WX_FIELD_ERRCODE = "errcode";
     public static final String WX_FIELD_ERRMSG = "errmsg";
+    public static final String WX_FIELD_TOKEN = "access_token";
     //
     public static final int TYPE_LOGIN_RESULT = 1;
     public static final int TYPE_USER_REJECT_AUTH = 2;
@@ -167,14 +168,6 @@ public class WXSDK extends LoaderBase implements IWXAPIEventHandler
                     sendUrl(title, desc, imgUrl, url, position == 1);
                 }
             }).show();
-//            new BottomSheet.Builder(activity, R.style.BottomSheetStyleDialog).title("分享").sheet(R.menu.menu_wx_share).listener(new DialogInterface.OnClickListener()
-//            {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which)
-//                {
-//                    sendUrl(title, desc, imgUrl, url, which == 1);
-//                }
-//            }).grid().build().show();
         } else
         {
             sendUrl(title, desc, imgUrl, url, (shareType & WX_SHARE_TYPE_TIMELINE) == WX_SHARE_TYPE_TIMELINE);
