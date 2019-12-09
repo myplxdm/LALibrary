@@ -4,15 +4,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,9 +21,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liu.lalibrary.R;
+import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
 import com.zhy.autolayout.attr.AutoAttr;
 import com.zhy.autolayout.utils.AutoUtils;
+
+import q.rorbin.badgeview.QBadgeView;
+import q.rorbin.badgeview.Badge;
 
 /**
  * Created by liu on 2017/4/20.
@@ -39,6 +42,7 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     //
     private boolean middelClickSetup;
     private int space;
+    private SparseArray<Badge> badgeList = new SparseArray<>(5);
     //
     private LinearLayout llSet[] = new LinearLayout[3];
     //
@@ -57,18 +61,18 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     public LTitleView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
-        llSet[0] = new LinearLayout(context);
-        AutoRelativeLayout.LayoutParams lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        llSet[0] = new AutoLinearLayout(context);
+        AutoRelativeLayout.LayoutParams lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         lp.addRule(RelativeLayout.CENTER_VERTICAL);
         addView(llSet[0], lp);
         //
-        llSet[1] = new LinearLayout(context);
-        lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        llSet[1] = new AutoLinearLayout(context);
+        lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         lp.addRule(RelativeLayout.CENTER_IN_PARENT);
         addView(llSet[1], lp);
         //
-        llSet[2] = new LinearLayout(context);
-        lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        llSet[2] = new AutoLinearLayout(context);
+        lp = new AutoRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         lp.addRule(RelativeLayout.CENTER_VERTICAL);
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         addView(llSet[2], lp);
@@ -158,7 +162,8 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
     {
         TextView tv = new TextView(getContext());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        tv.setGravity(Gravity.CENTER);
         tv.setText(text);
         tv.setTextColor(textColor);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
@@ -293,6 +298,19 @@ public class LTitleView extends AutoRelativeLayout implements ITitleView
         LinearLayout ll = llSet[tvl];
         if (index >= ll.getChildCount()) return;
         ll.getChildAt(index).setVisibility(isShow ? View.VISIBLE : View.GONE);
+    }
+
+    public void showViewBadge(int tvl, int index, int count)
+    {
+        Badge bg = badgeList.get(tvl * 100 + index);
+        if (bg == null)
+        {
+            bg = new QBadgeView(getContext()).bindTarget(getView(tvl, index));
+            bg.setBadgeGravity(Gravity.END | Gravity.TOP);
+            bg.setBadgeTextSize(8, true);
+            badgeList.put(tvl * 100, bg);
+        }
+        bg.setBadgeNumber(count);
     }
 
     @Override

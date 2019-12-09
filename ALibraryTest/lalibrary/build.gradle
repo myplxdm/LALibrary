@@ -50,4 +50,5 @@ dependencies {
     api 'de.hdodenhof:circleimageview:3.0.0'
 //    api 'com.dou361.dialogui:jjdxm-dialogui:1.0.3'
     api 'com.github.yalantis:ucrop:2.2.1'
+    api 'q.rorbin:badgeview:1.1.3'
 }

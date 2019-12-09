@@ -28,6 +28,7 @@ public interface ITitleView
     public View mdImgView(int tvl, int index, String imageUrl);
     public View mdTxtView(int tvl, int index, String text);
     public void showView(int tvl, int index, boolean isShow);
+    public void showViewBadge(int tvl, int index, int count);
     public void clearView(int tvl);
     public void setTitleViewListener(LTitleView.TitleViewListener listener);
     public void setBottomLine(int color, int height);

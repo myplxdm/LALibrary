@@ -5,26 +5,16 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+    <com.liu.lalibrary.ui.titleview.LTitleView
+        android:background="#fff"
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="159px"/>
     <Button
-        android:text="open"
+        android:id="@+id/btn"
+        android:text="test"
+        android:textColor="#000"
         android:textSize="50px"
-        android:textColor="#000"
-        android:id="@+id/btnOpen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:text="stop"
-        android:textSize="50px"
-        android:textColor="#000"
-        android:id="@+id/btnStop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <com.liu.lalibrary.ui.NoPaddingTextView
-        android:background="#f1f"
-        android:textColor="#000"
-        app:ttSize="90px"
-        android:text="102洋"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

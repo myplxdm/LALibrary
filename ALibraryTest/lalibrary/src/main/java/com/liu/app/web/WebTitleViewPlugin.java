@@ -66,11 +66,15 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
     private final String TV_SET_TITLE = "settitle";
     private final String TV_SET_RETURN = "setreturn";
     //
+    private final String TV_SHOW_BADGE = "showBadge";
+    private final String P_BADGE_COUNT = "badgeCount";//数字小于0时显示dot，等于0时隐藏整个Badge，在普通模式下超过99时显示99+，精确模式下显示具体值
+    //
     private int returnBtnIndex = -1;
     private int titleLocation = LTitleView.TVL_MIDDLE;
     private int titleIndex = -1;
 
     private HashMap<View, BtnInfo> mapBtnInfo = new HashMap<>();
+
 
     @Override
     public void init(IWebShell ws, Intent data)
@@ -106,7 +110,6 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
             isProc = true;
         } else if (funName.equals(TV_ADD_TXT_BTN))
         {
-
             index = tv.addTextView(LTitleView.TVL_RIGHT, param.getString(P_TB_TEXT),
                     JsonHelper.getInt(param, P_TB_TEXT_SIZE, tv.getContext().getResources().getDimensionPixelOffset(R.dimen.title_view_btn_size)),
                     JsonHelper.getInt(param, P_TB_TEXT_COLOR, 0xff000000), true);
@@ -166,8 +169,11 @@ public class WebTitleViewPlugin extends WebPluginBase implements ITitleView.Titl
             mapBtnInfo.put(tv.getView(ITitleView.TVL_MIDDLE, index), bi);
             shell.jsCall(funName, JsonHelper.getString(param, P_TAP_DATA, ""));
             isProc = true;
+        } else if (funName.equals(TV_SHOW_BADGE))
+        {
+            tv.showViewBadge(LTitleView.TVL_RIGHT, param.getIntValue(P_INDEX), param.getIntValue(P_BADGE_COUNT));
+            isProc = true;
         }
-
         isProc = isProc || !(execOther(funName, param, callback) == IWebPlugin.EXEC_OTHER_NO_PROC);
         if (!isProc)return false;
         procCallback(true, callback, param, null);
