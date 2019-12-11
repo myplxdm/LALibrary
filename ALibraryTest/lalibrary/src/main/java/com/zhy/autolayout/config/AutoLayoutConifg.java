@@ -17,7 +17,6 @@ public class AutoLayoutConifg
 
     private static AutoLayoutConifg sIntance = new AutoLayoutConifg();
 
-
     private static final String KEY_DESIGN_WIDTH = "design_width";
     private static final String KEY_DESIGN_HEIGHT = "design_height";
 
@@ -29,8 +28,7 @@ public class AutoLayoutConifg
 
     private boolean useDeviceSize;
 
-    private int screenDir;
-
+    private Context context;
 
     private AutoLayoutConifg()
     {
@@ -59,7 +57,7 @@ public class AutoLayoutConifg
 
     public int getScreenDir()
     {
-        Configuration mConfiguration = AbsActivity.curActivity.getResources().getConfiguration();
+        Configuration mConfiguration = context.getResources().getConfiguration();
         return mConfiguration.orientation;
     }
 
@@ -93,6 +91,7 @@ public class AutoLayoutConifg
 
     public void init(Context context)
     {
+        this.context = context;
         getMetaData(context);
         int[] screenSize = ScreenUtils.getScreenSize(context, useDeviceSize);
         mScreenWidth = screenSize[0];
