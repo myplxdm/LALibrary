@@ -73,6 +73,7 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
         super.addView(child, params);
         stateList.put(getChildCount() - 1, 0);
         child.setOnClickListener(this);
+        AutoUtils.auto(child);
     }
 
     @Override
@@ -81,6 +82,7 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
         super.addView(child);
         stateList.put(getChildCount() - 1, 0);
         child.setOnClickListener(this);
+        AutoUtils.auto(child);
     }
 
     public void setFlowItemListener(FlowItemListener listener)
