@@ -127,7 +127,7 @@
             android:checked="true"
             android:gravity="center"
             android:text="精准扶贫"
-            android:textColor="@drawable/selector_main_bm_btn"
+            android:textColor="@drawable/selector_tag_bg"
             android:textSize="50px"/>
 
         <RadioButton
@@ -138,7 +138,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="公益活动"
-            android:textColor="@drawable/selector_main_bm_btn"
+            android:textColor="@drawable/selector_tag_bg"
             android:textSize="50px"/>
 
         <RadioButton
@@ -149,7 +149,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="捐赠众筹"
-            android:textColor="@drawable/selector_main_bm_btn"
+            android:textColor="@drawable/selector_tag_bg"
             android:textSize="50px"/>
 
     </com.zhy.autolayout.widget.AutoRadioGroup>

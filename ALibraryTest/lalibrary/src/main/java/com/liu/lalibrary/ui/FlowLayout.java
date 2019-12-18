@@ -3,10 +3,12 @@ package com.liu.lalibrary.ui;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.liu.lalibrary.R;
+import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,14 @@ import java.util.List;
  * Created by Pinger on 2016/10/6.
  */
 
-public class FlowLayout extends ViewGroup {
+public class FlowLayout extends ViewGroup implements View.OnClickListener
+{
+    public interface FlowItemListener
+    {
+        public void onFlowSelItem(View child, boolean isSel, int index);
+
+    }
+
     /**
      * 存储行的集合，管理行
      */
@@ -33,26 +42,79 @@ public class FlowLayout extends ViewGroup {
     // 行的最大宽度，除去边距的宽度
     private int mMaxWidth;
 
+    // 状态
+    private SparseIntArray stateList = new SparseIntArray(50);
+    private boolean isMultilSel;
+    private int curSelIndex = -1;
+    private FlowItemListener listener;
     //
     private boolean useMinWidth;//开启后整个组件宽度为一行最大宽度
 
-    public FlowLayout(Context context) {
+    public FlowLayout(Context context)
+    {
         this(context, null);
     }
 
-    public FlowLayout(Context context, AttributeSet attrs) {
+    public FlowLayout(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
 
         // 获取自定义属性
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout);
-        horizontal_space = array.getDimension(R.styleable.FlowLayout_hor_space,0);
-        vertical_space =  array.getDimension(R.styleable.FlowLayout_ver_space,0);
+        horizontal_space = AutoUtils.getPercentHeightSize(array.getDimensionPixelSize(R.styleable.FlowLayout_hor_space, 0));
+        vertical_space = AutoUtils.getPercentHeightSize(array.getDimensionPixelSize(R.styleable.FlowLayout_ver_space, 0));
         useMinWidth = array.getBoolean(R.styleable.FlowLayout_useMinWidth, false);
         array.recycle();
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void addView(View child)
+    {
+        super.addView(child);
+        stateList.put(getChildCount() - 1, 0);
+        child.setOnClickListener(this);
+    }
+
+    public void setFlowItemListener(FlowItemListener listener)
+    {
+        this.listener = listener;
+    }
+
+    public void setMultilSel(boolean isMultilSel)
+    {
+        this.isMultilSel = isMultilSel;
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        if (listener == null)return;
+        int index = indexOfChild(view);
+        if (!isMultilSel)
+        {
+            if (curSelIndex != -1)
+            {
+                listener.onFlowSelItem(view, false, curSelIndex);
+                stateList.put(curSelIndex, 0);
+                curSelIndex = -1;
+            }
+            if (curSelIndex != index)
+            {
+                listener.onFlowSelItem(view, true, index);
+                stateList.put(index, 1);
+                curSelIndex = index;
+            }
+        } else
+        {
+            boolean isSel = stateList.get(index) == 1;
+            listener.onFlowSelItem(view, !isSel, index);
+            stateList.put(index, isSel ? 0 : 1);
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
         // 每次测量之前都先清空集合，不让会覆盖掉以前
         mLines.clear();
         mCurrentLine = null;
@@ -65,14 +127,16 @@ public class FlowLayout extends ViewGroup {
         // ******************** 测量孩子 ********************
         // 遍历获取孩子
         int childCount = this.getChildCount();
-        for (int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++)
+        {
             View childView = getChildAt(i);
             // 测量孩子
             measureChild(childView, widthMeasureSpec, heightMeasureSpec);
 
             // 测量完需要将孩子添加到管理行的孩子的集合中，将行添加到管理行的集合中
 
-            if (mCurrentLine == null) {
+            if (mCurrentLine == null)
+            {
                 // 初次添加第一个孩子的时候
                 mCurrentLine = new Line(mMaxWidth, horizontal_space);
 
@@ -81,12 +145,15 @@ public class FlowLayout extends ViewGroup {
                 // 添加行
                 mLines.add(mCurrentLine);
 
-            } else {
+            } else
+            {
                 // 行中有孩子的时候，判断时候能添加
-                if (mCurrentLine.canAddView(childView)) {
+                if (mCurrentLine.canAddView(childView))
+                {
                     // 继续往该行里添加
                     mCurrentLine.addView(childView);
-                } else {
+                } else
+                {
                     //  添加到下一行
                     mCurrentLine = new Line(mMaxWidth, horizontal_space);
                     mCurrentLine.addView(childView);
@@ -99,7 +166,8 @@ public class FlowLayout extends ViewGroup {
         // 测量自己只需要计算高度，宽度肯定会被填充满的
         int maxLineWidth = 0;
         int height = getPaddingTop() + getPaddingBottom();
-        for (int i = 0; i < mLines.size(); i++) {
+        for (int i = 0; i < mLines.size(); i++)
+        {
             // 所有行的高度
             height += mLines.get(i).height;
             maxLineWidth = Math.max(mLines.get(i).usedWidth, maxLineWidth);
@@ -112,11 +180,13 @@ public class FlowLayout extends ViewGroup {
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    protected void onLayout(boolean changed, int l, int t, int r, int b)
+    {
         // 这里只负责高度的位置，具体的宽度和子孩子的位置让具体的行去管理
         l = getPaddingLeft();
         t = getPaddingTop();
-        for (int i = 0; i < mLines.size(); i++) {
+        for (int i = 0; i < mLines.size(); i++)
+        {
             // 获取行
             Line line = mLines.get(i);
             // 管理
@@ -124,7 +194,8 @@ public class FlowLayout extends ViewGroup {
 
             // 更新高度
             t += line.height;
-            if (i != mLines.size() - 1) {
+            if (i != mLines.size() - 1)
+            {
                 // 不是最后一条就添加间距
                 t += vertical_space;
             }
@@ -134,7 +205,8 @@ public class FlowLayout extends ViewGroup {
     /**
      * 内部类，行管理器，管理每一行的孩子
      */
-    public class Line {
+    public class Line
+    {
         // 定义一个行的集合来存放子View
         private List<View> views = new ArrayList<>();
         // 行的最大宽度
@@ -147,7 +219,8 @@ public class FlowLayout extends ViewGroup {
         private float space;
 
         // 通过构造初始化最大宽度和边距
-        public Line(int maxWidth, float horizontalSpace) {
+        public Line(int maxWidth, float horizontalSpace)
+        {
             this.maxWidth = maxWidth;
             this.space = horizontalSpace;
         }
@@ -155,21 +228,26 @@ public class FlowLayout extends ViewGroup {
         /**
          * 往集合里添加孩子
          */
-        public void addView(View view) {
+        public void addView(View view)
+        {
             int childWidth = view.getMeasuredWidth();
             int childHeight = view.getMeasuredHeight();
 
             // 更新行的使用宽度和高度
-            if (views.size() == 0) {
+            if (views.size() == 0)
+            {
                 // 集合里没有孩子的时候
-                if (childWidth > maxWidth) {
+                if (childWidth > maxWidth)
+                {
                     usedWidth = maxWidth;
                     height = childHeight;
-                } else {
+                } else
+                {
                     usedWidth = childWidth;
                     height = childHeight;
                 }
-            } else {
+            } else
+            {
                 usedWidth += childWidth + space;
                 height = childHeight > height ? childHeight : height;
             }
@@ -184,14 +262,17 @@ public class FlowLayout extends ViewGroup {
          *
          * @return
          */
-        public boolean canAddView(View view) {
+        public boolean canAddView(View view)
+        {
             // 集合里没有数据可以添加
-            if (views.size() == 0) {
+            if (views.size() == 0)
+            {
                 return true;
             }
 
             // 最后一个孩子的宽度大于剩余宽度就不添加
-            if (view.getMeasuredWidth() > (maxWidth - usedWidth - space)) {
+            if (view.getMeasuredWidth() > (maxWidth - usedWidth - space))
+            {
                 return false;
             }
 
@@ -205,12 +286,14 @@ public class FlowLayout extends ViewGroup {
          * @param t
          * @param l
          */
-        public void layout(int t, int l) {
+        public void layout(int t, int l)
+        {
             // 平分剩下的空间
             int avg = (maxWidth - usedWidth) / views.size();
 
             // 循环指定孩子位置
-            for (View view : views) {
+            for (View view : views)
+            {
                 // 获取宽高
                 int measuredWidth = view.getMeasuredWidth();
                 int measuredHeight = view.getMeasuredHeight();
