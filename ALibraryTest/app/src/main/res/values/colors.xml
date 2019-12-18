@@ -7,5 +7,8 @@
     <color name="colorMainBmBtn">#999999</color>
     <color name="colorWindowBg">#eef1f6</color>
     <color name="colorSepLine">#dcdcdc</color>
-
+    <color name="tagTextSel">#fff</color>
+    <color name="tagText">#303133</color>
+    <color name="tagBgSel">#FF953D</color>
+    <color name="tagBg">#F5F7FA</color>
 </resources>

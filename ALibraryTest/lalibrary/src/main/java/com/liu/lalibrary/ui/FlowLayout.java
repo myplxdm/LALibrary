@@ -68,6 +68,14 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
     }
 
     @Override
+    public void addView(View child, LayoutParams params)
+    {
+        super.addView(child, params);
+        stateList.put(getChildCount() - 1, 0);
+        child.setOnClickListener(this);
+    }
+
+    @Override
     public void addView(View child)
     {
         super.addView(child);
@@ -88,26 +96,26 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
     @Override
     public void onClick(View view)
     {
-        if (listener == null)return;
         int index = indexOfChild(view);
+        View oldView = null;
         if (!isMultilSel)
         {
             if (curSelIndex != -1)
             {
-                listener.onFlowSelItem(view, false, curSelIndex);
+                if (listener != null) listener.onFlowSelItem(getChildAt(curSelIndex), false, curSelIndex);
                 stateList.put(curSelIndex, 0);
                 curSelIndex = -1;
             }
             if (curSelIndex != index)
             {
-                listener.onFlowSelItem(view, true, index);
+                if (listener != null) listener.onFlowSelItem(view, true, index);
                 stateList.put(index, 1);
                 curSelIndex = index;
             }
         } else
         {
             boolean isSel = stateList.get(index) == 1;
-            listener.onFlowSelItem(view, !isSel, index);
+            if (listener != null) listener.onFlowSelItem(view, !isSel, index);
             stateList.put(index, isSel ? 0 : 1);
         }
     }

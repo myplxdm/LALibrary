@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.liu.app.pluginImpl.PluginContacts;
 import com.liu.lalibrary.AbsActivity;
@@ -38,17 +39,28 @@ public class MainActivity extends AbsActivity
     {
         ButterKnife.bind(this);
         LayoutInflater li = LayoutInflater.from(this);
-        RadioButton rb;
-        for (int i = 0; i < 10; i++)
+        RadioButton rb = null;
+        fl.setMultilSel(true);
+        for (int i = 0; i < 3; i++)
         {
-
+            //rb = new RadioButton(this);
+            //rb.setPadding(30, 30, 30, 30);
+            //rb.sette
+            View.inflate(this, R.layout.tag_item, fl); //li.inflate(R.layout.tag_item, null, false);
+            rb = (RadioButton) fl.getChildAt(i);
+            rb.setText("test" + i);
+            //fl.addView(rb);
         }
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
+        fl.setFlowItemListener(new FlowLayout.FlowItemListener()
+        {
+            @Override
+            public void onFlowSelItem(View child, boolean isSel, int index)
+            {
+                ((RadioButton) child).setChecked(isSel);
+                String ss = String.format("%s %d", ((RadioButton) child).getText().toString(), isSel ? 1 : 0);
+                Toast.makeText(MainActivity.this, ss, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

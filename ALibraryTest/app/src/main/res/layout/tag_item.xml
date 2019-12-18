@@ -5,7 +5,9 @@
     android:orientation="vertical">
 
     <RadioButton
+        android:button="@null"
         android:id="@+id/rb"
+        android:padding="30px"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_tag_bg"
