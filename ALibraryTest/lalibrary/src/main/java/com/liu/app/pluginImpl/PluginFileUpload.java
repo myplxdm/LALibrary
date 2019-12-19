@@ -109,7 +109,7 @@ public class PluginFileUpload extends PluginBase
                     {
 
                         ImageTools.savePhotoToSDCard(ImageTools.getPhotoFromSDCard(path, maxWHPX, maxWHPX),
-                                path, true);
+                                path, 100);
                     }
                     uploadFile(path, fileKey);
                 }

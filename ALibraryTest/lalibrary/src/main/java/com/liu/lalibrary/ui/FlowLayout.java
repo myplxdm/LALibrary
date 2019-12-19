@@ -47,6 +47,7 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
     private boolean isMultilSel;
     private int curSelIndex = -1;
     private FlowItemListener listener;
+    private int selCount = 0;
     //
     private boolean useMinWidth;//开启后整个组件宽度为一行最大宽度
 
@@ -95,11 +96,24 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
         this.isMultilSel = isMultilSel;
     }
 
+    public ArrayList<Integer> getSelectList()
+    {
+        if (selCount == 0)return null;
+        ArrayList<Integer> list = new ArrayList<>(selCount);
+        for (int i = 0;i < getChildCount();i++)
+        {
+            if (stateList.get(i) == 1)
+            {
+                list.add(i);
+            }
+        }
+        return list;
+    }
+
     @Override
     public void onClick(View view)
     {
         int index = indexOfChild(view);
-        View oldView = null;
         if (!isMultilSel)
         {
             if (curSelIndex != -1)
@@ -107,18 +121,21 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
                 if (listener != null) listener.onFlowSelItem(getChildAt(curSelIndex), false, curSelIndex);
                 stateList.put(curSelIndex, 0);
                 curSelIndex = -1;
+                selCount = 0;
             }
             if (curSelIndex != index)
             {
                 if (listener != null) listener.onFlowSelItem(view, true, index);
                 stateList.put(index, 1);
                 curSelIndex = index;
+                selCount = 1;
             }
         } else
         {
             boolean isSel = stateList.get(index) == 1;
             if (listener != null) listener.onFlowSelItem(view, !isSel, index);
             stateList.put(index, isSel ? 0 : 1);
+            selCount += !isSel ? 1 : -1;
         }
     }
 

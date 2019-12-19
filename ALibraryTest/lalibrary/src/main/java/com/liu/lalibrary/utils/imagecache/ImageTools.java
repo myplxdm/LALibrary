@@ -479,11 +479,16 @@ public final class ImageTools
         return flag;
     }
 
-    public static String savePhotoToSDCard(Bitmap photoBitmap, String path, boolean checkSD)
+    public static String savePhotoToSDCard(Bitmap photoBitmap, String path, int quaity)
+    {
+        return savePhotoToSDCard(photoBitmap, path, true, quaity);
+    }
+
+    public static String savePhotoToSDCard(Bitmap photoBitmap, String path, boolean checkSD, int quaity)
     {
         if (TextUtils.isEmpty(path)) return path;
         int index = path.lastIndexOf(File.separator);
-        return savePhotoToSDCard(photoBitmap, path.substring(0, index), path.substring(index + 1, path.length()), checkSD);
+        return savePhotoToSDCard(photoBitmap, path.substring(0, index), path.substring(index + 1, path.length()), checkSD, quaity);
     }
 
     /**
@@ -494,9 +499,9 @@ public final class ImageTools
      * @param path
      */
     public static String savePhotoToSDCard(Bitmap photoBitmap, String path,
-                                           String photoName, boolean checkSD)
+                                           String photoName, boolean checkSD, int quaity)
     {
-        if (checkSD && !checkSDCardAvailable())
+        if (TextUtils.isEmpty(path) || (checkSD && !checkSDCardAvailable()))
             return null;
 
         File dir = new File(path);
@@ -513,7 +518,7 @@ public final class ImageTools
             if (photoBitmap != null)
             {
                 if (photoBitmap.compress(jpg ? Bitmap.CompressFormat.JPEG
-                        : Bitmap.CompressFormat.PNG, 100, fileOutputStream))
+                        : Bitmap.CompressFormat.PNG, quaity, fileOutputStream))
                 {
                     fileOutputStream.flush();
                 }

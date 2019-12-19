@@ -229,7 +229,7 @@ public class PhotoProcActivity extends AbsActivity implements View.OnClickListen
             touchPlate.drawInBmp(bmp, new Rect(fl_bg_canva.getLeft(), fl_bg_canva.getTop(), fl_bg_canva.getRight(), fl_bg_canva.getBottom()));
 
             String saveFileName = "tmp." + Utils.getExtName(filePath);
-            ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), saveFileName, true);
+            ImageTools.savePhotoToSDCard(bmp, Utils.getPath(filePath), saveFileName, true, 100);
             bmp.recycle();
 
             Intent rs = new Intent();

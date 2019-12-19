@@ -14,6 +14,8 @@ import com.liu.app.pluginImpl.PluginContacts;
 import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.ui.FlowLayout;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -43,13 +45,9 @@ public class MainActivity extends AbsActivity
         fl.setMultilSel(true);
         for (int i = 0; i < 3; i++)
         {
-            //rb = new RadioButton(this);
-            //rb.setPadding(30, 30, 30, 30);
-            //rb.sette
             View.inflate(this, R.layout.tag_item, fl); //li.inflate(R.layout.tag_item, null, false);
             rb = (RadioButton) fl.getChildAt(i);
             rb.setText("test" + i);
-            //fl.addView(rb);
         }
         fl.setFlowItemListener(new FlowLayout.FlowItemListener()
         {
@@ -57,8 +55,8 @@ public class MainActivity extends AbsActivity
             public void onFlowSelItem(View child, boolean isSel, int index)
             {
                 ((RadioButton) child).setChecked(isSel);
-                String ss = String.format("%s %d", ((RadioButton) child).getText().toString(), isSel ? 1 : 0);
-                Toast.makeText(MainActivity.this, ss, Toast.LENGTH_LONG).show();
+                //String ss = String.format("%s %d", ((RadioButton) child).getText().toString(), isSel ? 1 : 0);
+                //Toast.makeText(MainActivity.this, ss, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -72,5 +70,7 @@ public class MainActivity extends AbsActivity
     @OnClick(R.id.add)
     public void onViewClicked()
     {
+        ArrayList list = fl.getSelectList();
+        toast("size = " + (list == null ? 0 : list.size()));
     }
 }

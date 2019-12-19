@@ -129,7 +129,7 @@ public class PluginPhotoChoose extends PluginBase
                     if (bmp != null)
                     {
                         path = ImageTools.savePhotoToSDCard(bmp, DirManager.inst().getDirByType(DirManager.DIR_CACHE),
-                                                            TAKE_PHOTO_NAME, true);
+                                                            TAKE_PHOTO_NAME, true,100);
                         if (path != null) event.pluginResult(true, path, null);
                     }
                     event.pluginResult(false, "", null);
