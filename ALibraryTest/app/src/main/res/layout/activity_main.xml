@@ -15,12 +15,13 @@
         android:textSize="50px" />
 
     <com.liu.lalibrary.ui.FlowLayout
+        android:layout_gravity="center_horizontal"
         android:id="@+id/fl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hor_space="60px"
         app:useMinWidth="true"
-        app:ver_space="60px" />
+        app:hor_space="60px"
+        app:ver_space="60px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <!--    <com.liu.app.ui.TBButton-->
     <!--        android:layout_gravity="center_horizontal"-->
     <!--        app:photoWidth="120"-->

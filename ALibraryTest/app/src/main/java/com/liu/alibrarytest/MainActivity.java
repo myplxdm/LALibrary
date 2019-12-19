@@ -41,13 +41,12 @@ public class MainActivity extends AbsActivity
     {
         ButterKnife.bind(this);
         LayoutInflater li = LayoutInflater.from(this);
-        RadioButton rb = null;
-        fl.setMultilSel(true);
-        for (int i = 0; i < 3; i++)
+        TagButton tb;
+        for (int i = 0;i < 3;i++)
         {
-            View.inflate(this, R.layout.tag_item, fl); //li.inflate(R.layout.tag_item, null, false);
-            rb = (RadioButton) fl.getChildAt(i);
-            rb.setText("test" + i);
+            tb = new TagButton(this);
+            tb.setText("test " + i);
+            fl.addView(tb);
         }
         fl.setFlowItemListener(new FlowLayout.FlowItemListener()
         {

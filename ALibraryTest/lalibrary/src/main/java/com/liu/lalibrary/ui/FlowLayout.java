@@ -116,20 +116,22 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
         int index = indexOfChild(view);
         if (!isMultilSel)
         {
+            int newSel = curSelIndex;
             if (curSelIndex != -1)
             {
                 if (listener != null) listener.onFlowSelItem(getChildAt(curSelIndex), false, curSelIndex);
                 stateList.put(curSelIndex, 0);
-                curSelIndex = -1;
+                newSel = -1;
                 selCount = 0;
             }
             if (curSelIndex != index)
             {
                 if (listener != null) listener.onFlowSelItem(view, true, index);
                 stateList.put(index, 1);
-                curSelIndex = index;
+                newSel = index;
                 selCount = 1;
             }
+            curSelIndex = newSel;
         } else
         {
             boolean isSel = stateList.get(index) == 1;
