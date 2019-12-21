@@ -422,7 +422,21 @@ public abstract class AbsActivity extends AutoLayoutActivity
         return actList.size() - num - 1;
     }
 
-    //从当前界面返回到第几个界面 a -> b -> c ,num = 1 , back to b
+    public static void exitToClassName(String clsSimpleName, Intent data)
+    {
+        for (int i = actList.size() - 1;i > -1;i--)
+        {
+            if (actList.get(i).getClass().getSimpleName().equals(clsSimpleName))
+            {
+                exitToActivity = actList.get(i);
+                exitToData = data;
+                break;
+            }
+            actList.get(i).finish();
+        }
+    }
+
+    //从当前界面返回到第几个界面 a -> b -> c ,num = 0 , back to a
     public static void exitToNum(int num, Intent data)
     {
         if (num < 0) return;
@@ -431,7 +445,7 @@ public abstract class AbsActivity extends AutoLayoutActivity
         for (int i = actList.size() - 1; i > num; i--)
         {
             actList.get(i).finish();
-            delActivity(actList.get(i));
+            //delActivity(actList.get(i));
         }
     }
 
