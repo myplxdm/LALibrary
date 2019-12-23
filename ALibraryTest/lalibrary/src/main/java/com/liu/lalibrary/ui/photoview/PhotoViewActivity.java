@@ -17,6 +17,7 @@ import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.R;
 import com.liu.lalibrary.log.LogUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,10 @@ public class PhotoViewActivity extends AbsActivity implements OnPhotoTapListener
                 LogUtils.LOGE(PhotoViewActivity.class, "no photo data");
                 return;
             }
+            for (int i = 0;i < imgAry.length;i++)
+            {
+                imgAry[i] = host + imgAry[i];
+            }
         }
 
         View v;
@@ -78,9 +83,15 @@ public class PhotoViewActivity extends AbsActivity implements OnPhotoTapListener
         for (int i = 0;i< imgAry.length;i++)
         {
             v = View.inflate(this, R.layout.vp_photo_item, null);
-            pv = (PhotoView) v.findViewById(R.id.pv);
+            pv = v.findViewById(R.id.pv);
             new PhotoViewAttacher(pv).setOnPhotoTapListener(this);
-            Glide.with(this).load(host != null ? host + imgAry[i] : imgAry[i]).into(pv);
+            if (imgAry[i].startsWith("http"))
+            {
+                Glide.with(this).load(imgAry[i]).into(pv);
+            } else
+            {
+                Glide.with(this).load(new File(imgAry[i])).into(pv);
+            }
             viewList.add(v);
         }
         vp.setAdapter(adapter);
