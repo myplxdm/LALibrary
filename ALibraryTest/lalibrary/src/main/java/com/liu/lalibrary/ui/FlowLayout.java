@@ -11,6 +11,7 @@ import com.liu.lalibrary.R;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
     private int mMaxWidth;
 
     // 状态
-    private SparseIntArray stateList = new SparseIntArray(50);
+    private HashMap<View, Integer> stateList = new HashMap<>(50);
     private boolean isMultilSel;
     private int curSelIndex = -1;
     private FlowItemListener listener;
@@ -65,25 +66,56 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
         horizontal_space = AutoUtils.getPercentHeightSize(array.getDimensionPixelSize(R.styleable.FlowLayout_hor_space, 0));
         vertical_space = AutoUtils.getPercentHeightSize(array.getDimensionPixelSize(R.styleable.FlowLayout_ver_space, 0));
         useMinWidth = array.getBoolean(R.styleable.FlowLayout_useMinWidth, false);
+        isMultilSel = array.getBoolean(R.styleable.FlowLayout_multilSel, false);
         array.recycle();
     }
 
     @Override
     public void addView(View child, LayoutParams params)
     {
-        super.addView(child, params);
-        stateList.put(getChildCount() - 1, 0);
-        child.setOnClickListener(this);
-        AutoUtils.auto(child);
+        addView(child, params, false);
     }
 
     @Override
     public void addView(View child)
     {
-        super.addView(child);
-        stateList.put(getChildCount() - 1, 0);
+        addView(child, null, false);
+    }
+
+    public void addView(View child, LayoutParams params, boolean isSel)
+    {
+        if (params != null)
+        {
+            super.addView(child, params);
+        }else
+        {
+            super.addView(child);
+        }
+        stateList.put(child, isSel ? 1 : 0);
         child.setOnClickListener(this);
         AutoUtils.auto(child);
+        if (listener != null) listener.onFlowSelItem(child, isSel, getChildCount() - 1);
+    }
+
+    public void addView(View child, boolean isSel)
+    {
+        addView(child, null, isSel);
+        if (listener != null) listener.onFlowSelItem(child, isSel, getChildCount() - 1);
+    }
+
+    @Override
+    public void removeView(View view)
+    {
+        super.removeView(view);
+        stateList.remove(view);
+    }
+
+    @Override
+    public void removeViewAt(int index)
+    {
+        View view = getChildAt(index);
+        stateList.remove(view);
+        super.removeViewAt(index);
     }
 
     public void setFlowItemListener(FlowItemListener listener)
@@ -120,23 +152,23 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
             if (curSelIndex != -1)
             {
                 if (listener != null) listener.onFlowSelItem(getChildAt(curSelIndex), false, curSelIndex);
-                stateList.put(curSelIndex, 0);
+                stateList.put(view, 0);
                 newSel = -1;
                 selCount = 0;
             }
             if (curSelIndex != index)
             {
                 if (listener != null) listener.onFlowSelItem(view, true, index);
-                stateList.put(index, 1);
+                stateList.put(view, 1);
                 newSel = index;
                 selCount = 1;
             }
             curSelIndex = newSel;
         } else
         {
-            boolean isSel = stateList.get(index) == 1;
+            boolean isSel = stateList.get(view) == 1;
             if (listener != null) listener.onFlowSelItem(view, !isSel, index);
-            stateList.put(index, isSel ? 0 : 1);
+            stateList.put(view, isSel ? 0 : 1);
             selCount += !isSel ? 1 : -1;
         }
     }
