@@ -118,6 +118,13 @@ public class FlowLayout extends ViewGroup implements View.OnClickListener
         super.removeViewAt(index);
     }
 
+    @Override
+    public void removeAllViews()
+    {
+        super.removeAllViews();
+        stateList.clear();
+    }
+
     public void setFlowItemListener(FlowItemListener listener)
     {
         this.listener = listener;
