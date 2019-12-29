@@ -55,6 +55,7 @@ import java.io.InputStream;
 public final class ImageTools
 {
     public static final int REQ_CHOOSE_ALBUM = 0x1f1;
+    public static final int REQ_CHOOSE_FILE = 0x1f5;
     public static final int REQ_TAKE_PIC = 0x1f2;
     public static final int REQ_OPEN_CORP = 0x1f3;
 
