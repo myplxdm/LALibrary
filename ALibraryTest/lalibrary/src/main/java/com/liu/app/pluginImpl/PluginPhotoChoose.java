@@ -14,6 +14,7 @@ import com.liu.lalibrary.AbsActivity;
 import com.liu.lalibrary.plugins.IPluginEvent;
 import com.liu.lalibrary.plugins.PluginBase;
 import com.liu.lalibrary.utils.AppUtils;
+import com.liu.lalibrary.utils.JsonHelper;
 import com.liu.lalibrary.utils.PermissionsUtil;
 import com.liu.lalibrary.utils.imagecache.FileHelper;
 import com.liu.lalibrary.utils.imagecache.ImageTools;
@@ -49,6 +50,16 @@ public class PluginPhotoChoose extends PluginBase
     {
         super.stopPlugin();
         event = null;
+    }
+
+    public static JSONObject album()
+    {
+        return JsonHelper.convert(CHOOSE_TYPE, PHOTO_CHOOSE_CT_ALBUM);
+    }
+
+    public static JSONObject takePic()
+    {
+        return JsonHelper.convert(CHOOSE_TYPE, PHOTO_CHOOSE_CT_TAKEPIC);
     }
 
     @Override
