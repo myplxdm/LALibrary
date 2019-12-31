@@ -14,12 +14,16 @@
         android:textColor="#000"
         android:textSize="50px" />
 
-    <com.liu.lalibrary.ui.FlowLayout
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/fl"
-        app:useMinWidth="true"
-        app:hor_space="60px"
-        app:ver_space="60px"
+    <com.liu.app.ui.TBButton
+        android:id="@+id/tb"
+        app:tbSpace="20"
+        app:tbTextSize="50"
+        app:tbText="测试"
+        app:tbTextColor="#000"
+        app:photoscr="@mipmap/test"
+        app:photoWidth="81"
+        app:photoHeight="96"
+        app:dir="lr_right_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <!--    <com.liu.app.ui.TBButton-->
