@@ -52,14 +52,17 @@ public class TBButton extends AutoLinearLayout
         String text = array.getString(R.styleable.TBButton_tbText);
         photoSrcRes = array.getResourceId(R.styleable.TBButton_photoscr,-1);
         photoSelSrcRes = array.getResourceId(R.styleable.TBButton_photoselscr,-1);
-        boolean useCir = array.getBoolean(R.styleable.TBButton_photocircular, false);
+        boolean photoCircular = array.getBoolean(R.styleable.TBButton_photocircular, false);
+        int dir = array.getInt(R.styleable.TBButton_dir, 0);
         array.recycle();
-        setOrientation(VERTICAL);
+        /////////////////////
+        setOrientation(dir < 2 ? VERTICAL : HORIZONTAL);
         setGravity(Gravity.CENTER);
-        if (useCir)
+        //////// init photo
+        if (photoCircular)
         {
             ivPhoto = new CircleImageView(context);
-        }else
+        } else
         {
             ivPhoto = new ImageView(context);
         }
@@ -67,28 +70,90 @@ public class TBButton extends AutoLinearLayout
         {
             ivPhoto.setImageResource(photoSrcRes);
         }
+        LayoutParams lpPhoto, lpText;
         if (pw != 0 && ph != 0)
         {
-            LayoutParams lp = new LayoutParams(pw, ph);
-            ivPhoto.setLayoutParams(lp);
-            addView(ivPhoto);
-        }else
+            lpPhoto = new LayoutParams(pw, ph);
+        } else
         {
-            addView(ivPhoto, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            lpPhoto = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
-        ////////////////////////////////
+        ////// init textview
         tvName = new NoPaddingTextView(context);
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, space, 0, 0);
-        tvName.setLayoutParams(lp);
+        lpText = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         tvName.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
         tvName.setTextColor(textColor);
         tvName.setText(text);
-        addView(tvName);
-        //
+        /////////
+        switch (dir)
+        {
+            case 0://top image
+                 lpPhoto.setMargins(0, 0, 0, space);
+                 ivPhoto.setLayoutParams(lpPhoto);
+                 addView(ivPhoto);
+                 tvName.setLayoutParams(lpText);
+                 addView(tvName);
+                break;
+            case 1://bottom image
+                lpText.setMargins(0, 0, 0, space);
+                tvName.setLayoutParams(lpText);
+                addView(tvName);
+                ivPhoto.setLayoutParams(lpPhoto);
+                addView(ivPhoto);
+                break;
+            case 2://left image
+                lpPhoto.setMargins(0, 0, space, 0);
+                ivPhoto.setLayoutParams(lpPhoto);
+                addView(ivPhoto);
+                tvName.setLayoutParams(lpText);
+                addView(tvName);
+                break;
+            case 3://right image
+                lpText.setMargins(0, 0, space, 0);
+                tvName.setLayoutParams(lpText);
+                addView(tvName);
+                ivPhoto.setLayoutParams(lpPhoto);
+                addView(ivPhoto);
+                break;
+        }
         AutoUtils.autoSize(ivPhoto, AutoAttr.BASE_HEIGHT);
         AutoUtils.auto(tvName);
         setSelect(sel);
+//        setOrientation(VERTICAL);
+//        setGravity(Gravity.CENTER);
+//        if (useCir)
+//        {
+//            ivPhoto = new CircleImageView(context);
+//        }else
+//        {
+//            ivPhoto = new ImageView(context);
+//        }
+//        if (photoSrcRes != -1)
+//        {
+//            ivPhoto.setImageResource(photoSrcRes);
+//        }
+//        if (pw != 0 && ph != 0)
+//        {
+//            LayoutParams lp = new LayoutParams(pw, ph);
+//            ivPhoto.setLayoutParams(lp);
+//            addView(ivPhoto);
+//        }else
+//        {
+//            addView(ivPhoto, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        }
+//        ////////////////////////////////
+//        tvName = new NoPaddingTextView(context);
+//        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//        lp.setMargins(0, space, 0, 0);
+//        tvName.setLayoutParams(lp);
+//        tvName.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
+//        tvName.setTextColor(textColor);
+//        tvName.setText(text);
+//        addView(tvName);
+//        //
+//        AutoUtils.autoSize(ivPhoto, AutoAttr.BASE_HEIGHT);
+//        AutoUtils.auto(tvName);
+//        setSelect(sel);
     }
 
     public ImageView getImageView()

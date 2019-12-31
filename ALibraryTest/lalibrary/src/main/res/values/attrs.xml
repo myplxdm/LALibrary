@@ -4,31 +4,37 @@
         <attr name="auto_textSize_base_width" format="boolean"></attr>
     </declare-styleable>
     <declare-styleable name="FlowLayout">
-        <attr name="hor_space" format="dimension"/>
-        <attr name="ver_space" format="dimension"/>
-        <attr name="useMinWidth" format="boolean"/>
-        <attr name="multilSel" format="boolean"/>
+        <attr name="hor_space" format="dimension" />
+        <attr name="ver_space" format="dimension" />
+        <attr name="useMinWidth" format="boolean" />
+        <attr name="multilSel" format="boolean" />
     </declare-styleable>
     <declare-styleable name="TBButton">
-        <attr name="photocircular" format="boolean"/>
-        <attr name="photoWidth" format="integer"/>
-        <attr name="photoHeight" format="integer"/>
-        <attr name="tbTextColor" format="color"/>
-        <attr name="tbTextSelColor" format="color"/>
-        <attr name="tbTextSize" format="integer"/>
-        <attr name="tbText" format="string"/>
-        <attr name="select" format="boolean"/>
-        <attr name="photoscr" format="reference"/>
-        <attr name="photoselscr" format="reference"/>
-        <attr name="tbSpace" format="integer"/>
+        <attr name="photocircular" format="boolean" />
+        <attr name="photoWidth" format="integer" />
+        <attr name="photoHeight" format="integer" />
+        <attr name="tbTextColor" format="color" />
+        <attr name="tbTextSelColor" format="color" />
+        <attr name="tbTextSize" format="integer" />
+        <attr name="tbText" format="string" />
+        <attr name="select" format="boolean" />
+        <attr name="photoscr" format="reference" />
+        <attr name="photoselscr" format="reference" />
+        <attr name="tbSpace" format="integer" />
+        <attr name="dir">
+            <enum name="tb_top_img" value="0"/>
+            <enum name="tb_bottom_img" value="1"/>
+            <enum name="lr_left_img" value="2"/>
+            <enum name="lr_right_img" value="3"/>
+        </attr>
     </declare-styleable>
     <declare-styleable name="TBTextView">
-        <attr name="topTextColor" format="color"/>
-        <attr name="topTextSize" format="integer"/>
-        <attr name="bottomTextColor" format="color"/>
-        <attr name="bottomTextSize" format="integer"/>
-        <attr name="topBottomSpace" format="integer"/>
-        <attr name="topText" format="string"/>
-        <attr name="bottomText" format="string"/>
+        <attr name="topTextColor" format="color" />
+        <attr name="topTextSize" format="integer" />
+        <attr name="bottomTextColor" format="color" />
+        <attr name="bottomTextSize" format="integer" />
+        <attr name="topBottomSpace" format="integer" />
+        <attr name="topText" format="string" />
+        <attr name="bottomText" format="string" />
     </declare-styleable>
 </resources>
